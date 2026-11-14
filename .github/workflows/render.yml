@@ -1,0 +1,296 @@
+name: Render 3D Roblox Story Video
+
+on:
+  workflow_dispatch:
+    inputs:
+      project:
+        description: 'Project folder inside projects/ (e.g. Video-1)'
+        required: true
+        default: 'Video-1'
+      mode:
+        description: 'Render Mode: final (full 30fps MP4 across 18 parallel servers) or preview (fast 53-shot storyboard check)'
+        required: true
+        default: 'final'
+        type: choice
+        options:
+          - final
+          - preview
+      samples:
+        description: 'Render Samples (8 = Fast Clean, 16 = High Quality)'
+        required: true
+        default: '8'
+        type: choice
+        options:
+          - '8'
+          - '16'
+
+  push:
+    paths:
+      - 'projects/**/audio/**'
+      - 'projects/**/shots.py'
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  prepare:
+    name: 1. Prepare Voice & Parallel Shot Matrix
+    runs-on: ubuntu-latest
+    outputs:
+      project: ${{ steps.plan.outputs.project }}
+      mode: ${{ steps.plan.outputs.mode }}
+      samples: ${{ steps.plan.outputs.samples }}
+      slices: ${{ steps.plan.outputs.slices }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install Audio & Alignment Dependencies
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+          pip install -q numpy pillow faster-whisper
+
+      - name: Prepare Project & Compute Parallel Slices
+        id: plan
+        run: |
+          python3 - << 'EOF'
+          import glob, json, os, re, shutil, subprocess, sys
+
+          proj = "${{ github.event.inputs.project }}" or "Video-1"
+          mode = "${{ github.event.inputs.mode }}" or "final"
+          samples = "${{ github.event.inputs.samples }}" or "8"
+
+          pdir = os.path.join("projects", proj)
+          if not os.path.isdir(pdir):
+              cands = sorted([ os.path.basename(d) for d in glob.glob("projects/*") if os.path.isdir(d) ])
+              if not cands:
+                  raise SystemExit("No project folders found in projects/")
+              proj = cands[0]
+              pdir = os.path.join("projects", proj)
+
+          # Check if voice.wav and words.json exist; if only raw audio was uploaded, run 1.3x pitch-shift + Whisper
+          adir = os.path.join(pdir, "audio")
+          os.makedirs(adir, exist_ok=True)
+          v_wav = os.path.join(adir, "voice.wav")
+          w_json = os.path.join(adir, "words.json")
+
+          if not (os.path.isfile(v_wav) and os.path.isfile(w_json)):
+              raws = [f for f in glob.glob(os.path.join(adir, "*"))
+                      if os.path.splitext(f)[1].lower() in (".wav", ".mp3", ".m4a", ".ogg", ".flac")
+                      and not os.path.basename(f).startswith(("voice.", "raw_fast.", "music.", "mix."))]
+              if not raws:
+                  raise SystemExit(f"No audio found in {adir}! Upload your raw voiceover or voice.wav.")
+              eng_vdir = os.path.join("engine", "videos", "active")
+              if os.path.exists(eng_vdir):
+                  shutil.rmtree(eng_vdir)
+              shutil.copytree(pdir, eng_vdir)
+              subprocess.run([sys.executable, "tools/voice_run.py", "--video", "active", "--voice", os.path.abspath(raws[0]), "--speed", "1.3"], cwd="engine", check=True)
+              subprocess.run([sys.executable, "tools/tighten.py", "active", "--max-gap", "0.45"], cwd="engine", check=False)
+              shutil.copy2(os.path.join(eng_vdir, "audio", "voice.wav"), v_wav)
+              shutil.copy2(os.path.join(eng_vdir, "audio", "words.json"), w_json)
+
+          # Count shots in shots.py
+          shots_txt = open(os.path.join(pdir, "shots.py"), encoding="utf-8").read()
+          shot_ids = sorted(int(m.group(1)) for m in re.finditer(r'@S\(\s*(\d+)\s*,', shots_txt))
+          n_shots = len(shot_ids)
+          if mode == "preview":
+              slices = ["all"]
+          else:
+              # Split across up to 18 parallel cloud workers (3 shots per server)
+              n_workers = min(18, max(1, (n_shots + 2) // 3))
+              chunk = (n_shots + n_workers - 1) // n_workers
+              slices = []
+              for i in range(n_workers):
+                  a = i * chunk + 1
+                  b = min((i + 1) * chunk, n_shots)
+                  if a <= b:
+                      slices.append(f"{a}-{b}")
+
+          with open(os.environ["GITHUB_OUTPUT"], "a") as out:
+              out.write(f"project={proj}\n")
+              out.write(f"mode={mode}\n")
+              out.write(f"samples={samples}\n")
+              out.write(f"slices={json.dumps(slices)}\n")
+          print(f"Prepared {proj}: {n_shots} shots -> {len(slices)} parallel worker(s): {slices}")
+          EOF
+
+      - name: Upload Prepared Project Audio & Script
+        uses: actions/upload-artifact@v4
+        with:
+          name: prepared-project
+          path: projects/${{ steps.plan.outputs.project }}/
+          retention-days: 5
+
+  render_slice:
+    name: 2. Render Slice (${{ matrix.slice }})
+    needs: prepare
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        slice: ${{ fromJson(needs.prepare.outputs.slices) }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Cache Headless Blender 4.3.2
+        id: cache-blender
+        uses: actions/cache@v4
+        with:
+          path: /opt/blender
+          key: blender-linux-4.3.2-x64
+
+      - name: Install System Libraries & Blender (if not cached)
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg libx11-6 libxi6 libxfixes3 libxrender1 libxxf86vm1 libxkbcommon0 libsm6 libice6 libgl1 libegl1
+          if [ ! -f /opt/blender/blender ]; then
+            echo "Downloading Blender 4.3.2 Linux x64..."
+            sudo mkdir -p /opt/blender
+            sudo chown -R $USER:$USER /opt/blender
+            curl -L -s https://download.blender.org/release/Blender4.3/blender-4.3.2-linux-x64.tar.xz -o /tmp/blender.tar.xz
+            tar -xf /tmp/blender.tar.xz --strip-components=1 -C /opt/blender
+            rm -f /tmp/blender.tar.xz
+          fi
+          /opt/blender/blender --version
+
+      - name: Download Prepared Project
+        uses: actions/download-artifact@v4
+        with:
+          name: prepared-project
+          path: engine/videos/active
+
+      - name: Render 3D Shots (${{ matrix.slice }})
+        run: |
+          cp -f engine/videos/active/tex/*.png engine/assets/tex/ 2>/dev/null || true
+          cd engine
+          /opt/blender/blender -b --factory-startup -P tools/render.py -- active ${{ needs.prepare.outputs.mode }} ${{ matrix.slice }} ${{ needs.prepare.outputs.samples }}
+          cat videos/active/render_log_*.txt || true
+
+      - name: Upload Rendered Slice Output
+        uses: actions/upload-artifact@v4
+        with:
+          name: slice-${{ matrix.slice }}
+          path: |
+            engine/videos/active/frames/*.png
+            engine/videos/active/preview/*.png
+            engine/videos/active/audio/cues*.json
+            engine/videos/active/render_log_*.txt
+          if-no-files-found: error
+          retention-days: 3
+
+  assemble:
+    name: 3. Mix 44 SFX + Music + Captions & Publish MP4
+    needs: [prepare, render_slice]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python & FFmpeg
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install Dependencies
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+          pip install -q numpy pillow
+
+      - name: Download Prepared Project
+        uses: actions/download-artifact@v4
+        with:
+          name: prepared-project
+          path: engine/videos/active
+
+      - name: Download All Rendered Slices
+        uses: actions/download-artifact@v4
+        with:
+          pattern: slice-*
+          path: _slices
+          merge-multiple: false
+
+      - name: Merge Frames, Cues & Build Final Video / QA Sheet
+        run: |
+          python3 - << 'EOF'
+          import glob, json, os, shutil, subprocess, sys
+          from PIL import Image, ImageDraw
+
+          vdir = os.path.join("engine", "videos", "active")
+          fdir = os.path.join(vdir, "frames")
+          pdir = os.path.join(vdir, "preview")
+          adir = os.path.join(vdir, "audio")
+          odir = os.path.join(vdir, "out")
+          for d in (fdir, pdir, adir, odir):
+              os.makedirs(d, exist_ok=True)
+
+          # Copy all PNGs and merge cues from all slices
+          cues = []
+          for sdir in sorted(glob.glob("_slices/slice-*")):
+              for png in glob.glob(os.path.join(sdir, "**", "frames", "*.png"), recursive=True):
+                  shutil.copy2(png, os.path.join(fdir, os.path.basename(png)))
+              for png in glob.glob(os.path.join(sdir, "**", "preview", "*.png"), recursive=True):
+                  shutil.copy2(png, os.path.join(pdir, os.path.basename(png)))
+              for cf in glob.glob(os.path.join(sdir, "**", "cues*.json"), recursive=True):
+                  try:
+                      cues.extend(json.load(open(cf, encoding="utf-8")))
+                  except Exception:
+                      pass
+
+          cues.sort(key=lambda x: x.get("t", 0.0))
+          json.dump(cues, open(os.path.join(adir, "cues.json"), "w", encoding="utf-8"), indent=1)
+          print(f"Merged {len(os.listdir(fdir))} frame PNGs, {len(os.listdir(pdir))} preview PNGs, {len(cues)} SFX cues.")
+
+          mode = "${{ needs.prepare.outputs.mode }}"
+          if mode == "preview":
+              # Stitch preview contact sheet
+              shots = sorted(glob.glob(os.path.join(pdir, "shot_*.png")))
+              W, H = 240, 426
+              cols = 9
+              rows = (len(shots) + cols - 1) // cols
+              sheet = Image.new("RGB", (cols * W, rows * H), (20, 20, 20))
+              for idx, sp in enumerate(shots):
+                  im = Image.open(sp).convert("RGB").resize((W, H))
+                  dr = ImageDraw.Draw(im)
+                  dr.rectangle([0, 0, W, 24], fill=(0, 0, 0))
+                  dr.text((6, 5), os.path.basename(sp), fill=(255, 230, 0))
+                  sheet.paste(im, ((idx % cols) * W, (idx // cols) * H))
+              sheet.save(os.path.join(odir, "qa_preview_sheet.jpg"), quality=92)
+              print("Saved preview contact sheet -> out/qa_preview_sheet.jpg")
+          else:
+              subprocess.run([sys.executable, "tools/finish.py", "active"], cwd="engine", check=True)
+              mp4 = os.path.join(odir, "final.mp4")
+              subprocess.run([
+                  "ffmpeg", "-y", "-v", "error", "-i", mp4,
+                  "-vf", "fps=1/2,scale=216:384,tile=9x6", "-frames:v", "1",
+                  os.path.join(odir, "qa_contact_sheet.jpg")
+              ], check=False)
+          EOF
+
+      - name: Upload Final MP4 & QA Sheet Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ needs.prepare.outputs.project }}-${{ needs.prepare.outputs.mode }}-output
+          path: |
+            engine/videos/active/out/*
+          retention-days: 30
+
+      - name: Publish MP4 to GitHub Releases (Phone Download + Notification)
+        if: needs.prepare.outputs.mode == 'final'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PROJ="${{ needs.prepare.outputs.project }}"
+          TAG="render-${PROJ}-run-${{ github.run_number }}"
+          cp engine/videos/active/out/final.mp4 "${PROJ}_final.mp4"
+          gh release create "$TAG" "${PROJ}_final.mp4" engine/videos/active/out/qa_contact_sheet.jpg \
+            --title "🎬 ${PROJ} — Finished 3D Roblox Short (Run #${{ github.run_number }})" \
+            --notes "Autonomous 3D Blender Cloud Render complete for **${PROJ}**. Tap **${PROJ}_final.mp4** below to download directly to your phone or PC."
