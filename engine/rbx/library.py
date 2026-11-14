@@ -35,9 +35,9 @@ def _room_shell(name, width=18.0, depth=14.0, height=9.0, wall_col="#f2efe8",
 
 def _room_lights(name, coll, key_z=7.6, energy=1600, color="#fff7ea", fill_energy=900):
     """Standard bright overhead + front-fill lighting so faces are never dark."""
-    light(name + "_key", "AREA", (0, -2.5, key_z), hexc(color), energy, size=10.0,
+    light(name + "_key", "AREA", (0, -2.5, key_z), energy, hexc(color), size=10.0,
           rot=(22, 0, 0), coll=coll)
-    light(name + "_back_fill", "AREA", (0, 2.5, key_z), hexc("#eef4ff"), fill_energy,
+    light(name + "_back_fill", "AREA", (0, 2.5, key_z), fill_energy, hexc("#eef4ff"),
           size=9.0, rot=(-15, 0, 0), coll=coll)
 
 
@@ -189,7 +189,7 @@ def park_day():
     c = _coll("ParkDay")
     world(hexc("#7ec8f8"), 1.0)
     W.sun(5.5, (48, -22, 35))
-    light("PK_fill", "AREA", (0, -10, 12), hexc("#fff8eb"), 1200, size=18.0, rot=(35, 0, 0), coll=c)
+    light("PK_fill", "AREA", (0, -10, 12), 1200, hexc("#fff8eb"), size=18.0, rot=(35, 0, 0), coll=c)
     m_grass = mat("PK_grass", hexc("#4ade80"), 0.85)
     m_path = mat("PK_path", hexc("#d6d3d1"), 0.75)
     m_wood = mat("PK_wood", hexc("#92400e"), 0.55)
@@ -211,8 +211,8 @@ def rooftop_night():
     """City rooftop at night with glowing skyline buildings, parapet wall, and cool moon rim."""
     c = _coll("RooftopNight")
     world(hexc("#0c1428"), 0.45)
-    light("RT_moon", "SUN", (10, 15, 25), hexc("#9ec5ff"), 2.4, rot=(42, 0, -25), coll=c)
-    light("RT_fill", "AREA", (0, -8, 9), hexc("#ffd8a8"), 900, size=14.0, rot=(30, 0, 0), coll=c)
+    light("RT_moon", "SUN", (10, 15, 25), 2.4, hexc("#9ec5ff"), rot=(42, 0, -25), coll=c)
+    light("RT_fill", "AREA", (0, -8, 9), 900, hexc("#ffd8a8"), size=14.0, rot=(30, 0, 0), coll=c)
     m_conc = mat("RT_conc", hexc("#475569"), 0.8)
     m_wall = mat("RT_wall", hexc("#64748b"), 0.75)
     m_bldg = mat("RT_bldg", hexc("#1e293b"), 0.6)
@@ -262,8 +262,8 @@ def haunted_house():
     """Spooky mansion foyer with crooked frames, pillars, and eerie purple/green lighting."""
     c = _room_shell("HauntedHouse", 18, 14, 9.5, "#2e2438", "#3d2c2e", "#1a1420")
     world(hexc("#120d1a"), 0.4)
-    light("HH_purp", "AREA", (-3, -2, 7.5), hexc("#a855f7"), 1400, size=9.0, rot=(20, 0, 0), coll=c)
-    light("HH_grn", "AREA", (3, 1, 6.5), hexc("#4ade80"), 900, size=8.0, rot=(10, 0, 0), coll=c)
+    light("HH_purp", "AREA", (-3, -2, 7.5), 1400, hexc("#a855f7"), size=9.0, rot=(20, 0, 0), coll=c)
+    light("HH_grn", "AREA", (3, 1, 6.5), 900, hexc("#4ade80"), size=8.0, rot=(10, 0, 0), coll=c)
     m_wood = mat("HH_wood", hexc("#4a3228"), 0.65)
     m_gold = mat("HH_gold", hexc("#b4933b"), 0.4, metal=0.6)
     for px in (-5.5, 5.5):
@@ -278,7 +278,7 @@ def beach():
     c = _coll("Beach")
     world(hexc("#60c5ff"), 1.0)
     W.sun(6.0, (45, -18, 30))
-    light("BC_fill", "AREA", (0, -8, 10), hexc("#fff9e6"), 1100, size=16.0, rot=(30, 0, 0), coll=c)
+    light("BC_fill", "AREA", (0, -8, 10), 1100, hexc("#fff9e6"), size=16.0, rot=(30, 0, 0), coll=c)
     m_sand = mat("BC_sand", hexc("#f6d58e"), 0.85)
     m_sea = mat("BC_sea", hexc("#06b6d4"), 0.2)
     m_trunk = mat("BC_trunk", hexc("#92400e"), 0.75)

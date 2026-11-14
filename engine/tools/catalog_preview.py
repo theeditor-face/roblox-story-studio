@@ -59,7 +59,7 @@ for name, fn, cp, tg in ENVS:
 def _char_lineup_1():
     C.world(C.hexc("#dbeafe"), 1.0)
     W.sun(4.5, (35, -20, 25))
-    C.light("CL_fill", "AREA", (0, -10, 6), C.hexc("#ffffff"), 1200, size=14, rot=(15, 0, 0))
+    C.light("CL_fill", "AREA", (0, -10, 6), 1200, C.hexc("#ffffff"), size=14, rot=(15, 0, 0))
     C.box("CL_floor", (30, 12, 0.3), (0, 0, -0.15), C.mat("CL_fl", C.hexc("#cbd5e1"), 0.5))
     roster = [
         ("police_officer", LIB.police_officer),
@@ -76,7 +76,7 @@ def _char_lineup_1():
 def _char_lineup_2():
     C.world(C.hexc("#dbeafe"), 1.0)
     W.sun(4.5, (35, -20, 25))
-    C.light("CL2_fill", "AREA", (0, -10, 6), C.hexc("#ffffff"), 1200, size=14, rot=(15, 0, 0))
+    C.light("CL2_fill", "AREA", (0, -10, 6), 1200, C.hexc("#ffffff"), size=14, rot=(15, 0, 0))
     C.box("CL2_floor", (30, 12, 0.3), (0, 0, -0.15), C.mat("CL2_fl", C.hexc("#cbd5e1"), 0.5))
     roster = [
         ("nerd", LIB.nerd),
@@ -93,7 +93,7 @@ def _char_lineup_2():
 def _props_lineup():
     C.world(C.hexc("#f1f5f9"), 1.0)
     W.sun(4.5, (35, -20, 25))
-    C.light("PL_fill", "AREA", (0, -8, 6), C.hexc("#ffffff"), 1100, size=12, rot=(20, 0, 0))
+    C.light("PL_fill", "AREA", (0, -8, 6), 1100, C.hexc("#ffffff"), size=12, rot=(20, 0, 0))
     C.box("PL_tbl", (22, 6, 0.4), (0, 0, -0.2), C.mat("PL_tb", C.hexc("#e2e8f0"), 0.4))
     props = [
         LIB.prop_gavel, LIB.prop_burger_tray, LIB.prop_shopping_cart,
