@@ -102,8 +102,8 @@ jobs:
           if mode == "preview":
               slices = ["all"]
           else:
-              # Split across up to 18 parallel cloud workers (3 shots per server)
-              n_workers = min(18, max(1, (n_shots + 2) // 3))
+              # Split across up to 20 parallel cloud workers (2-3 shots per server)
+              n_workers = min(20, max(1, (n_shots + 2) // 3))
               chunk = (n_shots + n_workers - 1) // n_workers
               slices = []
               for i in range(n_workers):
@@ -149,7 +149,7 @@ jobs:
       - name: Install System Libraries & Blender (if not cached)
         run: |
           sudo apt-get update -qq
-          sudo apt-get install -y -qq ffmpeg libx11-6 libxi6 libxfixes3 libxrender1 libxxf86vm1 libxkbcommon0 libsm6 libice6 libgl1 libegl1
+          sudo apt-get install -y -qq ffmpeg xvfb libgl1-mesa-dri libx11-6 libxi6 libxfixes3 libxrender1 libxxf86vm1 libxkbcommon0 libsm6 libice6 libgl1 libegl1
           if [ ! -f /opt/blender/blender ]; then
             echo "Downloading Blender 4.3.2 Linux x64..."
             sudo mkdir -p /opt/blender
@@ -170,7 +170,7 @@ jobs:
         run: |
           cp -f engine/videos/active/tex/*.png engine/assets/tex/ 2>/dev/null || true
           cd engine
-          /opt/blender/blender -b --factory-startup -P tools/render.py -- active ${{ needs.prepare.outputs.mode }} ${{ matrix.slice }} ${{ needs.prepare.outputs.samples }}
+          xvfb-run -a /opt/blender/blender -b --factory-startup -P tools/render.py -- active ${{ needs.prepare.outputs.mode }} ${{ matrix.slice }} ${{ needs.prepare.outputs.samples }}
           cat videos/active/render_log_*.txt || true
 
       - name: Upload Rendered Slice Output

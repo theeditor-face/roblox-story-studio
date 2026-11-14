@@ -73,35 +73,50 @@ def setup_render(f0, f1, res=(1080, 1920), samples=24, pct=100, blur=True):
     fast_mode = (samples <= 8)
     gpu_str = _activate_nvidia_gpu()
 
-    # Headless Cycles (NVIDIA GPU via OptiX/CUDA on Colab, or multi-core Embree + OIDN on GitHub Actions)
-    sc.render.engine = "CYCLES"
-    sc.cycles.device = "GPU" if gpu_str != "CPU" else "CPU"
-    sc.cycles.samples = 8 if fast_mode else 16
-    sc.cycles.use_adaptive_sampling = True
-    sc.cycles.adaptive_threshold = 0.08 if fast_mode else 0.04
-    sc.cycles.use_denoising = True
-    sc.cycles.denoiser = "OPENIMAGEDENOISE"
+    if gpu_str != "CPU":
+        # NVIDIA GPU available (e.g. Colab T4): use hardware Cycles + OIDN
+        sc.render.engine = "CYCLES"
+        sc.cycles.device = "GPU"
+        sc.cycles.samples = 8 if fast_mode else 16
+        sc.cycles.use_adaptive_sampling = True
+        sc.cycles.adaptive_threshold = 0.08 if fast_mode else 0.04
+        sc.cycles.use_denoising = True
+        sc.cycles.denoiser = "OPENIMAGEDENOISE"
+        try:
+            sc.cycles.denoising_use_gpu = True
+        except Exception:
+            pass
+        sc.cycles.max_bounces = 1 if fast_mode else 2
+        sc.cycles.diffuse_bounces = 1
+        sc.cycles.glossy_bounces = 1
+        sc.cycles.transmission_bounces = 1
+        sc.cycles.volume_bounces = 0
+        sc.cycles.transparent_max_bounces = 1
+        sc.cycles.caustics_reflective = False
+        sc.cycles.caustics_refractive = False
+        try:
+            sc.cycles.use_fast_gi = True
+            sc.cycles.ao_bounces = 1
+        except Exception:
+            pass
+    else:
+        # CPU-only cloud runner (e.g. GitHub Actions ubuntu-latest):
+        # Use EEVEE Next with screen-space raytracing disabled (10-20x faster than CPU Cycles)
+        sc.render.engine = "BLENDER_EEVEE_NEXT"
+        try:
+            sc.eevee.taa_render_samples = 8 if fast_mode else 16
+            sc.eevee.use_shadows = True
+            sc.eevee.use_raytracing = False
+        except Exception:
+            pass
+
     try:
-        sc.cycles.denoising_use_gpu = (gpu_str != "CPU")
-    except Exception:
-        pass
-    sc.cycles.max_bounces = 1 if fast_mode else 2
-    sc.cycles.diffuse_bounces = 1
-    sc.cycles.glossy_bounces = 1
-    sc.cycles.transmission_bounces = 1
-    sc.cycles.volume_bounces = 0
-    sc.cycles.transparent_max_bounces = 1
-    sc.cycles.caustics_reflective = False
-    sc.cycles.caustics_refractive = False
-    try:
-        sc.cycles.use_fast_gi = True
-        sc.cycles.ao_bounces = 1
         sc.render.use_persistent_data = True
         sc.render.image_settings.compression = 15
     except Exception:
         pass
     if fast_mode and pct == 100:
-        pct = 75  # 810x1440 internal raytrace -> Lanczos + crisp 1080x1920 captions
+        pct = 75  # 810x1440 internal render -> crisp 1080x1920 Lanczos + captions
 
     sc.render.resolution_x, sc.render.resolution_y = res
     sc.render.resolution_percentage = pct
