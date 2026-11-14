@@ -48,7 +48,7 @@ def _room_lights(name, coll, key_z=7.6, energy=1600, color="#fff7ea", fill_energ
 def nurse_office():
     """Bright school nurse's office with exam bed, curtain, medicine cabinet, and sign."""
     c = _room_shell("NurseOffice", 16, 12, 8.5, "#eef7f5", "#dce8e6", "#7da8a1")
-    world("NurseWorld", hexc("#d7ecea"), 0.8)
+    world(hexc("#d7ecea"), 0.8)
     _room_lights("NO", c, energy=1800, color="#ffffff")
     m_white = mat("NO_white", hexc("#ffffff"), 0.35)
     m_teal = mat("NO_teal", hexc("#2b9eb3"), 0.45)
@@ -74,7 +74,7 @@ def nurse_office():
 def courtroom():
     """Wood-paneled courtroom with judge's bench, witness stand, and jury rail."""
     c = _room_shell("Courtroom", 20, 16, 10.0, "#7c5338", "#5a3d2b", "#3d271a")
-    world("CourtWorld", hexc("#2b1e16"), 0.5)
+    world(hexc("#2b1e16"), 0.5)
     _room_lights("CR", c, key_z=8.8, energy=2200, color="#ffe8c4", fill_energy=1000)
     m_oak = mat("CR_oak", hexc("#8b5a2b"), 0.4)
     m_dark = mat("CR_dark", hexc("#4a2e16"), 0.38)
@@ -97,7 +97,7 @@ def courtroom():
 def diner():
     """Retro burger diner with checkered floor, red booths, counter, and neon sign."""
     c = _room_shell("Diner", 18, 14, 8.5, "#f8edd9", "#e6e6e6", "#d63838")
-    world("DinerWorld", hexc("#ffd7a8"), 0.7)
+    world(hexc("#ffd7a8"), 0.7)
     _room_lights("DN", c, energy=1900, color="#fff0d4")
     m_chk = ST.checker_mat("DN_floor_chk", hexc("#1b1b1e"), hexc("#f4f4f4"), 0.65)
     for o in c.objects:
@@ -126,7 +126,7 @@ def diner():
 def grocery_store():
     """Bright supermarket aisle with colorful stocked shelves and checkout counter."""
     c = _room_shell("GroceryStore", 20, 16, 9.0, "#f3f6f8", "#d8dee6", "#3b82f6")
-    world("GroceryWorld", hexc("#eaf4ff"), 0.85)
+    world(hexc("#eaf4ff"), 0.85)
     _room_lights("GS", c, key_z=8.2, energy=2100, color="#ffffff")
     m_shelf = mat("GS_shelf", hexc("#cbd5e1"), 0.35, metal=0.4)
     colors = ["#ef4444", "#f59e0b", "#10b981", "#3b82f6", "#ec4899", "#8b5cf6"]
@@ -146,7 +146,7 @@ def grocery_store():
 def gym():
     """School basketball gym with hardwood court, hoops, and bleachers."""
     c = _room_shell("SchoolGym", 24, 18, 11.0, "#e6dfd3", "#d49b57", "#1e3a8a")
-    world("GymWorld", hexc("#e8f0fa"), 0.8)
+    world(hexc("#e8f0fa"), 0.8)
     _room_lights("GY", c, key_z=9.8, energy=2600, color="#fff9ee")
     m_line = mat("GY_line", hexc("#ffffff"), 0.4)
     m_wood = mat("GY_bleach", hexc("#b87e42"), 0.5)
@@ -168,7 +168,7 @@ def gym():
 def police_station():
     """Police precinct with booking height chart, front desk, and WANTED board."""
     c = _room_shell("PoliceStation", 18, 14, 8.5, "#dbe4ee", "#94a3b8", "#1e3a8a")
-    world("PoliceWorld", hexc("#cbd5e1"), 0.75)
+    world(hexc("#cbd5e1"), 0.75)
     _room_lights("PS", c, energy=1900, color="#f4f8ff")
     m_desk = mat("PS_desk", hexc("#334155"), 0.4)
     m_white = mat("PS_white", hexc("#ffffff"), 0.35)
@@ -187,7 +187,7 @@ def police_station():
 def park_day():
     """Sunny daytime city park with grass, paved path, bench, trees, and bright sun."""
     c = _coll("ParkDay")
-    world("ParkSky", hexc("#7ec8f8"), 1.0)
+    world(hexc("#7ec8f8"), 1.0)
     W.sun(5.5, (48, -22, 35))
     light("PK_fill", "AREA", (0, -10, 12), hexc("#fff8eb"), 1200, size=18.0, rot=(35, 0, 0), coll=c)
     m_grass = mat("PK_grass", hexc("#4ade80"), 0.85)
@@ -210,7 +210,7 @@ def park_day():
 def rooftop_night():
     """City rooftop at night with glowing skyline buildings, parapet wall, and cool moon rim."""
     c = _coll("RooftopNight")
-    world("NightSky", hexc("#0c1428"), 0.45)
+    world(hexc("#0c1428"), 0.45)
     light("RT_moon", "SUN", (10, 15, 25), hexc("#9ec5ff"), 2.4, rot=(42, 0, -25), coll=c)
     light("RT_fill", "AREA", (0, -8, 9), hexc("#ffd8a8"), 900, size=14.0, rot=(30, 0, 0), coll=c)
     m_conc = mat("RT_conc", hexc("#475569"), 0.8)
@@ -230,7 +230,7 @@ def rooftop_night():
 def subway_station():
     """Underground metro platform with yellow safety stripe, pillars, and subway train."""
     c = _room_shell("Subway", 24, 14, 8.5, "#cbd5e1", "#64748b", "#334155")
-    world("SubwayWorld", hexc("#1e293b"), 0.5)
+    world(hexc("#1e293b"), 0.5)
     _room_lights("SB", c, energy=1800, color="#f8fafc")
     m_yel = mat("SB_yel", hexc("#facc15"), 0.4)
     m_train = mat("SB_train", hexc("#94a3b8"), 0.25, metal=0.7)
@@ -261,7 +261,7 @@ def space_station():
 def haunted_house():
     """Spooky mansion foyer with crooked frames, pillars, and eerie purple/green lighting."""
     c = _room_shell("HauntedHouse", 18, 14, 9.5, "#2e2438", "#3d2c2e", "#1a1420")
-    world("HauntWorld", hexc("#120d1a"), 0.4)
+    world(hexc("#120d1a"), 0.4)
     light("HH_purp", "AREA", (-3, -2, 7.5), hexc("#a855f7"), 1400, size=9.0, rot=(20, 0, 0), coll=c)
     light("HH_grn", "AREA", (3, 1, 6.5), hexc("#4ade80"), 900, size=8.0, rot=(10, 0, 0), coll=c)
     m_wood = mat("HH_wood", hexc("#4a3228"), 0.65)
@@ -276,7 +276,7 @@ def haunted_house():
 def beach():
     """Sunny tropical beach with golden sand, turquoise ocean, palm tree, and umbrella."""
     c = _coll("Beach")
-    world("BeachSky", hexc("#60c5ff"), 1.0)
+    world(hexc("#60c5ff"), 1.0)
     W.sun(6.0, (45, -18, 30))
     light("BC_fill", "AREA", (0, -8, 10), hexc("#fff9e6"), 1100, size=16.0, rot=(30, 0, 0), coll=c)
     m_sand = mat("BC_sand", hexc("#f6d58e"), 0.85)
