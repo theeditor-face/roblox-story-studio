@@ -99,7 +99,7 @@ def diner():
     c = _room_shell("Diner", 18, 14, 8.5, "#f8edd9", "#e6e6e6", "#d63838")
     world(hexc("#ffd7a8"), 0.7)
     _room_lights("DN", c, energy=1900, color="#fff0d4")
-    m_chk = ST.checker_mat("DN_floor_chk", hexc("#1b1b1e"), hexc("#f4f4f4"), 0.65)
+    m_chk = ST.checker_mat("DN_floor_chk", "#1b1b1e", "#f4f4f4", 0.65)
     for o in c.objects:
         if o.name.endswith("_floor"):
             o.data.materials[0] = m_chk
