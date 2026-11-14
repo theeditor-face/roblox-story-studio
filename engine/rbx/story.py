@@ -363,7 +363,25 @@ def spin(ob, t0, t1, rise, turns=(0.6, 0.4, 0.3), seed=0):
     ob.keyframe_insert("rotation_euler", frame=F(t1))
 
 
-def puff(name, loc, t, r=1.4):
+def puff(name, loc, t, r=1.4, avoid_cam=True):
+    """Teleport/reveal poof. avoid_cam: this used to spawn at a fixed loc with zero awareness of
+    the camera, so a puff timed to a close-up could land directly on the lens axis and white-out
+    the whole frame. If the active camera at time t has this loc inside a narrow, close cone in
+    front of it, shrink the puff and nudge it sideways instead of letting it block the shot."""
+    if avoid_cam:
+        cam = bpy.context.scene.camera
+        if cam is not None:
+            bpy.context.scene.frame_set(F(t))
+            cp = Vector(cam.matrix_world.translation)
+            fwd = (cam.matrix_world.to_quaternion() @ Vector((0, 0, -1))).normalized()
+            to_p = Vector(loc) - cp
+            along = to_p.dot(fwd)
+            lateral = (to_p - fwd * along).length
+            if 0 < along < 4.0 and lateral < 1.2:   # close, and inside the lens' direct line of sight
+                r = min(r, 0.35)
+                side = fwd.cross(Vector((0, 0, 1)))
+                side = side.normalized() if side.length > 1e-6 else Vector((1, 0, 0))
+                loc = tuple(Vector(loc) + side * 1.0)
     ob = sphere(name, r, loc, mat("puff_white", (0.95, 0.95, 0.95), 0.9, emit=(0.6, 0.6, 0.6), estr=0.4), seg=16)
     ob.scale = (0.01,) * 3
     ob.keyframe_insert("scale", frame=F(t - 0.04))

@@ -578,6 +578,21 @@ def noise(ob, path, index, strength, scale=20, phase=None):
 
 
 # ------------------------------------------------------------------ camera
+def clamp_to_room(pos, bounds, margin=0.6, zmin=0.3):
+    """Pull a world-space point back inside a room's box if it's outside it."""
+    if not bounds:
+        return pos
+    x, y, z = pos
+    x0x1 = bounds.get("X"); y0y1 = bounds.get("Y"); h = bounds.get("H")
+    if x0x1:
+        x0, x1 = x0x1; x = min(max(x, x0 + margin), x1 - margin)
+    if y0y1:
+        y0, y1 = y0y1; y = min(max(y, y0 + margin), y1 - margin)
+    if h is not None:
+        z = min(max(z, zmin), h - margin)
+    return (x, y, z)
+
+
 def fix_euler(ob):
     """Unwrap rotation_euler keys so interpolation never spins through 360 degrees."""
     ad = ob.animation_data
@@ -613,10 +628,12 @@ class Cam:
         bpy.context.scene.camera = self.ob
         self.cd = cd
 
-    def key(self, t, loc, target, lens=None, roll=0.0, focus=None, fstop=None, interp="BEZIER", ease=None):
+    def key(self, t, loc, target, lens=None, roll=0.0, focus=None, fstop=None, interp="BEZIER", ease=None, room=None):
         """Keyframe at absolute time t (s). focus = world point or distance for DOF."""
         f = F(t) if isinstance(t, float) or isinstance(t, int) and not isinstance(t, bool) else t
         ob = self.ob
+        if room is not None:
+            loc = clamp_to_room(loc, room)
         ob.location = loc
         aim(ob, target, roll)
         ob.keyframe_insert("location", frame=f)
@@ -683,22 +700,22 @@ def orbit_pos(target, dist, yaw, pitch):
 
 
 def _cam_push(self, t0, t1, target, d0, d1, yaw=0.0, pitch=8.0, lens=30, yaw1=None, pitch1=None, lens1=None,
-              fstop=2.8, ease="EASE_IN_OUT", roll=0.0, look=None):
+              fstop=2.8, ease="EASE_IN_OUT", roll=0.0, look=None, room=None):
     """Dolly from d0 to d1 (push in if d1 < d0) around target, optional drift in yaw/pitch/lens."""
     yaw1 = yaw if yaw1 is None else yaw1; pitch1 = pitch if pitch1 is None else pitch1
     lens1 = lens if lens1 is None else lens1
     aimp = look or target
-    self.key(t0, orbit_pos(target, d0, yaw, pitch), aimp, lens=lens, roll=roll, focus=target, fstop=fstop)
-    self.key(t1, orbit_pos(target, d1, yaw1, pitch1), aimp, lens=lens1, roll=roll, focus=target, fstop=fstop, ease=ease)
+    self.key(t0, orbit_pos(target, d0, yaw, pitch), aimp, lens=lens, roll=roll, focus=target, fstop=fstop, room=room)
+    self.key(t1, orbit_pos(target, d1, yaw1, pitch1), aimp, lens=lens1, roll=roll, focus=target, fstop=fstop, ease=ease, room=room)
     return self
 
 
-def _cam_orbit(self, t0, t1, target, dist, yaw0, yaw1, pitch=8.0, lens=30, steps=4, fstop=2.8, pitch1=None):
+def _cam_orbit(self, t0, t1, target, dist, yaw0, yaw1, pitch=8.0, lens=30, steps=4, fstop=2.8, pitch1=None, room=None):
     pitch1 = pitch if pitch1 is None else pitch1
     for i in range(steps + 1):
         k = i / steps; t = t0 + (t1 - t0) * k
         self.key(t, orbit_pos(target, dist, yaw0 + (yaw1 - yaw0) * k, pitch + (pitch1 - pitch) * k), target,
-                 lens=lens, focus=target, fstop=fstop, interp="BEZIER" if i in (0, steps) else "LINEAR")
+                 lens=lens, focus=target, fstop=fstop, interp="BEZIER" if i in (0, steps) else "LINEAR", room=room)
     return self
 
 
@@ -729,15 +746,17 @@ def _cam_whip(self, t0, t1, loc0, aim0, loc1, aim1, lens=None, whoosh=True):
     return self
 
 
-def _cam_track(self, ch, t0, t1, offset=(3.0, -6.0, 1.5), look_up=4.0, lens=26, step=0.25, fstop=4.0):
+def _cam_track(self, ch, t0, t1, offset=(3.0, -6.0, 1.5), look_up=None, lens=26, step=0.25, fstop=4.0):
     """Follow a character's root (sampled from its keys) at a fixed offset."""
     root = ch.root
+    s = root.scale[0] or 1.0
+    off = Vector((offset[0] * s, offset[1] * s, offset[2] * s))
     t = t0
     while t <= t1 + 1e-6:
         bpy.context.scene.frame_set(F(t))
         p = Vector(root.matrix_world.translation)
-        tgt = p + Vector((0, 0, look_up))
-        self.key(t, tuple(p + Vector(offset)), tuple(tgt), lens=lens, focus=tuple(tgt), fstop=fstop, interp="LINEAR")
+        tgt = Vector(ch.head.matrix_world.translation) if look_up is None else p + Vector((0, 0, look_up))
+        self.key(t, tuple(p + off), tuple(tgt), lens=lens, focus=tuple(tgt), fstop=fstop, interp="LINEAR")
         t += step
     return self
 

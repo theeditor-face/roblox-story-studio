@@ -16,6 +16,8 @@ VOICE_PEAK_DB = -1.5   # the voice is the loudest thing: its peak is put here
 SFX_DB = -12.0         # pack sounds sit about 10-14 dB under the voice peak (cue vol and pack.json trim from here)
 MUSIC_DB = -13.0       # music peak in the gaps (~14 dB under the voice while talking, audible on phones)...
 DUCK_DB = -5.0         # ...and this much lower while the voice is speaking
+SFX_DUCK_DB = -5.0     # same idea for action/impact SFX (sneeze, bonk, ...) that land while a word is being spoken:
+                       # it still reads as the sound, it just sits under the narration instead of fighting it
 CEILING = 10 ** (-1.0 / 20)
 REPEAT_WIN, REPEAT_STEP, REPEAT_FLOOR = 0.35, 0.8, 0.5  # the same sound again within 350ms gets quieter each time
 
@@ -97,6 +99,7 @@ def main():
     ap.add_argument('--sfx-db', type=float, default=SFX_DB)
     ap.add_argument('--music-db', type=float, default=MUSIC_DB)
     ap.add_argument('--duck-db', type=float, default=DUCK_DB)
+    ap.add_argument('--sfx-duck-db', type=float, default=SFX_DUCK_DB)
     o = ap.parse_args()
     if o.video:
         d = os.path.join(ROOT, 'videos', o.video, 'audio')
@@ -135,17 +138,22 @@ def main():
     n = max([len(voice)] + [a + len(s) for a, s in placed])
     if o.video: n = len(voice); placed = [(a, s[:max(0, n - a)]) for a, s in placed if a < n]   # the video is as long as its voice
     mix = np.zeros((n, 2)); mix[:len(voice)] += voice
+    # envelope of "the voice is talking right now" (0..1), used to duck BOTH the sfx bus and the
+    # music bed under it. Previously this only existed inside the music branch below, so action
+    # SFX (sneeze, bonk, ...) landing on top of a spoken word played at full volume and fought the
+    # narration instead of sitting under it.
+    talk = np.zeros(n); talk[:len(voice)] = speaking(voice)
     bus = np.zeros(n)
     for a, s in placed:
         if a < 0: s = s[-a:]; a = 0
         bus[a:a + len(s)] += s
+    bus *= 1 + (db(o.sfx_duck_db) - 1) * talk   # pull SFX under active narration; silent-gap cues are untouched (talk==0)
     mix += bus[:, None]
 
     # ---- music bed ----
     if music_p:
         m = decode(music_p)
         m = looped(m, n, int(0.5 * SR)) * (db(o.music_db) / max(np.abs(m).max(), 1e-9))
-        talk = np.zeros(n); talk[:len(voice)] = speaking(voice)
         m *= (1 + (db(o.duck_db) - 1) * talk)[:, None]
         mix += fade(m, int(0.3 * SR), int(1.0 * SR))
 

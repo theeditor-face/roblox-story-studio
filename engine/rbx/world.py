@@ -27,13 +27,20 @@ def sky(strength=1.0, top=(0.03, 0.14, 0.72), bottom=(0.18, 0.42, 0.95)):
     return bg
 
 
-def space_world(strength=1.0):
+def space_world(strength=1.0, add_light=True):
+    """add_light: a starfield environment texture gives the SCENE zero actual light on its own
+    (it's just the background colour) - any shot that called this without also remembering a
+    sun()/fill light rendered characters as flat black/gray silhouettes. On by default now; pass
+    False if the location already brings its own tailored lighting (e.g. moon() below)."""
     w = D.worlds.new("Space"); bpy.context.scene.world = w
     w.use_nodes = True; nt = w.node_tree
     bg = next(n for n in nt.nodes if n.type == "BACKGROUND")
     tx = nt.nodes.new("ShaderNodeTexEnvironment")
     tx.image = D.images.load(os.path.join(TEX, "space_stars.png"), check_existing=True)
     nt.links.new(tx.outputs["Color"], bg.inputs[0]); bg.inputs[1].default_value = strength
+    if add_light:
+        sun(4.0, rot=(50, 0, 30))
+        light("space_fill", "AREA", (0, -10, 10), 4000, (0.75, 0.82, 1.0), 16, target=(0, 0, 2))
 
 
 def sun(strength=4.0, rot=(48, 0, 35), coll=None):
