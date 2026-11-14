@@ -15,6 +15,7 @@ on:
         options:
           - final
           - preview
+          - bench
       samples:
         description: 'Render Samples (8 = Fast Clean, 16 = High Quality)'
         required: true
@@ -99,7 +100,7 @@ jobs:
           shots_txt = open(os.path.join(pdir, "shots.py"), encoding="utf-8").read()
           shot_ids = sorted(int(m.group(1)) for m in re.finditer(r'@S\(\s*(\d+)\s*,', shots_txt))
           n_shots = len(shot_ids)
-          if mode == "preview":
+          if mode in ("preview", "bench"):
               slices = ["all"]
           else:
               # Split across up to 20 parallel cloud workers (2-3 shots per server)
@@ -170,10 +171,15 @@ jobs:
         run: |
           cp -f engine/videos/active/tex/*.png engine/assets/tex/ 2>/dev/null || true
           cd engine
-          xvfb-run -a /opt/blender/blender -b --factory-startup -P tools/render.py -- active ${{ needs.prepare.outputs.mode }} ${{ matrix.slice }} ${{ needs.prepare.outputs.samples }}
+          if [ "${{ needs.prepare.outputs.mode }}" = "bench" ]; then
+            xvfb-run -a /opt/blender/blender -b --factory-startup -P tools/bench.py
+          else
+            xvfb-run -a /opt/blender/blender -b --factory-startup -P tools/render.py -- active ${{ needs.prepare.outputs.mode }} ${{ matrix.slice }} ${{ needs.prepare.outputs.samples }}
+          fi
           cat videos/active/render_log_*.txt || true
 
       - name: Upload Rendered Slice Output
+        if: needs.prepare.outputs.mode != 'bench'
         uses: actions/upload-artifact@v4
         with:
           name: slice-${{ matrix.slice }}
@@ -188,6 +194,7 @@ jobs:
   assemble:
     name: 3. Mix 44 SFX + Music + Captions & Publish MP4
     needs: [prepare, render_slice]
+    if: needs.prepare.outputs.mode != 'bench'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
