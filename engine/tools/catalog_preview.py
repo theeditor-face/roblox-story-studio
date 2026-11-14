@@ -27,8 +27,9 @@ def _snap(name, setup_fn, cam_pos, target):
     sc.render.resolution_percentage = 100
     sc.render.image_settings.file_format = "PNG"
     setup_fn()
-    cam = C.Cam("CatCam", cam_pos, target, lens=32)
-    sc.camera = cam.cam
+    cam = C.Cam("CatCam", lens=32)
+    cam.key(0.0, cam_pos, target)
+    sc.camera = cam.ob
     p = os.path.join(OUT, f"{name}.png")
     sc.render.filepath = p
     bpy.ops.render.render(write_still=True)

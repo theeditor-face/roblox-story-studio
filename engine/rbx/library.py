@@ -67,7 +67,7 @@ def nurse_office():
     box("NO_desk", (3.6, 1.8, 2.0), (-4.0, 1.8, 1.0), m_wood, 0.04, coll=c)
     # Sign on back wall facing -Y
     box("NO_sign_bg", (5.2, 0.14, 1.2), (0.8, 5.75, 6.2), m_teal, 0.04, coll=c)
-    text("NO_sign_txt", "NURSE OFFICE", (0.8, 5.65, 6.0), m_white, 0.62, rot=(90, 0, 0), coll=c)
+    text("NO_sign_txt", "NURSE OFFICE", (0.8, 5.65, 6.0), 0.62, m_white, rot=(90, 0, 0), coll=c)
     return c
 
 
@@ -119,7 +119,7 @@ def diner():
     box("DN_booth_s2", (2.6, 1.2, 1.8), (-5.8, 0.8, 0.9), m_red, 0.06, coll=c)
     # Neon menu sign
     box("DN_menu_bg", (6.2, 0.16, 1.6), (0, 6.75, 5.6), mat("DN_blk", hexc("#1b1b24"), 0.4), 0.04, coll=c)
-    text("DN_menu_txt", "BLOX BURGER", (0, 6.62, 5.3), m_neon, 0.68, rot=(90, 0, 0), coll=c)
+    text("DN_menu_txt", "BLOX BURGER", (0, 6.62, 5.3), 0.68, m_neon, rot=(90, 0, 0), coll=c)
     return c
 
 
@@ -180,7 +180,7 @@ def police_station():
     box("PS_chart_bg", (4.5, 0.12, 6.5), (4.5, 6.65, 3.25), m_white, 0.02, coll=c)
     for ft in range(1, 7):
         box(f"PS_ft_{ft}", (4.2, 0.04, 0.06), (4.5, 6.56, ft * 0.95), m_line, 0, coll=c)
-    text("PS_hdr", "POLICE DEPT", (-2.5, 6.6, 6.4), m_blue, 0.65, rot=(90, 0, 0), coll=c)
+    text("PS_hdr", "POLICE DEPT", (-2.5, 6.6, 6.4), 0.65, m_blue, rot=(90, 0, 0), coll=c)
     return c
 
 
