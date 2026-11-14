@@ -5,7 +5,7 @@
 """
 import math
 import bpy
-from . import core as C, chars as CH, sets as ST, world as W
+from . import core as C, chars as CH, sets as ST, world as W, acting as _acting  # noqa: F401
 
 hexc, mat, box, cyl, sphere, plane, text, light, world = (
     C.hexc, C.mat, C.box, C.cyl, C.sphere, C.plane, C.text, C.light, C.world
