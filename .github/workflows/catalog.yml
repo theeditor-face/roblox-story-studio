@@ -37,6 +37,29 @@ jobs:
         run: |
           cd engine
           xvfb-run -a /opt/blender/blender -b --factory-startup -P tools/catalog_preview.py
+          python3 - << 'EOF'
+          import os, glob
+          from PIL import Image, ImageDraw
+          out = "catalog_previews"
+          def make_sheet(items, cols, out_path):
+              W, H = 480, 360
+              rows = (len(items) + cols - 1) // cols
+              sheet = Image.new("RGB", (cols * W, rows * H), (18, 18, 22))
+              for idx, (label, path) in enumerate(items):
+                  im = Image.open(path).convert("RGB").resize((W, H))
+                  dr = ImageDraw.Draw(im)
+                  dr.rectangle([0, 0, W, 34], fill=(0, 0, 0))
+                  dr.text((10, 8), label, fill=(255, 220, 40))
+                  sheet.paste(im, ((idx % cols) * W, (idx // cols) * H))
+              sheet.save(out_path, quality=92)
+          envs = [(os.path.basename(p)[4:-4], p) for p in sorted(glob.glob(f"{out}/env_*.png"))]
+          make_sheet(envs, 4, f"{out}/envs_sheet.jpg")
+          make_sheet([
+              ("Chars 1: Officer, Judge, Nurse, Chef, Astro, Bully", f"{out}/chars_1.png"),
+              ("Chars 2: Nerd, RichKid, Ninja, Robber, Alien, Robot", f"{out}/chars_2.png"),
+              ("Props: Gavel, Burger, Cart, Ball, Chest, Phone, Trophy, Mega, Skate, Mic", f"{out}/props_all.png"),
+          ], 1, f"{out}/chars_props_sheet.jpg")
+          EOF
 
       - name: Upload Catalog Sheets
         uses: actions/upload-artifact@v4

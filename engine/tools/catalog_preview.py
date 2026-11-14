@@ -1,7 +1,6 @@
 """Render labeled visual contact sheets for all assets in engine/rbx/library.py."""
 import os, sys
 import bpy
-from PIL import Image, ImageDraw
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 STUDIO = os.path.dirname(HERE)
@@ -110,25 +109,4 @@ def _props_lineup():
 c1 = _snap("chars_1", _char_lineup_1, (0, -13.5, 3.2), (0, 0, 2.5))
 c2 = _snap("chars_2", _char_lineup_2, (0, -13.5, 3.2), (0, 0, 2.5))
 pr = _snap("props_all", _props_lineup, (0, -11.0, 4.2), (0, 0.2, 0.8))
-
-
-def _make_sheet(items, cols, out_path):
-    W_im, H_im = 480, 360
-    rows = (len(items) + cols - 1) // cols
-    sheet = Image.new("RGB", (cols * W_im, rows * H_im), (18, 18, 22))
-    for idx, (label, path) in enumerate(items):
-        im = Image.open(path).convert("RGB").resize((W_im, H_im))
-        dr = ImageDraw.Draw(im)
-        dr.rectangle([0, 0, W_im, 34], fill=(0, 0, 0))
-        dr.text((10, 8), label, fill=(255, 220, 40))
-        sheet.paste(im, ((idx % cols) * W_im, (idx // cols) * H_im))
-    sheet.save(out_path, quality=92)
-
-
-_make_sheet(env_imgs, 4, os.path.join(OUT, "envs_sheet.jpg"))
-_make_sheet([
-    ("Chars 1: Officer, Judge, Nurse, Chef, Astro, Bully", c1),
-    ("Chars 2: Nerd, RichKid, Ninja, Robber, Alien, Robot", c2),
-    ("Props: Gavel, Burger, Cart, Ball, Chest, Phone, Trophy, Mega, Skate, Mic", pr),
-], 1, os.path.join(OUT, "chars_props_sheet.jpg"))
-print("Saved catalog sheets in", OUT)
+print("Rendered all catalog PNGs in", OUT)
