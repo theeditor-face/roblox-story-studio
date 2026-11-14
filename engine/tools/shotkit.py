@@ -20,7 +20,7 @@ if STUDIO not in sys.path:
 import rbx
 rbx.ASSETS = os.path.join(STUDIO, "assets")
 from rbx.core import *          # noqa: F401,F403  (reset, setup_render, Cam, mat, box, light, sfx, ...)
-from rbx import core, chars, sets, locs, fx, acting, world as W, world2 as W2   # noqa: F401
+from rbx import core, chars, sets, locs, fx, acting, world as W, world2 as W2, library as LIB   # noqa: F401
 from rbx.core import CUES, fix_euler, ensure_motion
 
 norm = lambda w: re.sub(r"[^a-z0-9]", "", w.lower())
