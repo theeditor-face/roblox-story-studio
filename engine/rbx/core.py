@@ -101,10 +101,10 @@ def setup_render(f0, f1, res=(1080, 1920), samples=24, pct=100, blur=True):
             pass
     else:
         # CPU-only cloud runner (e.g. GitHub Actions ubuntu-latest):
-        # Use EEVEE Next with screen-space raytracing disabled (10-20x faster than CPU Cycles)
+        # Use EEVEE Next with screen-space raytracing disabled (~4.5-7s/frame vs 60s/frame CPU Cycles)
         sc.render.engine = "BLENDER_EEVEE_NEXT"
         try:
-            sc.eevee.taa_render_samples = 8 if fast_mode else 16
+            sc.eevee.taa_render_samples = 4 if fast_mode else 8
             sc.eevee.use_shadows = True
             sc.eevee.use_raytracing = False
         except Exception:
@@ -115,8 +115,10 @@ def setup_render(f0, f1, res=(1080, 1920), samples=24, pct=100, blur=True):
         sc.render.image_settings.compression = 15
     except Exception:
         pass
-    if fast_mode and pct == 100:
-        pct = 75  # 810x1440 internal render -> crisp 1080x1920 Lanczos + captions
+    if gpu_str == "CPU" and pct == 100:
+        pct = 60 if fast_mode else 75  # 648x1152 (fast ~13m) or 810x1440 (HQ) -> Lanczos 1080x1920 + crisp captions
+    elif fast_mode and pct == 100:
+        pct = 75
 
     sc.render.resolution_x, sc.render.resolution_y = res
     sc.render.resolution_percentage = pct
