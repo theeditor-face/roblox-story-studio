@@ -136,6 +136,7 @@ def classroom_day(board="chalk_joke.png", open_window=True):
     light("cd_key", "AREA", (0, 2, H - 0.5), 9000, (1.0, 0.98, 0.94), 14, coll=c, target=(0, 2, 0), size_y=14)
     light("cd_win", "AREA", (X1 - 0.5, 3, 7), 4000, (0.95, 0.97, 1.0), 10, coll=c, target=(0, 3, 2))
     light("cd_fill", "AREA", (-6, Y0 + 1, 7), 2000, (1.0, 0.95, 0.88), 8, coll=c, target=(0, 8, 3))
+    light("cd_board_fill", "AREA", (0, Y1 - 0.8, 7.5), 4200, (1.0, 0.98, 0.94), 14, coll=c, target=(0, 3, 3.0))
     return dict(coll=c, sash=sash, desks=desks, board=(-1.5, Y1, 7.0), win=(X1, 3.0, 6.75))
 
 
@@ -271,6 +272,7 @@ def hallway_day():
         card(f"hd_lamp{i}", 3.0, 1.0, (0, i * 10, 12.0 - 0.02), mat("cd_lamp", (1, 1, 1), emit=(1, 0.98, 0.92), estr=6), "-Y", coll=c).rotation_euler = (math.radians(180), 0, 0)
     light("hd_key", "AREA", (0, 10, 11.5), 5000, (1.0, 0.98, 0.94), 6, coll=c, target=(0, 10, 0), size_y=30)
     light("hd_fill", "AREA", (0, -8, 6), 1500, (1.0, 0.96, 0.9), 6, coll=c, target=(0, 10, 3))
+    light("hd_fill_rev", "AREA", (0, 36, 6), 2000, (1.0, 0.97, 0.92), 8, coll=c, target=(0, 10, 3))
     return dict(coll=c)
 
 
