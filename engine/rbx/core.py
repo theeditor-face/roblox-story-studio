@@ -74,24 +74,24 @@ def setup_render(f0, f1, res=(1080, 1920), samples=24, pct=100, blur=True):
     gpu_str = _activate_nvidia_gpu()
 
     if gpu_str != "CPU":
-        # NVIDIA GPU available (e.g. Colab T4): use hardware Cycles + OIDN
+        # NVIDIA GPU available (e.g. Kaggle T4 x2): use hardware Cycles + OIDN
         sc.render.engine = "CYCLES"
         sc.cycles.device = "GPU"
-        sc.cycles.samples = 8 if fast_mode else 16
+        sc.cycles.samples = 8 if fast_mode else samples
         sc.cycles.use_adaptive_sampling = True
-        sc.cycles.adaptive_threshold = 0.08 if fast_mode else 0.04
+        sc.cycles.adaptive_threshold = 0.08 if fast_mode else 0.03
         sc.cycles.use_denoising = True
         sc.cycles.denoiser = "OPENIMAGEDENOISE"
         try:
             sc.cycles.denoising_use_gpu = True
         except Exception:
             pass
-        sc.cycles.max_bounces = 1 if fast_mode else 2
-        sc.cycles.diffuse_bounces = 1
-        sc.cycles.glossy_bounces = 1
+        sc.cycles.max_bounces = 1 if fast_mode else 3
+        sc.cycles.diffuse_bounces = 1 if fast_mode else 2
+        sc.cycles.glossy_bounces = 1 if fast_mode else 2
         sc.cycles.transmission_bounces = 1
         sc.cycles.volume_bounces = 0
-        sc.cycles.transparent_max_bounces = 1
+        sc.cycles.transparent_max_bounces = 1 if fast_mode else 4
         sc.cycles.caustics_reflective = False
         sc.cycles.caustics_refractive = False
         try:
