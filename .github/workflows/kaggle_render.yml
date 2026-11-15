@@ -1,0 +1,149 @@
+name: Kaggle T4 GPU Full Video Render
+
+on:
+  workflow_dispatch:
+    inputs:
+      project:
+        description: 'Project folder inside projects/ (e.g. Video-1)'
+        required: true
+        default: 'Video-1'
+      samples:
+        description: 'Cycles GPU Samples (16 = High Quality, 24 = Ultra)'
+        required: true
+        default: '16'
+        type: choice
+        options:
+          - '16'
+          - '24'
+          - '8'
+      ntfy_topic:
+        description: 'Optional ntfy.sh topic name for instant phone push notification'
+        required: false
+        default: ''
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  kaggle_render:
+    name: Full Cycles GPU Render on Kaggle Dual-T4
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Kaggle CLI
+        run: pip install -q kaggle six urllib3 requests python-dateutil tqdm
+
+      - name: Push Full Render Job to Kaggle Dual-T4
+        env:
+          KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+          KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
+          PROJECT_NAME: ${{ github.event.inputs.project || 'Video-1' }}
+          SAMPLES: ${{ github.event.inputs.samples || '16' }}
+        run: |
+          mkdir -p ~/.kaggle
+          echo "$KAGGLE_API_TOKEN" > ~/.kaggle/access_token
+          chmod 600 ~/.kaggle/access_token
+
+          cat > kaggle/render/render_config.json << EOF
+          {
+            "project": "${PROJECT_NAME}",
+            "samples": ${SAMPLES}
+          }
+          EOF
+
+          SLUG_NAME="roblox-render-${{ github.run_number }}"
+          cat > kaggle/render/kernel-metadata.json << EOF
+          {
+            "id": "${KAGGLE_USERNAME}/${SLUG_NAME}",
+            "title": "Roblox Render ${{ github.run_number }}",
+            "code_file": "run_render.py",
+            "language": "python",
+            "kernel_type": "script",
+            "is_private": true,
+            "enable_gpu": true,
+            "enable_tpu": false,
+            "enable_internet": true,
+            "dataset_sources": [],
+            "competition_sources": [],
+            "kernel_sources": [],
+            "model_sources": []
+          }
+          EOF
+          kaggle kernels push -p kaggle/render --accelerator NvidiaTeslaT4
+
+      - name: Poll Kaggle Kernel Until Complete
+        env:
+          KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+          KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
+        run: |
+          SLUG="${KAGGLE_USERNAME}/roblox-render-${{ github.run_number }}"
+          sleep 15
+          FINAL_STATE="timeout"
+          for i in $(seq 1 660); do
+            STATUS=$(kaggle kernels status "$SLUG" 2>&1 || true)
+            echo "Poll $i ($(date -u +%H:%M:%SZ)): $STATUS"
+            if echo "$STATUS" | grep -qi "complete"; then
+              FINAL_STATE="complete"
+              break
+            fi
+            if echo "$STATUS" | grep -qi 'KernelWorkerStatus.ERROR\|KernelWorkerStatus.CANCEL\|"error"'; then
+              FINAL_STATE="error"
+              break
+            fi
+            sleep 30
+          done
+
+          mkdir -p kaggle_out
+          kaggle kernels output "$SLUG" -p kaggle_out || true
+          ls -lh kaggle_out || true
+          tail -n 60 kaggle_out/*.log 2>/dev/null || true
+
+          if [ "$FINAL_STATE" != "complete" ]; then
+            echo "Kaggle render ended with state: $FINAL_STATE"
+            exit 1
+          fi
+
+      - name: Upload GitHub Actions Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ github.event.inputs.project || 'Video-1' }}-kaggle-final
+          path: kaggle_out/*
+          retention-days: 14
+
+      - name: Publish MP4 & QA Sheet to GitHub Releases
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PROJECT_NAME: ${{ github.event.inputs.project || 'Video-1' }}
+          SAMPLES: ${{ github.event.inputs.samples || '16' }}
+          NTFY_TOPIC: ${{ github.event.inputs.ntfy_topic }}
+        run: |
+          TAG="render-${PROJECT_NAME}-kaggle-${{ github.run_number }}"
+          MP4_OUT="${PROJECT_NAME}_final.mp4"
+          cp kaggle_out/final.mp4 "$MP4_OUT"
+
+          FILES=("$MP4_OUT")
+          if [ -f kaggle_out/qa_contact_sheet.jpg ]; then
+            cp kaggle_out/qa_contact_sheet.jpg "${PROJECT_NAME}_qa_contact_sheet.jpg"
+            FILES+=("${PROJECT_NAME}_qa_contact_sheet.jpg")
+          fi
+          if [ -f kaggle_out/render_log_final.txt ]; then
+            cp kaggle_out/render_log_final.txt "${PROJECT_NAME}_render_log.txt"
+            FILES+=("${PROJECT_NAME}_render_log.txt")
+          fi
+
+          gh release create "$TAG" "${FILES[@]}" \
+            --title "🎬 ${PROJECT_NAME} — Cycles GPU Render (Kaggle T4, Run #${{ github.run_number }})" \
+            --notes "Autonomous 3D Blender **Cycles GPU (NVIDIA OptiX, ${SAMPLES} samples, 1080x1920)** render complete for **${PROJECT_NAME}**. Tap **${MP4_OUT}** below to download directly."
+
+          REL_URL="https://github.com/${{ github.repository }}/releases/tag/${TAG}"
+          echo "Published Release: $REL_URL"
+          if [ -n "$NTFY_TOPIC" ]; then
+            curl -fsS -d "${PROJECT_NAME} Cycles GPU render finished! Download: ${REL_URL}" "https://ntfy.sh/${NTFY_TOPIC}" || true
+          fi
