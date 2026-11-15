@@ -7,6 +7,7 @@ from mathutils import Vector
 
 V = Video(__file__)
 story.bind(V)
+ST = sets
 
 
 # ------------------------------------------------------------------ cast helpers
@@ -249,13 +250,13 @@ def build_elevator_lobby():
 def s01(t0, t1):
     locs.living_room()
     cookie_plate((0.4, 0.4, 2.2), cookies=1)
-    M = mom(t0, t1, "angry", loc=(-1.8, 4.4, 0), rot=-22)
+    M = mom(t0, t1, "angry", loc=(-1.9, 3.6, 0), rot=-24)
     M.act(t0 + 0.05, "cross")
-    E = eddie(t0, t1, "worried", loc=(1.6, 3.6, 0), rot=20)
+    E = eddie(t0, t1, "worried", loc=(1.7, 3.3, 0), rot=20)
     E.act(t0 + 0.04, "shrug", expr="worried")
     lips(E, t0, t1)
     cam = Cam()
-    cam.push(t0, t1, (0.0, 3.0, 2.8), 12.6, 10.6, yaw=-6, pitch=8, lens=17)
+    cam.push(t0, t1, (0.0, 2.8, 2.8), 13.0, 11.0, yaw=-6, pitch=8, lens=17)
     cam.handheld(0.8)
 
 
@@ -263,13 +264,13 @@ def s01(t0, t1):
 def s02(t0, t1):
     locs.living_room()
     cookie_plate((0.4, 0.4, 2.2), cookies=0)
-    M = mom(t0, t1, "furious", loc=(-1.8, 4.4, 0), rot=-28)
+    M = mom(t0, t1, "furious", loc=(-1.9, 3.6, 0), rot=-28)
     M.act(t0 + 0.03, "point_l")
-    E = eddie(t0, t1, "sus", loc=(1.6, 3.6, 0), rot=14)
+    E = eddie(t0, t1, "sus", loc=(1.7, 3.3, 0), rot=14)
     lips(E, t0, t1)
     E.face(w(9), "panic")
     cam = Cam()
-    cam.push(t0, t1, (0.6, 3.2, 3.1), 9.4, 7.8, yaw=18, pitch=7, lens=19)
+    cam.push(t0, t1, (0.5, 2.8, 3.0), 10.6, 9.0, yaw=16, pitch=7, lens=17)
     sfx(t0 + 0.06, "chat")
 
 
@@ -277,14 +278,14 @@ def s02(t0, t1):
 def s03(t0, t1):
     locs.living_room()
     cookie_plate((0.4, 0.4, 2.2), cookies=0)
-    M = mom(t0, t1, "shock", loc=(-1.8, 4.4, 0), rot=-28)
-    E = eddie(t0, t1, "terror", loc=(1.6, 3.6, 0), rot=14)
+    M = mom(t0, t1, "shock", loc=(-1.9, 3.6, 0), rot=-32)
+    E = eddie(t0, t1, "terror", loc=(1.7, 3.3, 0), rot=14)
     tv = w(12)
     W2.vanish(E, tv)
-    W2.poof("ed_hook", (1.6, 3.6, 2.2), tv, s=0.95)
+    W2.poof("ed_hook", (1.7, 3.3, 2.2), tv, s=0.95)
     M.act(tv + 0.05, "hands_head", expr="terror")
     cam = Cam()
-    cam.push(t0, t1, (0.2, 3.8, 2.8), 12.0, 10.2, yaw=0, pitch=7, lens=17)
+    cam.push(t0, t1, (0.2, 3.2, 2.8), 12.6, 10.6, yaw=0, pitch=7, lens=17)
     cam.crash(tv, 17, 22, 0.08)
     cam.handheld(1.4)
     sfx(tv, "poof")
@@ -295,12 +296,13 @@ def s03(t0, t1):
 def s04(t0, t1):
     locs.living_room()
     cookie_plate((0.4, 0.4, 2.2), cookies=0)
-    card("clk11", 2.2, 2.2, (2.2, 6.2, 6.4), img_mat("clock12", os.path.join(W.TEX, "clock_1200.png"), 0.45), "-Y")
-    M = mom(t0, t1, "terror", loc=(-1.8, 4.4, 0), rot=-28)
+    box("clk11_fr", (2.4, 0.14, 2.4), (2.2, 8.6, 7.6), mat("clk_f", hexc("#1e293b"), 0.4), 0.03)
+    card("clk11", 2.1, 2.1, (2.2, 8.5, 7.6), img_mat("clock12", os.path.join(W.TEX, "clock_1200.png"), 0.45), "-Y")
+    M = mom(t0, t1, "terror", loc=(-1.9, 3.6, 0), rot=-40)
     M.act(t0, "hands_face", expr="terror")
     M.shake(t0 + 0.1, 16)
     cam = Cam()
-    cam.orbit(t0, t1, (0.4, 4.0, 3.4), 11.4, -10, 12, pitch=6, lens=17)
+    cam.orbit(t0, t1, (0.2, 3.8, 3.4), 12.2, -10, 10, pitch=6, lens=17)
     sfx(t0 + 0.05, "ding")
 
 
@@ -351,27 +353,33 @@ def s07(t0, t1):
 @S(8, 37, 45, "Couples therapist working by phone beside empty chair")
 def s08(t0, t1):
     LIB.nurse_office()
-    th = therapist(t0, t1, "talk", loc=(-4.0, 3.0, 0), rot=-8)
+    remove_prefix("NO_sign")
+    remove_prefix("NO_chart")
+    remove_prefix("NO_cross")
+    box("TH_sign_bg", (5.2, 0.14, 1.0), (0.0, 5.74, 6.8), mat("th_bg", hexc("#2b6cb0"), 0.4), 0.04)
+    text("TH_sign_txt", "COUPLES THERAPY", (0.0, 5.64, 6.68), 0.42, mat("th_w", (1, 1, 1), 0.35), rot=(90, 0, 0))
+    th = therapist(t0, t1, "talk", loc=(-4.0, 3.1, 0.15), rot=-8)
+    th.pose(t0, loc=(-4.0, 3.1, 0.15), rot=-8, legL=(80, 4), legR=(80, -4))
     th.act(t0 + 0.04, "phone", expr="worried")
     lips(th, t0, t1)
-    LIB.prop_phone("th_ph1", (-3.3, 1.5, 2.42))
-    LIB.prop_phone("th_ph2", (-2.7, 1.7, 2.42))
+    LIB.prop_phone("th_ph1", (-3.3, 1.4, 2.42))
+    LIB.prop_phone("th_ph2", (-2.7, 1.6, 2.42))
     cam = Cam()
-    cam.push(t0, t1, (-3.6, 2.2, 2.7), 10.4, 8.6, yaw=-14, pitch=8, lens=18)
+    cam.push(t0, t1, (-3.0, 2.4, 2.8), 11.2, 9.2, yaw=-14, pitch=8, lens=17)
     sfx(w(43), "click")
 
 
 @S(9, 45, 56, "Police station: Officer calmly waits for suspect instead of lie detector")
 def s09(t0, t1):
     LIB.police_station()
-    ofc = LIB.police_officer("Det", loc=(-2.8, 1.2, 0), rot=-32)
+    ofc = LIB.police_officer("Det", loc=(-2.6, 1.0, 0), rot=-24)
     story._live(ofc, t0, t1, "smug")
     ofc.act(t0 + 0.06, "cross", expr="bored")
-    sus = LIB.robber("Suspect", loc=(2.4, 1.0, 0), rot=30)
+    sus = LIB.robber("Suspect", loc=(2.4, 1.0, 0), rot=26)
     story._live(sus, t0, t1, "scared")
     sus.shake(t0 + 0.2, 16)
     cam = Cam()
-    cam.orbit(t0, t1, (0.0, 1.2, 2.6), 12.2, -10, 12, pitch=7, lens=17)
+    cam.orbit(t0, t1, (0.0, 1.2, 2.6), 13.0, -10, 12, pitch=7, lens=17)
     sfx(w(52), "crickets")
 
 
@@ -379,24 +387,24 @@ def s09(t0, t1):
 def s10(t0, t1):
     world((0.88, 0.92, 1.0), 0.6)
     sets.bedroom()
-    M = mom(t0, t1, "happy", loc=(-2.0, 2.0, 0), rot=-28)
+    M = mom(t0, t1, "happy", loc=(-2.0, 2.0, 0), rot=-26)
     M.act(t0 + 0.05, "lean")
     D_ch = chars.dad()
     story._live(D_ch, t0, t1, "worried")
-    D_ch.pose(t0, loc=(2.0, 2.0, 0), rot=28)
+    D_ch.pose(t0, loc=(2.0, 2.0, 0), rot=26)
     cam = Cam()
-    cam.push(t0, t1, (0.0, 2.2, 2.8), 11.4, 9.8, yaw=6, pitch=7, lens=18)
+    cam.push(t0, t1, (0.0, 2.2, 2.8), 11.8, 10.0, yaw=6, pitch=7, lens=17)
 
 
 @S(11, 61, 67, "Mom tilts head asking 'does this make me look old'")
 def s11(t0, t1):
     world((0.88, 0.92, 1.0), 0.6)
     sets.bedroom()
-    M = mom(t0, t1, "sus", loc=(-1.6, 2.2, 0), rot=-16)
+    M = mom(t0, t1, "sus", loc=(-1.4, 2.2, 0), rot=-16)
     lips(M, t0, t1)
     M.act(t0 + 0.04, "shrug", expr="sus")
     cam = Cam()
-    cam.push(t0, t1, (-1.4, 2.2, 3.6), 7.4, 6.2, yaw=18, pitch=4, lens=20)
+    cam.push(t0, t1, (-1.2, 2.2, 3.2), 9.0, 7.6, yaw=14, pitch=5, lens=18)
 
 
 @S(12, 67, 71, "Dad sweats forcing fake grin & shaking head honestly-free")
@@ -405,12 +413,12 @@ def s12(t0, t1):
     sets.bedroom()
     D_ch = chars.dad()
     story._live(D_ch, t0, t1, "panic")
-    D_ch.pose(t0, loc=(1.8, 2.2, 0), rot=16)
+    D_ch.pose(t0, loc=(1.4, 2.2, 0), rot=16)
     D_ch.face(t0 + 0.15, "grin")
     D_ch.act(t0 + 0.15, "cheer", expr="grin")
     D_ch.shake(t0 + 0.25, 18)
     cam = Cam()
-    cam.push(t0, t1, (1.6, 2.2, 3.5), 7.6, 6.2, yaw=-18, pitch=4, lens=20)
+    cam.push(t0, t1, (1.2, 2.2, 3.2), 9.0, 7.6, yaw=-14, pitch=5, lens=18)
     sfx(t0 + 0.15, "rimshot")
 
 
