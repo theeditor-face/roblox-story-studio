@@ -1,0 +1,1257 @@
+[
+{
+"word": "I",
+"start": 0.0,
+"end": 0.075
+},
+{
+"word": "told",
+"start": 0.075,
+"end": 0.195
+},
+{
+"word": "my",
+"start": 0.195,
+"end": 0.315
+},
+{
+"word": "mom",
+"start": 0.315,
+"end": 0.495
+},
+{
+"word": "I",
+"start": 0.495,
+"end": 0.815
+},
+{
+"word": "didn’t",
+"start": 0.815,
+"end": 1.035
+},
+{
+"word": "eat",
+"start": 1.035,
+"end": 1.155
+},
+{
+"word": "the",
+"start": 1.155,
+"end": 1.275
+},
+{
+"word": "last",
+"start": 1.275,
+"end": 1.395
+},
+{
+"word": "cookie,",
+"start": 1.395,
+"end": 1.595
+},
+{
+"word": "and",
+"start": 2.045,
+"end": 2.225
+},
+{
+"word": "I",
+"start": 2.575,
+"end": 2.72
+},
+{
+"word": "vanished.",
+"start": 2.72,
+"end": 2.88
+},
+{
+"word": "Completely.",
+"start": 3.32,
+"end": 3.48
+},
+{
+"word": "Mid-sentence.",
+"start": 3.5,
+"end": 4.62
+},
+{
+"word": "For",
+"start": 4.62,
+"end": 5.1
+},
+{
+"word": "eleven",
+"start": 5.1,
+"end": 5.26
+},
+{
+"word": "seconds.",
+"start": 5.26,
+"end": 5.58
+},
+{
+"word": "You",
+"start": 5.975,
+"end": 6.095
+},
+{
+"word": "see,",
+"start": 6.095,
+"end": 6.215
+},
+{
+"word": "in",
+"start": 6.315,
+"end": 6.375
+},
+{
+"word": "this",
+"start": 6.375,
+"end": 6.475
+},
+{
+"word": "world,",
+"start": 6.475,
+"end": 6.655
+},
+{
+"word": "telling",
+"start": 6.655,
+"end": 6.915
+},
+{
+"word": "the",
+"start": 6.915,
+"end": 7.135
+},
+{
+"word": "truth",
+"start": 7.135,
+"end": 7.315
+},
+{
+"word": "makes",
+"start": 7.715,
+"end": 7.875
+},
+{
+"word": "you",
+"start": 7.875,
+"end": 8.055
+},
+{
+"word": "disappear.",
+"start": 8.055,
+"end": 8.375
+},
+{
+"word": "The",
+"start": 8.825,
+"end": 8.905
+},
+{
+"word": "bigger",
+"start": 8.905,
+"end": 9.045
+},
+{
+"word": "the",
+"start": 9.045,
+"end": 9.165
+},
+{
+"word": "truth,",
+"start": 9.165,
+"end": 9.305
+},
+{
+"word": "the",
+"start": 9.625,
+"end": 9.725
+},
+{
+"word": "longer",
+"start": 9.725,
+"end": 9.925
+},
+{
+"word": "you’re",
+"start": 9.925,
+"end": 10.145
+},
+{
+"word": "gone.",
+"start": 10.145,
+"end": 10.305
+},
+{
+"word": "That’s",
+"start": 10.755,
+"end": 10.855
+},
+{
+"word": "why",
+"start": 10.855,
+"end": 10.955
+},
+{
+"word": "couples",
+"start": 10.955,
+"end": 11.135
+},
+{
+"word": "therapists",
+"start": 11.335,
+"end": 11.555
+},
+{
+"word": "work",
+"start": 11.555,
+"end": 11.775
+},
+{
+"word": "entirely",
+"start": 11.775,
+"end": 12.015
+},
+{
+"word": "by",
+"start": 12.015,
+"end": 12.375
+},
+{
+"word": "phone.",
+"start": 12.395,
+"end": 12.615
+},
+{
+"word": "Lie",
+"start": 13.065,
+"end": 13.125
+},
+{
+"word": "detector",
+"start": 13.125,
+"end": 13.305
+},
+{
+"word": "tests",
+"start": 13.305,
+"end": 13.685
+},
+{
+"word": "got",
+"start": 13.685,
+"end": 13.925
+},
+{
+"word": "replaced",
+"start": 13.925,
+"end": 14.125
+},
+{
+"word": "with",
+"start": 14.125,
+"end": 14.365
+},
+{
+"word": "just...",
+"start": 14.365,
+"end": 14.585
+},
+{
+"word": "waiting",
+"start": 14.925,
+"end": 15.085
+},
+{
+"word": "in",
+"start": 15.085,
+"end": 15.305
+},
+{
+"word": "a",
+"start": 15.305,
+"end": 15.365
+},
+{
+"word": "room.",
+"start": 15.365,
+"end": 15.505
+},
+{
+"word": "And",
+"start": 15.955,
+"end": 16.055
+},
+{
+"word": "my",
+"start": 16.055,
+"end": 16.155
+},
+{
+"word": "dad",
+"start": 16.155,
+"end": 16.395
+},
+{
+"word": "hasn’t",
+"start": 16.645,
+"end": 16.915
+},
+{
+"word": "answered",
+"start": 16.915,
+"end": 17.195
+},
+{
+"word": "“does",
+"start": 17.535,
+"end": 17.635
+},
+{
+"word": "this",
+"start": 17.635,
+"end": 17.775
+},
+{
+"word": "make",
+"start": 17.775,
+"end": 17.915
+},
+{
+"word": "me",
+"start": 17.915,
+"end": 18.035
+},
+{
+"word": "look",
+"start": 18.035,
+"end": 18.195
+},
+{
+"word": "old”",
+"start": 18.195,
+"end": 18.395
+},
+{
+"word": "honestly",
+"start": 18.845,
+"end": 18.845
+},
+{
+"word": "in",
+"start": 19.185,
+"end": 19.295
+},
+{
+"word": "six",
+"start": 19.295,
+"end": 19.475
+},
+{
+"word": "years.",
+"start": 19.475,
+"end": 19.775
+},
+{
+"word": "But",
+"start": 20.22,
+"end": 20.365
+},
+{
+"word": "today,",
+"start": 20.365,
+"end": 20.565
+},
+{
+"word": "I",
+"start": 20.565,
+"end": 20.705
+},
+{
+"word": "got",
+"start": 20.705,
+"end": 20.785
+},
+{
+"word": "called",
+"start": 20.785,
+"end": 21.005
+},
+{
+"word": "as",
+"start": 21.005,
+"end": 21.205
+},
+{
+"word": "a",
+"start": 21.205,
+"end": 21.265
+},
+{
+"word": "witness.",
+"start": 21.265,
+"end": 21.465
+},
+{
+"word": "In",
+"start": 21.915,
+"end": 22.035
+},
+{
+"word": "an",
+"start": 22.035,
+"end": 22.115
+},
+{
+"word": "actual",
+"start": 22.125,
+"end": 22.435
+},
+{
+"word": "courtroom.",
+"start": 22.585,
+"end": 22.775
+},
+{
+"word": "Under",
+"start": 22.775,
+"end": 23.195
+},
+{
+"word": "oath.",
+"start": 23.195,
+"end": 23.375
+},
+{
+"word": "The",
+"start": 23.825,
+"end": 23.845
+},
+{
+"word": "judge",
+"start": 23.845,
+"end": 23.965
+},
+{
+"word": "looked",
+"start": 23.965,
+"end": 24.205
+},
+{
+"word": "down",
+"start": 24.205,
+"end": 24.385
+},
+{
+"word": "at",
+"start": 24.385,
+"end": 24.585
+},
+{
+"word": "me.",
+"start": 24.585,
+"end": 24.645
+},
+{
+"word": "“Did",
+"start": 24.86,
+"end": 25.025
+},
+{
+"word": "you",
+"start": 25.025,
+"end": 25.265
+},
+{
+"word": "or",
+"start": 25.265,
+"end": 25.505
+},
+{
+"word": "did",
+"start": 25.505,
+"end": 25.685
+},
+{
+"word": "you",
+"start": 25.685,
+"end": 25.805
+},
+{
+"word": "not",
+"start": 25.805,
+"end": 25.985
+},
+{
+"word": "see",
+"start": 25.985,
+"end": 26.225
+},
+{
+"word": "who",
+"start": 26.225,
+"end": 26.425
+},
+{
+"word": "broke",
+"start": 26.425,
+"end": 26.605
+},
+{
+"word": "the",
+"start": 26.605,
+"end": 26.765
+},
+{
+"word": "trophy",
+"start": 26.765,
+"end": 26.905
+},
+{
+"word": "case?”",
+"start": 26.905,
+"end": 27.205
+},
+{
+"word": "I",
+"start": 27.575,
+"end": 27.735
+},
+{
+"word": "saw",
+"start": 27.735,
+"end": 27.895
+},
+{
+"word": "Leo",
+"start": 27.895,
+"end": 28.015
+},
+{
+"word": "do",
+"start": 28.015,
+"end": 28.235
+},
+{
+"word": "it.",
+"start": 28.235,
+"end": 28.395
+},
+{
+"word": "My",
+"start": 28.62,
+"end": 28.765
+},
+{
+"word": "hand",
+"start": 28.765,
+"end": 28.945
+},
+{
+"word": "was",
+"start": 28.945,
+"end": 29.065
+},
+{
+"word": "already",
+"start": 29.065,
+"end": 29.325
+},
+{
+"word": "on",
+"start": 29.325,
+"end": 29.465
+},
+{
+"word": "the",
+"start": 29.465,
+"end": 29.525
+},
+{
+"word": "Bible.",
+"start": 29.525,
+"end": 29.685
+},
+{
+"word": "My",
+"start": 30.135,
+"end": 30.275
+},
+{
+"word": "mouth",
+"start": 30.275,
+"end": 30.435
+},
+{
+"word": "opened.",
+"start": 30.435,
+"end": 30.655
+},
+{
+"word": "I",
+"start": 31.07,
+"end": 31.23
+},
+{
+"word": "tried",
+"start": 31.23,
+"end": 31.45
+},
+{
+"word": "to",
+"start": 31.45,
+"end": 31.71
+},
+{
+"word": "say",
+"start": 31.71,
+"end": 31.89
+},
+{
+"word": "“no.”",
+"start": 31.89,
+"end": 32.27
+},
+{
+"word": "I",
+"start": 32.715,
+"end": 32.895
+},
+{
+"word": "really",
+"start": 32.895,
+"end": 33.035
+},
+{
+"word": "did.",
+"start": 33.035,
+"end": 33.295
+},
+{
+"word": "“...Leo.”",
+"start": 33.745,
+"end": 33.925
+},
+{
+"word": "Gone.",
+"start": 34.325,
+"end": 34.52
+},
+{
+"word": "Not",
+"start": 34.82,
+"end": 34.99
+},
+{
+"word": "just",
+"start": 34.99,
+"end": 35.09
+},
+{
+"word": "me —",
+"start": 35.09,
+"end": 35.25
+},
+{
+"word": "the",
+"start": 35.53,
+"end": 35.59
+},
+{
+"word": "second",
+"start": 35.59,
+"end": 35.75
+},
+{
+"word": "the",
+"start": 35.75,
+"end": 35.87
+},
+{
+"word": "truth",
+"start": 35.87,
+"end": 35.97
+},
+{
+"word": "left",
+"start": 35.97,
+"end": 36.17
+},
+{
+"word": "my",
+"start": 36.17,
+"end": 36.31
+},
+{
+"word": "mouth,",
+"start": 36.31,
+"end": 36.51
+},
+{
+"word": "the",
+"start": 36.81,
+"end": 36.83
+},
+{
+"word": "whole",
+"start": 36.83,
+"end": 36.95
+},
+{
+"word": "courtroom",
+"start": 36.99,
+"end": 37.33
+},
+{
+"word": "flickered.",
+"start": 37.33,
+"end": 37.77
+},
+{
+"word": "Leo",
+"start": 38.155,
+"end": 38.355
+},
+{
+"word": "shot",
+"start": 38.355,
+"end": 38.615
+},
+{
+"word": "up",
+"start": 38.615,
+"end": 38.775
+},
+{
+"word": "from",
+"start": 38.775,
+"end": 38.895
+},
+{
+"word": "the",
+"start": 38.895,
+"end": 38.975
+},
+{
+"word": "gallery,",
+"start": 38.975,
+"end": 39.155
+},
+{
+"word": "“WAIT,",
+"start": 39.415,
+"end": 39.495
+},
+{
+"word": "THAT’S",
+"start": 39.595,
+"end": 39.755
+},
+{
+"word": "NOT—”",
+"start": 39.755,
+"end": 39.875
+},
+{
+"word": "and",
+"start": 39.98,
+"end": 40.08
+},
+{
+"word": "he",
+"start": 40.08,
+"end": 40.2
+},
+{
+"word": "vanished",
+"start": 40.2,
+"end": 40.34
+},
+{
+"word": "too,",
+"start": 40.34,
+"end": 40.7
+},
+{
+"word": "admitting",
+"start": 40.9,
+"end": 41.1
+},
+{
+"word": "it",
+"start": 41.1,
+"end": 41.28
+},
+{
+"word": "by",
+"start": 41.28,
+"end": 41.42
+},
+{
+"word": "accident.",
+"start": 41.42,
+"end": 41.64
+},
+{
+"word": "The",
+"start": 42.09,
+"end": 42.13
+},
+{
+"word": "judge",
+"start": 42.13,
+"end": 42.23
+},
+{
+"word": "slammed",
+"start": 42.23,
+"end": 42.47
+},
+{
+"word": "her",
+"start": 42.47,
+"end": 42.71
+},
+{
+"word": "gavel.",
+"start": 42.71,
+"end": 42.91
+},
+{
+"word": "“ORDER!",
+"start": 42.93,
+"end": 43.11
+},
+{
+"word": "Both",
+"start": 43.55,
+"end": 43.73
+},
+{
+"word": "witnesses",
+"start": 43.73,
+"end": 44.01
+},
+{
+"word": "are",
+"start": 44.01,
+"end": 44.21
+},
+{
+"word": "invisible,",
+"start": 44.21,
+"end": 44.47
+},
+{
+"word": "we",
+"start": 44.71,
+"end": 44.71
+},
+{
+"word": "cannot",
+"start": 44.71,
+"end": 44.87
+},
+{
+"word": "have",
+"start": 44.87,
+"end": 45.19
+},
+{
+"word": "an",
+"start": 45.19,
+"end": 45.23
+},
+{
+"word": "invisible",
+"start": 45.23,
+"end": 45.51
+},
+{
+"word": "tr—”",
+"start": 45.51,
+"end": 45.71
+},
+{
+"word": "She",
+"start": 45.83,
+"end": 46.05
+},
+{
+"word": "vanished",
+"start": 46.05,
+"end": 46.21
+},
+{
+"word": "mid-sentence.",
+"start": 46.66,
+"end": 47.02
+},
+{
+"word": "Then",
+"start": 47.36,
+"end": 47.51
+},
+{
+"word": "the",
+"start": 47.51,
+"end": 47.61
+},
+{
+"word": "bailiff.",
+"start": 47.61,
+"end": 47.85
+},
+{
+"word": "Then",
+"start": 48.135,
+"end": 48.255
+},
+{
+"word": "the",
+"start": 48.255,
+"end": 48.355
+},
+{
+"word": "court",
+"start": 48.355,
+"end": 48.475
+},
+{
+"word": "reporter.",
+"start": 48.475,
+"end": 48.615
+},
+{
+"word": "Then",
+"start": 49.065,
+"end": 49.205
+},
+{
+"word": "all",
+"start": 49.205,
+"end": 49.305
+},
+{
+"word": "twelve",
+"start": 49.305,
+"end": 49.445
+},
+{
+"word": "people",
+"start": 49.445,
+"end": 49.705
+},
+{
+"word": "in",
+"start": 49.705,
+"end": 49.825
+},
+{
+"word": "the",
+"start": 49.825,
+"end": 49.885
+},
+{
+"word": "jury",
+"start": 49.885,
+"end": 49.985
+},
+{
+"word": "box,",
+"start": 49.985,
+"end": 50.205
+},
+{
+"word": "one",
+"start": 50.545,
+"end": 50.605
+},
+{
+"word": "by",
+"start": 50.605,
+"end": 50.765
+},
+{
+"word": "one,",
+"start": 50.765,
+"end": 50.985
+},
+{
+"word": "like",
+"start": 50.985,
+"end": 51.125
+},
+{
+"word": "dominoes,",
+"start": 51.125,
+"end": 51.585
+},
+{
+"word": "each",
+"start": 51.865,
+"end": 51.965
+},
+{
+"word": "one",
+"start": 51.965,
+"end": 52.125
+},
+{
+"word": "whispering",
+"start": 52.125,
+"end": 52.325
+},
+{
+"word": "something",
+"start": 52.325,
+"end": 52.665
+},
+{
+"word": "true",
+"start": 52.665,
+"end": 52.905
+},
+{
+"word": "under",
+"start": 52.905,
+"end": 53.145
+},
+{
+"word": "their",
+"start": 53.145,
+"end": 53.265
+},
+{
+"word": "breath",
+"start": 53.265,
+"end": 53.445
+},
+{
+"word": "without",
+"start": 53.445,
+"end": 53.625
+},
+{
+"word": "meaning",
+"start": 53.625,
+"end": 53.845
+},
+{
+"word": "to.",
+"start": 53.845,
+"end": 54.045
+},
+{
+"word": "The",
+"start": 54.495,
+"end": 54.635
+},
+{
+"word": "room",
+"start": 54.635,
+"end": 54.795
+},
+{
+"word": "was",
+"start": 54.795,
+"end": 55.015
+},
+{
+"word": "almost",
+"start": 55.015,
+"end": 55.235
+},
+{
+"word": "empty.",
+"start": 55.235,
+"end": 55.415
+},
+{
+"word": "Just",
+"start": 55.865,
+"end": 55.885
+},
+{
+"word": "floating",
+"start": 55.885,
+"end": 56.205
+},
+{
+"word": "microphones",
+"start": 56.205,
+"end": 56.585
+},
+{
+"word": "and",
+"start": 56.795,
+"end": 57.025
+},
+{
+"word": "an",
+"start": 57.025,
+"end": 57.105
+},
+{
+"word": "empty",
+"start": 57.115,
+"end": 57.365
+},
+{
+"word": "judge’s",
+"start": 57.365,
+"end": 57.745
+},
+{
+"word": "robe,",
+"start": 57.745,
+"end": 57.885
+},
+{
+"word": "still",
+"start": 57.885,
+"end": 58.125
+},
+{
+"word": "standing",
+"start": 58.125,
+"end": 58.485
+},
+{
+"word": "upright.",
+"start": 58.485,
+"end": 58.765
+},
+{
+"word": "Then",
+"start": 59.215,
+"end": 59.315
+},
+{
+"word": "I",
+"start": 59.315,
+"end": 59.395
+},
+{
+"word": "heard",
+"start": 59.395,
+"end": 59.495
+},
+{
+"word": "Leo’s",
+"start": 59.495,
+"end": 59.775
+},
+{
+"word": "voice,",
+"start": 59.775,
+"end": 59.935
+},
+{
+"word": "right",
+"start": 59.935,
+"end": 60.275
+},
+{
+"word": "next",
+"start": 60.275,
+"end": 60.435
+},
+{
+"word": "to",
+"start": 60.435,
+"end": 60.595
+},
+{
+"word": "me,",
+"start": 60.595,
+"end": 60.695
+},
+{
+"word": "panicked:",
+"start": 60.815,
+"end": 60.935
+},
+{
+"word": "“Wait...",
+"start": 61.38,
+"end": 61.42
+},
+{
+"word": "if",
+"start": 61.68,
+"end": 61.84
+},
+{
+"word": "everyone",
+"start": 61.84,
+"end": 62.06
+},
+{
+"word": "in",
+"start": 62.06,
+"end": 62.22
+},
+{
+"word": "here",
+"start": 62.22,
+"end": 62.38
+},
+{
+"word": "is",
+"start": 62.38,
+"end": 62.48
+},
+{
+"word": "honest",
+"start": 62.48,
+"end": 62.66
+},
+{
+"word": "right",
+"start": 62.8,
+"end": 62.96
+},
+{
+"word": "now...",
+"start": 62.96,
+"end": 63.24
+},
+{
+"word": "who’s",
+"start": 63.595,
+"end": 63.835
+},
+{
+"word": "actually",
+"start": 63.835,
+"end": 64.075
+},
+{
+"word": "driving",
+"start": 64.075,
+"end": 64.415
+},
+{
+"word": "the",
+"start": 64.415,
+"end": 64.635
+},
+{
+"word": "courthouse",
+"start": 64.635,
+"end": 64.815
+},
+{
+"word": "elevator",
+"start": 64.815,
+"end": 65.215
+},
+{
+"word": "outside?”",
+"start": 65.215,
+"end": 65.555
+}
+]
