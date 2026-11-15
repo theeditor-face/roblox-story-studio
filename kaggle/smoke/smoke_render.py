@@ -26,15 +26,18 @@ if os.path.exists(vdir):
 shutil.copytree(os.path.join(repo, "projects", "Video-1"), vdir)
 
 print("=== 4. Rendering 1 test frame on Kaggle GPU (Cycles + OIDN) ===")
+os.chdir(eng)
 t_r = time.time()
 subprocess.run([
     os.path.join(bdir, "blender"), "-b", "--factory-startup",
-    "-P", "tools/render.py", "--", "active", "still:1.0", "1", "8"
+    "-P", os.path.join(eng, "tools", "render.py"), "--", "active", "still:1.0", "1", "8"
 ], cwd=eng, check=True)
 print(f"Render call took {time.time() - t_r:.2f}s")
 
-for fn in os.listdir(os.path.join(vdir, "preview")):
+os.chdir("/kaggle/working")
+pdir = os.path.join(vdir, "preview")
+for fn in sorted(os.listdir(pdir)):
     if fn.endswith(".png"):
-        shutil.copy2(os.path.join(vdir, "preview", fn), "/kaggle/working/smoke_frame.png")
-        print("Saved /kaggle/working/smoke_frame.png")
+        shutil.copy2(os.path.join(pdir, fn), "/kaggle/working/smoke_frame.png")
+        print("Saved /kaggle/working/smoke_frame.png from", fn)
 print(f"Total kernel time: {time.time() - t_start:.1f}s")
