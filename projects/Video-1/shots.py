@@ -195,8 +195,8 @@ def s01(t0, t1):
     for k in ks[:4]:
         k.face(tsn, "gasp")
     cam = Cam()
-    cam.push(t0, t1, (2.5, 9.2, 4.3), 5.2, 3.8, yaw=186, pitch=5, lens=26, yaw1=176)
-    cam.crash(tsn, 26, 35, 0.08)
+    cam.push(t0, t1, (2.5, 9.2, 3.65), 6.2, 4.8, yaw=186, pitch=4, lens=24, yaw1=176)
+    cam.crash(tsn, 24, 30, 0.08)
     cam.handheld(1.4)
     sfx(tsn, "sneeze")
 
@@ -226,8 +226,8 @@ def s03(t0, t1):
     tsn = w(21)
     W2.sneeze(L, t0 + 0.05, tsn)
     cam = Cam()
-    cam.push(t0, t1, (-1.8, 9.5, 4.3), 5.2, 3.8, yaw=174, pitch=5, lens=26)
-    cam.crash(tsn, 26, 35, 0.08)
+    cam.push(t0, t1, (-1.8, 9.5, 3.65), 6.2, 4.8, yaw=174, pitch=4, lens=24)
+    cam.crash(tsn, 24, 30, 0.08)
     cam.handheld(1.2)
     sfx(tsn, "sneeze")
 
