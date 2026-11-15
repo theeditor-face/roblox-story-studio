@@ -121,5 +121,5 @@ def _props_lineup():
 
 p_c1 = _snap("chars_1", _char_lineup_1, (0, -14.0, 3.2), (0, 0, 2.6))
 p_c2 = _snap("chars_2", _char_lineup_2, (0, -14.0, 3.2), (0, 0, 2.6))
-p_pr = _snap("props", _props_lineup, (0, -14.0, 3.2), (0.5, 0, 1.2))
+p_pr = _snap("props_all", _props_lineup, (0, -14.0, 3.2), (0.5, 0, 1.2))
 print("Rendered:", len(env_imgs), "envs + 3 sheets")
