@@ -30,7 +30,7 @@ os.chdir(eng)
 t_r = time.time()
 subprocess.run([
     os.path.join(bdir, "blender"), "-b", "--factory-startup",
-    "-P", os.path.join(eng, "tools", "render.py"), "--", "active", "still:1.0", "1", "8"
+    "-P", os.path.join(eng, "tools", "render.py"), "--", "active", "still:1.0", "1", "16"
 ], cwd=eng, check=True)
 print(f"Render call took {time.time() - t_r:.2f}s")
 
