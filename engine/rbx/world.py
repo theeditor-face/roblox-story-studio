@@ -166,6 +166,41 @@ def town(school=True, banner=None, coll=None, extent=140, seed=5):
         box(f"tw_road_x{k}", (2 * extent, 6, 0.06), (0, y, 0.04), Mroad, 0, coll=c)
     for k, x in enumerate((-60, -100, -140, 60, 100, 140)):
         box(f"tw_road_y{k}", (6, 2 * extent, 0.07), (x, 0, 0.045), Mroad, 0, coll=c)
+    # Main street (-30) sidewalks, center lane dashes, crosswalk & roadside props
+    Mside = mat("tw_sidewalk", hexc("#cfd4dc"), 0.85)
+    for sy in (-25.2, -34.8):
+        box(f"tw_sw_{sy}", (118, 4.2, 0.14), (0, sy, 0.07), Mside, 0.02, coll=c)
+    Myel_l = mat("tw_lane_y", hexc("#f2c14e"), 0.5)
+    for k in range(-9, 10):
+        box(f"tw_dash_{k}", (3.2, 0.25, 0.03), (k * 6.0, -30, 0.075), Myel_l, 0, coll=c)
+    Mw_z = mat("tw_zebra_w", hexc("#f1f5f9"), 0.55)
+    for k in range(-3, 4):
+        if k != 0:
+            box(f"tw_cz_{k}", (0.8, 4.8, 0.03), (k * 1.6, -30, 0.078), Mw_z, 0, coll=c)
+    Mlamp_p = mat("tw_lamp_p", hexc("#2b303a"), 0.35, metal=0.7)
+    Mlamp_g = mat("tw_lamp_g", (1.0, 0.95, 0.78), 0.2, emit=(1.0, 0.92, 0.65), estr=2.5)
+    Mbench = wood("tw_bench_w", "#7c4724", "#b57645", 1.8)
+    for lx in (-12.5, 12.5):
+        cyl(f"tw_slp_{lx}", 0.14, 7.0, (lx, -23.6, 3.5), Mlamp_p, 10, coll=c)
+        sphere(f"tw_slb_{lx}", 0.42, (lx, -23.6, 7.1), Mlamp_g, coll=c)
+        box(f"tw_bn_{lx}", (3.6, 1.2, 0.22), (lx * 0.72, -23.6, 1.0), Mbench, 0.03, coll=c)
+        box(f"tw_bnb_{lx}", (3.6, 0.2, 1.0), (lx * 0.72, -23.1, 1.55), Mbench, 0.03, coll=c)
+    cyl("tw_hydrant", 0.32, 1.25, (-7.2, -24.0, 0.62), mat("tw_hyd", hexc("#dc2626"), 0.35), 10, coll=c)
+    Mtrunk = wood("tw_trunk", "#5c3317", "#874f28", 2.0)
+    Mbush = mat("tw_leaf_n", hexc("#3f9442"), 0.85)
+    for tx, ty in ((-16, -21.5), (16, -21.5), (-18, -8), (-22, 6), (20, 4), (-9, -15), (9, -15)):
+        cyl(f"tw_ntr_{tx}_{ty}", 0.45, 3.6, (tx, ty, 1.8), Mtrunk, 10, coll=c)
+        sphere(f"tw_nlf_{tx}_{ty}", 2.3, (tx, ty, 4.4), Mbush, (1, 1, 1.15), coll=c)
+    car("tw_park_b", (-16.5, -28.4, 0.08), color="#3b82f6", coll=c, rot=90)
+    car("tw_park_y", (18.0, -31.6, 0.08), color="#eab308", coll=c, rot=-90)
+    # West-side neighborhood cottages framing the street alongside the school
+    for idx, (hx, hy, col, rcol) in enumerate((
+        (-28, -4, "#e2725b", "#4a5568"),
+        (-42, -6, "#6fb3e0", "#7a4a2a"),
+        (-28, 12, "#f2c14e", "#a33b2f"),
+    )):
+        box(f"tw_wh_{idx}", (10, 10, 7.5), (hx, hy, 3.75), mat(f"tw_whm{idx}", hexc(col), 0.7), 0.15, coll=c)
+        box(f"tw_wr_{idx}", (10.8, 10.8, 1.3), (hx, hy, 8.1), mat(f"tw_wrm{idx}", hexc(rcol), 0.7), 0.2, coll=c)
     rnd = random.Random(seed)
     cols = ["#e2725b", "#f2c14e", "#6fb3e0", "#9b8fd6", "#f0f0f0", "#8fd18c", "#f59bb5"]
     roofs = ["#a33b2f", "#4a5568", "#7a4a2a"]

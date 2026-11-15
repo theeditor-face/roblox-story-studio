@@ -28,6 +28,13 @@ def _snap(name, setup_fn, cam_pos, target):
     sc.render.image_settings.file_format = "PNG"
     setup_fn()
     cam = C.Cam("CatCam", lens=32)
+    # Cam() is tuned for the real 1080x1920 PORTRAIT pipeline, so it hard-sets
+    # sensor_fit="VERTICAL" (FOV calibrated against the sensor's *height*). This preview
+    # renders a 480x360 LANDSCAPE frame instead - with VERTICAL fit still on, the horizontal
+    # FOV comes out far too narrow for a wide frame, so anything away from dead-center (side
+    # shelving, bleachers, the outer characters in a lineup) gets cropped clean out of shot.
+    # Switch to HORIZONTAL fit so this preview actually shows what a landscape frame should.
+    cam.cd.sensor_fit = "HORIZONTAL"
     cam.key(0.0, cam_pos, target)
     sc.camera = cam.ob
     p = os.path.join(OUT, f"{name}.png")
@@ -94,20 +101,25 @@ def _char_lineup_2():
 def _props_lineup():
     C.world(C.hexc("#f1f5f9"), 1.0)
     W.sun(4.5, (35, -20, 25))
-    C.light("PL_fill", "AREA", (0, -8, 6), 1100, C.hexc("#ffffff"), size=12, rot=(20, 0, 0))
-    C.box("PL_tbl", (22, 6, 0.4), (0, 0, -0.2), C.mat("PL_tb", C.hexc("#e2e8f0"), 0.4))
+    C.light("PRL_fill", "AREA", (0, -10, 6), 1200, C.hexc("#ffffff"), size=14, rot=(15, 0, 0))
+    C.box("PRL_floor", (28, 10, 0.3), (0, 0, -0.15), C.mat("PRL_fl", C.hexc("#cbd5e1"), 0.5))
     props = [
-        LIB.prop_gavel, LIB.prop_burger_tray, LIB.prop_shopping_cart,
-        LIB.prop_basketball, LIB.prop_treasure_chest, LIB.prop_phone,
-        LIB.prop_trophy, LIB.prop_megaphone, LIB.prop_skateboard, LIB.prop_desk_mic,
+        ("gavel", LIB.prop_gavel, (-9.0, 0, 0.5)),
+        ("burger", LIB.prop_burger_tray, (-7.0, 0, 0.5)),
+        ("cart", LIB.prop_shopping_cart, (-4.5, 0, 0)),
+        ("ball", LIB.prop_basketball, (-2.0, 0, 0)),
+        ("chest", LIB.prop_treasure_chest, (0.2, 0, 0)),
+        ("phone", LIB.prop_phone, (2.5, 0, 0.8)),
+        ("trophy", LIB.prop_trophy, (4.2, 0, 0)),
+        ("mega", LIB.prop_megaphone, (6.0, 0, 0.8)),
+        ("skate", LIB.prop_skateboard, (8.0, 0, 0)),
+        ("mic", LIB.prop_desk_mic, (10.0, 0, 0)),
     ]
-    for i, fn in enumerate(props):
-        x = -9.0 + (i % 5) * 4.5
-        y = -1.2 if i < 5 else 1.5
-        fn(f"P{i}", loc=(x, y, 0))
+    for nm, fn, lc in props:
+        fn(nm, lc)
 
 
-c1 = _snap("chars_1", _char_lineup_1, (0, -13.5, 3.2), (0, 0, 2.5))
-c2 = _snap("chars_2", _char_lineup_2, (0, -13.5, 3.2), (0, 0, 2.5))
-pr = _snap("props_all", _props_lineup, (0, -11.0, 4.2), (0, 0.2, 0.8))
-print("Rendered all catalog PNGs in", OUT)
+p_c1 = _snap("chars_1", _char_lineup_1, (0, -14.0, 3.2), (0, 0, 2.6))
+p_c2 = _snap("chars_2", _char_lineup_2, (0, -14.0, 3.2), (0, 0, 2.6))
+p_pr = _snap("props", _props_lineup, (0, -14.0, 3.2), (0.5, 0, 1.2))
+print("Rendered:", len(env_imgs), "envs + 3 sheets")

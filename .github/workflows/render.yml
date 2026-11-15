@@ -25,11 +25,6 @@ on:
           - '8'
           - '16'
 
-  push:
-    paths:
-      - 'projects/**/audio/**'
-      - 'projects/**/shots.py'
-
 permissions:
   contents: write
   actions: read

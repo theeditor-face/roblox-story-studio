@@ -30,12 +30,16 @@ def bedroom_scene():
 
 
 def space_scene():
-    """Brightly lit outer-space quarantine room/deck."""
-    W.space_world(1.0)
-    W.sun(5.5, rot=(48, 0, 25))
-    light("sp_key", "AREA", (0, -10, 8), 5000, (0.92, 0.96, 1.0), 12, target=(0, 0, 3.5))
-    light("sp_fill", "AREA", (-8, -6, 4), 2500, (0.8, 0.9, 1.0), 8, target=(0, 0, 3.0))
-    box("sp_pad", (10, 10, 0.4), (0, 0, -0.2), mat("sp_deck", hexc("#3a4252"), 0.4, metal=0.5), 0.08)
+    """Brightly lit outer-space quarantine deck using upgraded SpaceStation bay."""
+    from rbx import library as LIB
+    LIB.space_station()
+    light("sp_key", "AREA", (0, -8, 7.5), 4200, (0.94, 0.97, 1.0), 12, target=(0, 0, 3.0))
+    light("sp_fill", "AREA", (-7, -6, 4.5), 2200, (0.85, 0.92, 1.0), 8, target=(0, 0, 2.5))
+
+
+HIG_LOC = (0.0, -24.8, 0.0)
+EDDIE_TOWN_LOC = (-1.6, -27.0, 0.0)
+MIA_TOWN_LOC = (1.6, -27.0, 0.0)
 
 
 def mia(t0, t1, expr="happy", **kw):
@@ -187,32 +191,33 @@ def streetlamp_prop(loc=(-2.2, -26, 0)):
 @S(1, 0, 6, "HOOK: Picture Day classroom, Eddie sneezes in front of tripod camera")
 def s01(t0, t1):
     R, ks = class_scene(t0, t1, kids=8, board=BOARD)
-    camera_tripod((0.2, 10.8, 0), rot=0)
+    camera_tripod((0.0, 11.0, 0), rot=0)
     E = eddie(t0, t1, "shock")
-    E.pose(t0, loc=(2.5, 9.0, 0), rot=180)
+    E.pose(t0, loc=(2.4, 9.2, 0), rot=168)
     tsn = w(1) + 0.05
     W2.sneeze(E, t0, tsn)
     for k in ks[:4]:
         k.face(tsn, "gasp")
     cam = Cam()
-    cam.push(t0, t1, (2.5, 9.0, 3.5), 4.6, 4.0, yaw=186, pitch=4, lens=20, yaw1=176)
-    cam.crash(tsn, 20, 26, 0.08)
-    cam.handheld(1.4)
+    cam.push(t0, t1, (1.4, 9.2, 2.8), 7.6, 6.4, yaw=188, pitch=6, lens=20, yaw1=178)
+    cam.crash(tsn, 20, 25, 0.08)
+    cam.handheld(1.2)
     sfx(tsn, "sneeze")
 
 
 @S(2, 6, 15, "Eddie shrinks down to the size of a thumbtack on the open classroom floor")
 def s02(t0, t1):
     R, ks = class_scene(t0, t1, kids=6, board=BOARD)
+    camera_tripod((0.0, 11.0, 0), rot=0)
     E = eddie(t0, t1, "terror")
-    E.pose(t0, loc=(2.5, 9.5, 0), rot=180)
+    E.pose(t0, loc=(2.4, 9.2, 0), rot=168)
     t_sh = t0 + 0.08
     shrink_to(E, t_sh, s0=1.0, s1=0.16, dur=0.22)
     E.act(t_sh + 0.1, "hands_head", expr="terror")
     cam = Cam()
-    cam.key(t0, (2.5, 13.2, 3.8), (2.5, 9.5, 2.4), lens=24)
-    cam.key(t1, (2.5, 11.4, 1.1), (2.5, 9.5, 0.45), lens=28)
-    cam.handheld(1.3)
+    cam.key(t0, (2.2, 14.5, 4.2), (1.8, 8.8, 2.2), lens=20)
+    cam.key(t1, (2.2, 12.6, 2.2), (2.2, 9.2, 0.9), lens=22)
+    cam.handheld(1.1)
     sfx(t_sh, "poof")
     sfx(t_sh + 0.12, "boing")
 
@@ -220,30 +225,31 @@ def s02(t0, t1):
 @S(3, 15, 23, "Leo next to Eddie sneezes violently")
 def s03(t0, t1):
     R, ks = class_scene(t0, t1, kids=6, board=BOARD)
+    camera_tripod((0.0, 11.0, 0), rot=0)
     L = leo(t0, t1, "shock")
-    L.pose(t0, loc=(-1.8, 9.2, 0), rot=180)
-    shoe_prop("leo_shoe", (-0.6, 9.2, 0), scale=0.95, color="#2f5fd0", rot=180)
+    L.pose(t0, loc=(-2.2, 9.2, 0), rot=192)
+    shoe_prop("leo_shoe", (-0.8, 9.2, 0), scale=0.95, color="#2f5fd0", rot=180)
     tsn = w(21)
     W2.sneeze(L, t0 + 0.05, tsn)
     cam = Cam()
-    cam.push(t0, t1, (-1.8, 9.2, 3.5), 4.5, 4.0, yaw=174, pitch=4, lens=20)
-    cam.crash(tsn, 20, 26, 0.08)
-    cam.handheld(1.2)
+    cam.push(t0, t1, (-1.6, 9.2, 2.8), 7.6, 6.4, yaw=172, pitch=6, lens=20)
+    cam.crash(tsn, 20, 25, 0.08)
+    cam.handheld(1.0)
     sfx(tsn, "sneeze")
 
 
 @S(4, 23, 30, "Leo shrinks and disappears straight inside his own giant sneaker")
 def s04(t0, t1):
     R, ks = class_scene(t0, t1, kids=4, board=BOARD)
-    sh = shoe_prop("giant_shoe", (-1.2, 9.5, 0), scale=1.35, color="#2f5fd0", rot=180)
+    sh = shoe_prop("giant_shoe", (-1.4, 9.2, 0), scale=1.35, color="#2f5fd0", rot=180)
     L = leo(t0, t1, "terror")
-    L.pose(t0, loc=(-1.2, 9.5, 0.95), rot=180)
+    L.pose(t0, loc=(-1.4, 9.2, 0.95), rot=185)
     t_sh = t0 + 0.06
     shrink_to(L, t_sh, s0=0.75, s1=0.12, dur=0.20)
     W2.vanish(L, t_sh + 0.28)
     cam = Cam()
-    cam.push(t0, t1, (-1.2, 9.5, 1.2), 4.2, 2.8, yaw=188, pitch=16, lens=26)
-    cam.handheld(1.2)
+    cam.push(t0, t1, (-1.4, 9.2, 1.4), 6.2, 4.6, yaw=188, pitch=14, lens=22)
+    cam.handheld(1.0)
     sfx(t_sh, "poof")
     sfx(t_sh + 0.18, "pop")
 
@@ -253,13 +259,13 @@ def s04(t0, t1):
 def s05(t0, t1):
     bright_town()
     E = eddie(t0, t1, "shock")
-    E.pose(t0, loc=(0, -26, 0), rot=0)
+    E.pose(t0, loc=(0, -25.2, 0), rot=-12)
     tsn = w(35)
     W2.sneeze(E, t0 + 0.04, tsn)
     shrink_to(E, tsn + 0.05, s0=1.0, s1=0.42, dur=0.20)
     cam = Cam()
-    cam.push(t0, t1, (0, -26, 3.2), 7.8, 5.6, yaw=8, pitch=8, lens=24)
-    cam.handheld(1.0)
+    cam.push(t0, t1, (0, -25.2, 2.8), 10.6, 8.6, yaw=10, pitch=8, lens=20)
+    cam.handheld(0.9)
     sfx(tsn, "sneeze")
     sfx(tsn + 0.08, "boing")
 
@@ -268,14 +274,14 @@ def s05(t0, t1):
 def s06(t0, t1):
     bright_town()
     E = eddie(t0, t1, "terror")
-    E.pose(t0, loc=(0, -26, 0), rot=0)
+    E.pose(t0, loc=(0, -25.2, 0), rot=-12)
     E.root.scale = (0.42, 0.42, 0.42)
     tsn = w(42)
     W2.sneeze(E, t0 + 0.02, tsn)
     shrink_to(E, tsn + 0.04, s0=0.42, s1=0.14, dur=0.18)
     cam = Cam()
-    cam.push(t0, t1, (0, -26, 1.3), 4.8, 3.0, yaw=-12, pitch=14, lens=26)
-    cam.crash(tsn, 26, 35, 0.08)
+    cam.push(t0, t1, (0, -25.2, 1.4), 7.2, 5.2, yaw=-12, pitch=12, lens=22)
+    cam.crash(tsn, 22, 28, 0.08)
     sfx(tsn, "sneeze")
     sfx(tsn + 0.06, "poof")
 
@@ -289,29 +295,28 @@ def s07(t0, t1):
     doc = chars.Char("Doc", skin="#f0dcc3", shirt="#f4f8fc", pants="#2c3e50", hair="slick",
                      hair_color="#4a4a4a", face="mustache", sleeves="long", extras=("glasses",))
     story._live(doc, t0, t1, "determined")
-    doc.pose(t0, loc=(3.2, -5.2, 0), rot=15)
+    doc.pose(t0, loc=(3.2, -5.2, 0), rot=24)
     doc.act(t0 + 0.1, "point")
     lips(doc, t0, t1)
     sh = J["shaker"]
     noise(sh, "rotation_euler", 1, 0.05, 6)
     cam = Cam()
-    cam.key(t0, (0.5, -12.5, 4.4), (0.2, 3.0, 3.2), lens=26, focus=14.0, fstop=4)
-    cam.key(t1, (0.3, -7.2, 3.8), (0.2, 3.0, 3.0), lens=26, focus=9.5, fstop=4)
-    cam.handheld(0.8)
+    cam.key(t0, (0.5, -14.2, 4.4), (0.2, 2.5, 3.0), lens=22, focus=16.0, fstop=4)
+    cam.key(t1, (0.3, -10.5, 3.8), (0.2, 2.5, 2.8), lens=22, focus=12.5, fstop=4)
+    cam.handheld(0.7)
     sfx(t0 + 0.08, "buzzer")
 
 
 @S(8, 55, 66, "Astronaut in helmet quarantining in space room away from floating dust")
 def s08(t0, t1):
     space_scene()
-    W2.earth("earth", (6, 48, 8), r=22)
     astro = pilot(t0, t1, "shock", name="Astro", shirt="#f0f4f8")
     W2.astronaut_helmet(astro)
-    astro.pose(t0, loc=(0, 0, 0), rot=0)
+    astro.pose(t0, loc=(0, -0.4, 0), rot=12)
     astro.act(t0 + 0.1, "recoil")
-    pollen_cloud((0, -2.2, 3.8), t0, t1, n=22, spread=2.2, seed=9)
+    pollen_cloud((0, -2.0, 3.4), t0, t1, n=22, spread=2.4, seed=9)
     cam = Cam()
-    cam.orbit(t0, t1, (0, 0, 4.2), 6.4, -18, 18, pitch=6, lens=24)
+    cam.orbit(t0, t1, (0, 0.2, 3.0), 9.6, -16, 16, pitch=6, lens=20)
     sfx(t0 + 0.05, "whoosh")
 
 
@@ -319,11 +324,11 @@ def s08(t0, t1):
 def s09(t0, t1):
     bedroom_scene()
     U = uncle(t0, t1, "neutral")
-    U.pose(t0, loc=(-1.4, 3.2, 0), rot=0)
+    U.pose(t0, loc=(-2.2, 2.2, 0), rot=-16)
     U.face(t0, eyes="closed", mouth="frown")
-    vacuum_prop((1.5, 3.2, 0), tipped=False)
+    vacuum_prop((1.4, 2.2, 0), tipped=False)
     cam = Cam()
-    cam.push(t0, t1, (0.0, 3.2, 3.2), 7.2, 5.6, yaw=-6, pitch=8, lens=24)
+    cam.push(t0, t1, (0.0, 2.8, 2.8), 10.8, 9.2, yaw=-6, pitch=8, lens=20)
     sfx(t0 + 0.1, "snort")
 
 
@@ -331,13 +336,13 @@ def s09(t0, t1):
 def s10(t0, t1):
     bedroom_scene()
     U = uncle(t0, t1, "terror")
-    U.pose(t0, loc=(-1.4, 3.2, 0), rot=0)
+    U.pose(t0, loc=(-2.2, 2.2, 0), rot=-18)
     U.act(t0 + 0.08, "hands_head", expr="terror")
-    vacuum_prop((1.5, 3.2, 0), tipped=True)
-    puff("vac_dust", (1.8, 3.5, 0.9), t0 + 0.08, r=1.1)
+    vacuum_prop((1.4, 2.2, 0), tipped=True)
+    puff("vac_dust", (1.8, 2.6, 0.9), t0 + 0.08, r=1.1)
     cam = Cam()
-    cam.push(t0, t1, (0.0, 3.2, 3.0), 6.2, 4.8, yaw=8, pitch=10, lens=24)
-    cam.crash(t0 + 0.08, 24, 32, 0.08)
+    cam.push(t0, t1, (0.0, 2.8, 2.8), 9.8, 8.2, yaw=8, pitch=10, lens=20)
+    cam.crash(t0 + 0.08, 20, 26, 0.08)
     sfx(t0 + 0.06, "thud")
     sfx(t0 + 0.12, "gasp")
 
@@ -351,7 +356,7 @@ def s11(t0, t1):
     E.act(t0 + 0.06, "hands_face")
     lips(E, t0, t1)
     cam = Cam()
-    cam.push(t0, t1, up(E_SEAT, 4.2), 5.4, 4.1, yaw=188, pitch=4, lens=26)
+    cam.push(t0, t1, up(E_SEAT, 3.0), 8.2, 6.6, yaw=188, pitch=6, lens=20)
     sfx(t0 + 0.05, "pop")
 
 
@@ -361,36 +366,37 @@ def s12(t0, t1):
     E = eddie(t0, t1, "terror")
     W.sit(E, t0, E_DESK)
     W2.cat("allergy_cat", (3.6, 6.4, 3.42), rot=160)
-    pollen_cloud(up(E_SEAT, 4.2), t0, t1, n=28, spread=2.4, seed=3)
+    pollen_cloud(up(E_SEAT, 4.0), t0, t1, n=28, spread=2.4, seed=3)
     E.act(t0 + 0.05, "recoil")
     lips(E, t0, t1)
     cam = Cam()
-    cam.orbit(t0, t1, up(E_SEAT, 4.2), 5.0, 170, 196, pitch=6, lens=24)
+    cam.orbit(t0, t1, up(E_SEAT, 3.0), 8.2, 168, 198, pitch=8, lens=20)
     sfx(t0 + 0.05, "meow")
 
 
 @S(13, 94, 102, "Picture Day photographer stands in front of chalkboard beside tripod camera")
 def s13(t0, t1):
     R, ks = class_scene(t0, t1, kids=6, board=BOARD)
-    camera_tripod((-1.8, 11.2, 0), rot=0)
+    camera_tripod((-1.8, 11.0, 0), rot=0)
     ph = photographer(t0, t1, "joy")
-    ph.pose(t0, loc=(1.2, 11.2, 0), rot=0)
+    ph.pose(t0, loc=(1.4, 11.0, 0), rot=-12)
     ph.act(t0 + 0.08, "wave")
     cam = Cam()
-    cam.push(t0, t1, (-0.2, 11.2, 4.2), 6.2, 4.8, yaw=8, pitch=4, lens=24)
+    cam.push(t0, t1, (0.0, 11.0, 3.0), 9.6, 7.8, yaw=8, pitch=6, lens=20)
     sfx(t0 + 0.05, "door")
 
 
 @S(14, 102, 109, "Close-up: Photographer holds huge glowing spring flower bouquet")
 def s14(t0, t1):
     R, ks = class_scene(t0, t1, kids=4, board=BOARD)
+    camera_tripod((-1.8, 11.0, 0), rot=0)
     ph = photographer(t0, t1, "joy")
-    ph.pose(t0, loc=(1.2, 11.2, 0), rot=0)
+    ph.pose(t0, loc=(1.4, 11.0, 0), rot=-12)
     ph.pose(t0, armR=(75, 15))
-    bouquet_prop("spring_bouquet", (0.4, 10.1, 3.8), scale=1.35)
-    pollen_cloud((0.4, 10.1, 4.5), t0, t1, n=25, spread=1.8, seed=14)
+    bouquet_prop("spring_bouquet", (0.5, 9.8, 3.8), scale=1.35)
+    pollen_cloud((0.5, 9.8, 4.5), t0, t1, n=25, spread=1.8, seed=14)
     cam = Cam()
-    cam.push(t0, t1, (0.8, 10.6, 4.2), 4.6, 3.4, yaw=-10, pitch=4, lens=28)
+    cam.push(t0, t1, (0.8, 10.4, 3.5), 7.2, 5.6, yaw=-10, pitch=4, lens=22)
     sfx(t0 + 0.05, "sparkle")
 
 
@@ -403,25 +409,25 @@ def s15(t0, t1):
     tsn = w(112)
     W2.sneeze(E, t0, tsn)
     cam = Cam()
-    cam.push(t0, t1, up(E_SEAT, 4.4), 4.8, 3.5, yaw=182, pitch=4, lens=28)
-    cam.crash(tsn, 28, 38, 0.06)
-    cam.handheld(1.8)
+    cam.push(t0, t1, up(E_SEAT, 3.2), 7.8, 6.2, yaw=184, pitch=6, lens=22)
+    cam.crash(tsn, 22, 30, 0.06)
+    cam.handheld(1.5)
     sfx(t0 + 0.03, "snort")
     sfx(tsn, "sneeze")
 
 
-@S(16, 113, 122, "Eddie shrinks down onto the open classroom floor tiles")
+@S(16, 113, 122, "Eddie shrinks down onto the open classroom floor tiles beside his desk")
 def s16(t0, t1):
     R, ks = class_scene(t0, t1, kids=6, board=BOARD)
     E = eddie(t0, t1, "terror")
-    E.pose(t0, loc=(2.5, 9.6, 1.8), rot=180)
-    E.pose(t1, loc=(2.5, 9.6, 0.02), rot=180)
+    E.pose(t0, loc=(0.4, 7.6, 1.8), rot=170)
+    E.pose(t1, loc=(0.4, 7.6, 0.02), rot=170)
     shrink_to(E, t0 + 0.05, s0=0.85, s1=0.16, dur=min(0.45, (t1 - t0) * 0.7))
     E.panic(t0, t1, rate=6.0)
     cam = Cam()
-    cam.key(t0, (2.5, 13.0, 3.6), (2.5, 9.6, 2.0), lens=24)
-    cam.key(t1, (2.5, 11.4, 1.0), (2.5, 9.6, 0.4), lens=28)
-    cam.handheld(1.5)
+    cam.key(t0, (0.4, 12.8, 4.2), (0.4, 7.6, 2.0), lens=20)
+    cam.key(t1, (0.4, 10.6, 1.8), (0.4, 7.6, 0.7), lens=22)
+    cam.handheld(1.2)
     sfx(t0 + 0.04, "whoosh")
     sfx(t0 + 0.18, "boing")
 
@@ -430,11 +436,11 @@ def s16(t0, t1):
 def s17(t0, t1):
     R, ks = class_scene(t0, t1, kids=4, board=BOARD)
     E = eddie(t0, t1, "terror")
-    E.pose(t0, loc=(2.5, 9.5, 0), rot=180)
+    E.pose(t0, loc=(0.4, 7.6, 0), rot=170)
     E.root.scale = (0.14, 0.14, 0.14)
     E.act(t0 + 0.05, "hands_head", expr="terror")
     cam = Cam()
-    cam.push(t0, t1, (2.5, 9.5, 0.45), 2.4, 1.6, yaw=192, pitch=12, lens=26)
+    cam.push(t0, t1, (0.4, 7.6, 0.65), 3.6, 2.5, yaw=192, pitch=14, lens=22)
     cam.handheld(1.0)
     sfx(t0 + 0.04, "pop")
 
@@ -447,7 +453,7 @@ def s18(t0, t1):
     M.pose(t0 + 0.05, head=(0, 22, 0))
     M.act(t0 + 0.08, "shock")
     cam = Cam()
-    cam.push(t0, t1, up(L_SEAT, 4.3), 5.2, 3.9, yaw=172, pitch=-4, lens=26)
+    cam.push(t0, t1, up(L_SEAT, 3.2), 7.8, 6.2, yaw=172, pitch=0, lens=20)
     sfx(t0 + 0.06, "gasp")
 
 
@@ -459,22 +465,22 @@ def s19(t0, t1):
     tsn = w(139) + 0.04
     W2.sneeze(M, t0, tsn)
     cam = Cam()
-    cam.push(t0, t1, up(L_SEAT, 4.3), 4.8, 3.6, yaw=180, pitch=4, lens=28)
-    cam.crash(tsn, 28, 38, 0.07)
+    cam.push(t0, t1, up(L_SEAT, 3.2), 7.6, 5.8, yaw=180, pitch=6, lens=22)
+    cam.crash(tsn, 22, 30, 0.07)
     sfx(tsn, "sneeze")
 
 
-@S(20, 143, 155, "Mia pops down right beside tiny Eddie on the floor tiles")
+@S(20, 143, 155, "Mia pops down right beside tiny Eddie in the front aisle")
 def s20(t0, t1):
     R, ks = class_scene(t0, t1, kids=4, board=BOARD)
     E = eddie(t0, t1, "shock")
-    E.pose(t0, loc=(2.1, 9.5, 0), rot=165)
+    E.pose(t0, loc=(0.4, 7.6, 0), rot=165)
     E.root.scale = (0.14, 0.14, 0.14)
     M = mia(t0, t1, "shock")
-    M.pose(t0, loc=(2.9, 9.5, 0), rot=195)
+    M.pose(t0, loc=(1.2, 7.6, 0), rot=195)
     shrink_to(M, t0 + 0.06, s0=0.45, s1=0.15, dur=0.18)
     cam = Cam()
-    cam.push(t0, t1, (2.5, 9.5, 0.5), 2.8, 1.9, yaw=180, pitch=14, lens=26)
+    cam.push(t0, t1, (0.8, 7.6, 0.7), 4.0, 2.8, yaw=180, pitch=14, lens=22)
     sfx(t0 + 0.05, "poof")
     sfx(t0 + 0.14, "pop")
 
@@ -482,9 +488,9 @@ def s20(t0, t1):
 @S(21, 155, 161, "Camera tripod flash explodes with bright light")
 def s21(t0, t1):
     R, ks = class_scene(t0, t1, kids=6, board=BOARD)
-    tri, fl = camera_tripod((-0.8, 11.2, 0), rot=0, scale=1.15)
+    tri, fl = camera_tripod((-1.4, 11.0, 0), rot=0, scale=1.15)
     ph = photographer(t0, t1, "joy")
-    ph.pose(t0, loc=(1.4, 11.2, 0), rot=0)
+    ph.pose(t0, loc=(1.4, 11.0, 0), rot=-12)
     fl.scale = (1.0, 1.0, 1.0)
     fl.keyframe_insert("scale", frame=F(t0))
     fl.scale = (3.2, 3.2, 3.2)
@@ -492,8 +498,8 @@ def s21(t0, t1):
     fl.scale = (1.1, 1.1, 1.1)
     fl.keyframe_insert("scale", frame=F(t1))
     cam = Cam()
-    cam.push(t0, t1, (0.2, 11.2, 4.1), 5.6, 4.0, yaw=8, pitch=4, lens=24)
-    cam.crash(t0 + 0.08, 24, 34, 0.08)
+    cam.push(t0, t1, (0.0, 11.0, 3.2), 8.6, 6.8, yaw=8, pitch=6, lens=20)
+    cam.crash(t0 + 0.08, 20, 28, 0.08)
     sfx(t0 + 0.06, "click")
     sfx(t0 + 0.08, "sparkle")
 
@@ -505,7 +511,7 @@ def s22(t0, t1):
     puff("pollen_puff", (0.0, 10.8, 4.2), t0 + 0.05, r=1.4)
     pollen_cloud((0.0, 9.2, 4.2), t0, t1, n=45, spread=5.5, seed=22)
     cam = Cam()
-    cam.push(t0, t1, (0.0, 10.2, 4.0), 6.2, 4.8, yaw=0, pitch=8, lens=24)
+    cam.push(t0, t1, (0.0, 10.2, 3.6), 8.6, 6.8, yaw=0, pitch=8, lens=20)
     sfx(t0 + 0.04, "poof")
     sfx(t0 + 0.10, "wind")
 
@@ -689,74 +695,76 @@ def s34(t0, t1):
 @S(35, 244, 252, "Heroic reveal: Old Man Higgins standing tall and unfazed in the street")
 def s35(t0, t1):
     bright_town()
-    H = higgins(t0, t1, expr="determined", scale=1.15, loc=(0, -26, 0), rot=0)
+    H = higgins(t0, t1, expr="determined", scale=1.15, loc=HIG_LOC, rot=8)
     H.act(t0 + 0.08, "cross")
     cam = Cam()
-    cam.push(t0, t1, (0, -26, 4.4), 7.8, 5.6, yaw=0, pitch=4, lens=24)
+    cam.push(t0, t1, up(HIG_LOC, 3.2), 11.0, 8.6, yaw=8, pitch=6, lens=20)
     sfx(t0 + 0.05, "ding")
 
 
 @S(36, 252, 259, "Close-up on Old Man Higgins: stern glasses and beard, immune to pollen")
 def s36(t0, t1):
     bright_town()
-    H = higgins(t0, t1, expr="determined", scale=1.15, loc=(0, -26, 0), rot=0)
-    pollen_cloud((0, -26, 4.8), t0, t1, n=25, spread=2.0, seed=36)
+    H = higgins(t0, t1, expr="determined", scale=1.15, loc=HIG_LOC, rot=-8)
+    pollen_cloud(up(HIG_LOC, 4.6), t0, t1, n=25, spread=2.2, seed=36)
     H.shake(t0 + 0.08, 12, 0.45)
     cam = Cam()
-    cam.push(t0, t1, (0, -26, 5.0), 4.8, 3.6, yaw=-8, pitch=4, lens=28)
+    cam.push(t0, t1, up(HIG_LOC, 4.2), 7.6, 5.8, yaw=-10, pitch=4, lens=22)
     sfx(t0 + 0.06, "thud")
 
 
 @S(37, 259, 265, "Cats, flowers, and dust bounce harmlessly off Higgins")
 def s37(t0, t1):
     bright_town()
-    H = higgins(t0, t1, expr="happy", scale=1.15, loc=(0, -26, 0), rot=0)
+    H = higgins(t0, t1, expr="happy", scale=1.15, loc=HIG_LOC, rot=0)
     H.act(t0 + 0.05, "cross")
-    W2.cat("hig_cat", (-1.8, -26.8, 0), rot=20)
-    bouquet_prop("hig_flowers", (1.8, -26.8, 0), scale=1.2)
-    pollen_cloud((0, -26, 4.2), t0, t1, n=30, spread=2.8, seed=37)
+    W2.cat("hig_cat", (-2.2, -25.8, 0), rot=28)
+    bouquet_prop("hig_flowers", (2.2, -25.8, 0), scale=1.2)
+    pollen_cloud(up(HIG_LOC, 4.0), t0, t1, n=30, spread=2.8, seed=37)
     cam = Cam()
-    cam.orbit(t0, t1, (0, -26, 4.2), 6.8, -18, 18, pitch=8, lens=24)
+    cam.orbit(t0, t1, up(HIG_LOC, 3.2), 10.4, -18, 18, pitch=8, lens=20)
     sfx(t0 + 0.05, "sparkle")
 
 
 @S(38, 265, 272, "Everybody around Higgins shrinks down to tiny ants at his boots")
 def s38(t0, t1):
     bright_town()
-    H = higgins(t0, t1, expr="shock", scale=1.55, loc=(0, -25, 0), rot=0)
-    for i, dx in enumerate((-3.2, -1.8, 1.8, 3.2)):
+    H = higgins(t0, t1, expr="shock", scale=1.45, loc=HIG_LOC, rot=0)
+    for i, dx in enumerate((-3.4, -1.6, 1.6, 3.4)):
         k = townie(60 + i, t0, t1, "terror")
-        k.pose(t0, loc=(dx, -26.5, 0), rot=0)
+        k.pose(t0, loc=(dx, -26.8, 0), rot=-12 if dx > 0 else 12)
         shrink_to(k, t0 + 0.05 + i * 0.05, s0=0.85, s1=0.18, dur=0.18)
     cam = Cam()
-    cam.push(t0, t1, (0, -25.5, 3.8), 11.5, 8.8, yaw=0, pitch=8, lens=22)
+    cam.push(t0, t1, (0, -25.6, 3.2), 13.5, 10.5, yaw=0, pitch=8, lens=20)
     sfx(t0 + 0.06, "poof")
 
 
 @S(39, 272, 278, "Higgins looks down at his feet in disbelief, still full normal size")
 def s39(t0, t1):
     bright_town()
-    H = higgins(t0, t1, expr="shock", scale=1.4, loc=(0, -26, 0), rot=0)
+    H = higgins(t0, t1, expr="shock", scale=1.35, loc=HIG_LOC, rot=0)
     H.pose(t0 + 0.05, head=(0, 18, 0))
     H.act(t0 + 0.08, "shrug")
+    E = eddie(t0, t1, "shock"); E.pose(t0, loc=EDDIE_TOWN_LOC, rot=165); E.root.scale = (0.2, 0.2, 0.2)
+    M = mia(t0, t1, "shock"); M.pose(t0, loc=MIA_TOWN_LOC, rot=195); M.root.scale = (0.2, 0.2, 0.2)
     cam = Cam()
-    cam.push(t0, t1, (0, -26, 5.6), 7.2, 5.4, yaw=8, pitch=4, lens=24)
+    cam.push(t0, t1, up(HIG_LOC, 3.6), 10.6, 8.4, yaw=10, pitch=8, lens=20)
     sfx(t0 + 0.05, "pop")
 
 
 @S(40, 278, 286, "Low angle from tiny Eddie & Mia: Giant Higgins looming like a colossus")
 def s40(t0, t1):
     bright_town()
-    H = higgins(t0, t1, expr="shock", scale=1.9, loc=(0, -23.5, 0), rot=0)
+    H = higgins(t0, t1, expr="shock", scale=1.75, loc=HIG_LOC, rot=0)
     E = eddie(t0, t1, "shock")
-    E.pose(t0, loc=(-1.2, -27.5, 0), rot=0)
+    E.pose(t0, loc=EDDIE_TOWN_LOC, rot=155)
     E.root.scale = (0.22, 0.22, 0.22)
     M = mia(t0, t1, "shock")
-    M.pose(t0, loc=(1.2, -27.5, 0), rot=0)
+    M.pose(t0, loc=MIA_TOWN_LOC, rot=205)
     M.root.scale = (0.22, 0.22, 0.22)
     cam = Cam()
-    cam.key(t0, (0, -32.5, 2.2), (0, -24.5, 5.2), lens=22)
-    cam.key(t1, (0, -30.5, 1.8), (0, -24.5, 5.8), lens=22)
+    cam.key(t0, (0, -33.8, 2.0), (0, -24.8, 4.8), lens=20)
+    cam.key(t1, (0, -31.8, 1.6), (0, -24.8, 5.4), lens=20)
     sfx(t0 + 0.04, "rise")
 
 
@@ -764,67 +772,69 @@ def s40(t0, t1):
 @S(41, 286, 290, "Close-up on Eddie: lightbulb moment, determined grin")
 def s41(t0, t1):
     bright_town()
+    H = higgins(t0, t1, expr="shock", scale=1.35, loc=(1.8, -22.5, 0), rot=12)
     E = eddie(t0, t1, "joy")
-    E.pose(t0, loc=(0, -26, 0), rot=0)
+    E.pose(t0, loc=EDDIE_TOWN_LOC, rot=-15)
     E.act(t0 + 0.04, "point")
     lips(E, t0, t1)
     cam = Cam()
-    cam.push(t0, t1, (0, -26, 4.3), 5.2, 3.8, yaw=0, pitch=4, lens=26)
-    cam.crash(t0 + 0.05, 26, 34, 0.08)
+    cam.push(t0, t1, (-1.2, -26.8, 3.4), 7.8, 6.2, yaw=10, pitch=4, lens=22)
+    cam.crash(t0 + 0.05, 22, 28, 0.08)
     sfx(t0 + 0.04, "ding")
 
 
 @S(42, 290, 301, "Higgins stands tall next to the school while tiny townspeople wave up at him")
 def s42(t0, t1):
     bright_town()
-    H = higgins(t0, t1, expr="happy", scale=1.75, loc=(0, -24.5, 0), rot=0)
+    H = higgins(t0, t1, expr="happy", scale=1.65, loc=HIG_LOC, rot=0)
     for i, dx in enumerate((-2.8, -1.4, 1.4, 2.8)):
         k = townie(70 + i, t0, t1, "joy")
-        k.pose(t0, loc=(dx, -27.2, 0), rot=0)
+        k.pose(t0, loc=(dx, -27.2, 0), rot=150 if dx < 0 else 210)
         k.root.scale = (0.24, 0.24, 0.24)
         k.act(t0 + 0.05, "wave")
     cam = Cam()
-    cam.orbit(t0, t1, (0, -25.5, 4.4), 12.0, -18, 18, pitch=8, lens=22)
+    cam.orbit(t0, t1, (0, -25.8, 4.0), 13.5, -18, 18, pitch=8, lens=20)
 
 
 @S(43, 301, 310, "Tiny Eddie climbs up Higgins's giant sneaker shoelace and cups his hands")
 def s43(t0, t1):
     bright_town()
-    shoe_prop("higgins_boot", (0.8, -26, 0), scale=1.8, color="#c87628", rot=0)
+    shoe_prop("higgins_boot", (0.8, -25.6, 0), scale=1.8, color="#c87628", rot=0)
     E = eddie(t0, t1, "determined")
     E.root.scale = (0.32, 0.32, 0.32)
-    E.pose(t0, loc=(-0.6, -26.8, 0.4), rot=0)
-    E.pose(t1, loc=(0.2, -26.5, 1.85), rot=0)
+    E.pose(t0, loc=(-0.6, -26.8, 0.4), rot=-12)
+    E.pose(t1, loc=(0.2, -26.5, 1.85), rot=-12)
     E.act(t0 + 0.2, "hands_face")
     cam = Cam()
-    cam.push(t0, t1, (0.2, -26.5, 1.6), 5.2, 3.8, yaw=-12, pitch=10, lens=26)
+    cam.push(t0, t1, (0.2, -26.2, 1.8), 7.2, 5.4, yaw=-14, pitch=10, lens=22)
     sfx(t0 + 0.05, "footsteps")
 
 
 @S(44, 310, 315, "Tiny Eddie shouts up: HIGGINS! WE NEED A LIFT!")
 def s44(t0, t1):
     bright_town()
+    M = mia(t0, t1, "shock"); M.pose(t0, loc=MIA_TOWN_LOC, rot=18)
     E = eddie(t0, t1, "shock")
-    E.pose(t0, loc=(0, -26, 0), rot=0)
+    E.pose(t0, loc=EDDIE_TOWN_LOC, rot=-18)
     E.act(t0 + 0.04, "cheer")
     lips(E, t0, t1, mode="shout")
     cam = Cam()
-    cam.push(t0, t1, (0, -26, 4.3), 5.0, 3.6, yaw=0, pitch=4, lens=26)
-    cam.crash(t0 + 0.05, 26, 35, 0.08)
+    cam.push(t0, t1, (-0.8, -27.0, 3.2), 8.2, 6.4, yaw=12, pitch=4, lens=22)
+    cam.crash(t0 + 0.05, 22, 28, 0.08)
     sfx(t0 + 0.04, "cheer")
 
 
 @S(45, 315, 325, "Giant Higgins kneels and scoops up the shrunken townspeople in his hands")
 def s45(t0, t1):
     bright_town()
-    H = higgins(t0, t1, expr="happy", scale=1.65, loc=(0, -24.5, 0), rot=0)
+    H = higgins(t0, t1, expr="happy", scale=1.55, loc=HIG_LOC, rot=0)
     H.pose(t0, torso=(18, 0, 0), armL=(65, 20), armR=(65, -20))
     for i, dx in enumerate((-1.4, 0.0, 1.4)):
         k = townie(80 + i, t0, t1, "joy")
         k.root.scale = (0.26, 0.26, 0.26)
-        k.pose(t0, loc=(dx, -26.8, 2.0), rot=0)
+        k.pose(t0, loc=(dx, -26.6, 2.0), rot=0)
     cam = Cam()
-    cam.push(t0, t1, (0, -25.5, 4.2), 11.2, 8.6, yaw=8, pitch=10, lens=22)
+    cam.push(t0, t1, (0, -25.5, 3.8), 12.6, 9.8, yaw=8, pitch=10, lens=20)
     sfx(t0 + 0.06, "whoosh")
 
 
@@ -834,16 +844,16 @@ def s46(t0, t1):
     box("palm_platform", (6.5, 4.5, 0.55), (0, -26, 2.2), mat("skin_palm", hexc("#efd6be"), 0.45), 0.15)
     M = mayor(t0, t1, "joy")
     M.root.scale = (0.35, 0.35, 0.35)
-    M.pose(t0, loc=(-1.2, -26, 2.5), rot=0)
+    M.pose(t0, loc=(-1.2, -26, 2.5), rot=-12)
     E = eddie(t0, t1, "joy")
     E.root.scale = (0.35, 0.35, 0.35)
-    E.pose(t0, loc=(0.5, -26, 2.5), rot=0)
+    E.pose(t0, loc=(0.5, -26, 2.5), rot=10)
     d = W.dog("tiny_dog", (1.9, -26, 2.5))
     d.scale = (0.35, 0.35, 0.35)
     c = W.car("tiny_car", (-2.4, -26.2, 2.5), rot=20, color="#3880d9")
     c.scale = (0.22, 0.22, 0.22)
     cam = Cam()
-    cam.push(t0, t1, (0, -26, 3.2), 6.5, 4.8, yaw=0, pitch=16, lens=24)
+    cam.push(t0, t1, (0, -26, 3.0), 8.2, 6.2, yaw=0, pitch=14, lens=22)
     sfx(t0 + 0.05, "pop")
 
 
@@ -855,7 +865,7 @@ def s47(t0, t1):
     H = higgins(t0, t1, expr="determined", scale=1.15, loc=(0, 8.5, 0), rot=0)
     H.run(t0, t1, (0, 10.5, 0), (0, 6.5, 0), rate=2.8)
     cam = Cam()
-    cam.push(t0, t1, (0, 8.5, 4.2), 8.8, 6.5, yaw=0, pitch=6, lens=22)
+    cam.push(t0, t1, (0, 8.5, 3.6), 11.2, 8.6, yaw=0, pitch=6, lens=20)
     sfx(t0 + 0.04, "footsteps")
 
 
@@ -864,12 +874,12 @@ def s48(t0, t1):
     world((0.9, 0.95, 1.0), 0.6)
     W.hallway_day()
     N = nurse(t0, t1, "joy")
-    N.pose(t0, loc=(-1.0, 8.0, 0), rot=0)
+    N.pose(t0, loc=(-1.2, 8.0, 0), rot=-14)
     N.pose(t0, armR=(75, 10))
-    syringe_prop((1.1, 7.6, 1.6), scale=1.25, rot=(0, -18, 0))
+    syringe_prop((1.2, 7.6, 1.6), scale=1.25, rot=(0, -18, 0))
     cam = Cam()
-    cam.push(t0, t1, (0.0, 8.0, 3.8), 6.8, 5.0, yaw=0, pitch=6, lens=24)
-    cam.crash(t0 + 0.08, 24, 32, 0.08)
+    cam.push(t0, t1, (0.0, 8.0, 3.2), 9.4, 7.4, yaw=0, pitch=6, lens=20)
+    cam.crash(t0 + 0.08, 20, 26, 0.08)
     sfx(t0 + 0.05, "sparkle")
     sfx(t0 + 0.12, "rise")
 
@@ -879,16 +889,16 @@ def s48(t0, t1):
 def s49(t0, t1):
     bright_town()
     E = eddie(t0, t1, "joy")
-    E.pose(t0, loc=(-2.0, -26, 0), rot=0)
+    E.pose(t0, loc=EDDIE_TOWN_LOC, rot=-14)
     grow_to(E, t0 + 0.05, s0=0.22, s1=1.0, dur=0.25)
     M = mia(t0, t1, "joy")
-    M.pose(t0, loc=(2.0, -26, 0), rot=0)
+    M.pose(t0, loc=MIA_TOWN_LOC, rot=14)
     grow_to(M, t0 + 0.10, s0=0.22, s1=1.0, dur=0.25)
     my = mayor(t0, t1, "joy")
-    my.pose(t0, loc=(0, -25.2, 0), rot=0)
+    my.pose(t0, loc=HIG_LOC, rot=0)
     grow_to(my, t0 + 0.15, s0=0.22, s1=1.0, dur=0.25)
     cam = Cam()
-    cam.push(t0, t1, (0, -25.8, 3.8), 9.0, 6.8, yaw=0, pitch=8, lens=22)
+    cam.push(t0, t1, (0, -25.8, 3.0), 11.4, 8.8, yaw=0, pitch=8, lens=20)
     sfx(t0 + 0.04, "boing")
     sfx(t0 + 0.12, "pop")
 
@@ -896,16 +906,16 @@ def s49(t0, t1):
 @S(50, 353, 359, "The whole town cheers for Higgins with confetti falling")
 def s50(t0, t1):
     bright_town()
-    H = higgins(t0, t1, expr="joy", scale=1.1, loc=(0, -25, 0), rot=0)
+    H = higgins(t0, t1, expr="joy", scale=1.1, loc=HIG_LOC, rot=0)
     H.act(t0 + 0.05, "cheer")
     for i, dx in enumerate((-4.2, -2.2, 2.2, 4.2)):
         k = townie(90 + i, t0, t1, "joy")
-        k.pose(t0, loc=(dx, -26.2, 0), rot=0)
+        k.pose(t0, loc=(dx, -26.8, 0), rot=14 if dx < 0 else -14)
         k.act(t0 + 0.05, "cheer")
         k.jump(t0 + (i % 2) * 0.12, 1.1, 0.4)
     confetti("win_conf", (0, -25, 8.0), (8, 5, 3), t0, dur=t1 - t0, n=75, seed=50)
     cam = Cam()
-    cam.orbit(t0, t1, (0, -25.5, 4.0), 10.2, -16, 16, pitch=8, lens=22)
+    cam.orbit(t0, t1, (0, -25.6, 3.2), 12.6, -16, 16, pitch=8, lens=20)
     sfx(t0 + 0.04, "cheer")
     sfx(t0 + 0.08, "confetti")
 
@@ -913,7 +923,7 @@ def s50(t0, t1):
 @S(51, 359, 372, "Close-up on Higgins smiling wide — then his red nose twitches!")
 def s51(t0, t1):
     bright_town()
-    H = higgins(t0, t1, expr="joy", scale=1.15, loc=(0, -26, 0), rot=0)
+    H = higgins(t0, t1, expr="joy", scale=1.15, loc=HIG_LOC, rot=-6)
     rn = sphere("hig_rednose", 0.15, (0, -0.64, -0.06), mat("rednose", hexc("#e03a34"), 0.3, emit=hexc("#e03a34"), estr=0.5),
                 parent=H.head, coll=H.coll)
     t_tw = w(370)
@@ -923,8 +933,8 @@ def s51(t0, t1):
     rn.scale = (1.65, 1.65, 1.65)
     rn.keyframe_insert("scale", frame=F(t_tw))
     cam = Cam()
-    cam.push(t0, t1, (0, -26, 4.9), 5.2, 3.6, yaw=0, pitch=4, lens=28)
-    cam.crash(t_tw, 28, 36, 0.08)
+    cam.push(t0, t1, up(HIG_LOC, 4.2), 7.6, 5.8, yaw=6, pitch=4, lens=22)
+    cam.crash(t_tw, 22, 28, 0.08)
     sfx(t_tw - 0.05, "pop")
     sfx(t_tw, "snort")
 
@@ -932,19 +942,19 @@ def s51(t0, t1):
 @S(52, 372, 382, "Higgins unleashes the biggest sneeze in history — shockwave poof!")
 def s52(t0, t1):
     bright_town()
-    H = higgins(t0, t1, expr="shock", scale=1.2, loc=(0, -25, 0), rot=0)
+    H = higgins(t0, t1, expr="shock", scale=1.2, loc=HIG_LOC, rot=0)
     E = eddie(t0, t1, "terror")
-    E.pose(t0, loc=(-2.6, -26.5, 0), rot=0)
+    E.pose(t0, loc=(-2.8, -26.8, 0), rot=-16)
     M = mia(t0, t1, "terror")
-    M.pose(t0, loc=(2.6, -26.5, 0), rot=0)
+    M.pose(t0, loc=(2.8, -26.8, 0), rot=16)
     tsn = w(374)
     W2.sneeze(H, t0, tsn)
     shrink_to(H, tsn + 0.08, s0=1.2, s1=0.08, dur=0.22)
     puff("mega_blast", (0, -22.5, 5.2), tsn + 0.05, r=2.0)
     cam = Cam()
-    cam.push(t0, t1, (0, -25.8, 4.2), 8.2, 5.8, yaw=0, pitch=8, lens=24)
-    cam.crash(tsn, 24, 34, 0.07)
-    cam.handheld(2.4)
+    cam.push(t0, t1, (0, -25.8, 3.4), 11.4, 8.6, yaw=0, pitch=8, lens=20)
+    cam.crash(tsn, 20, 28, 0.07)
+    cam.handheld(2.2)
     sfx(tsn, "sneeze")
     sfx(tsn + 0.04, "boom")
 
@@ -954,15 +964,15 @@ def s53(t0, t1):
     bright_town()
     streetlamp_prop((0, -25.5, 0))
     E = eddie(t0, t1, "terror")
-    E.pose(t0, loc=(-1.3, -26, 0), rot=0)
+    E.pose(t0, loc=EDDIE_TOWN_LOC, rot=-18)
     E.act(t0 + 0.03, "hands_head", expr="terror")
     lips(E, t0, t1, mode="shout")
     M = mia(t0, t1, "terror")
-    M.pose(t0, loc=(1.3, -26, 0), rot=0)
+    M.pose(t0, loc=MIA_TOWN_LOC, rot=18)
     M.act(t0 + 0.03, "hands_head", expr="terror")
     puff("final_wave", (0, -21, 5.5), t0 + 0.04, r=2.2)
     cam = Cam()
-    cam.push(t0, t1, (0, -26, 4.0), 6.5, 4.6, yaw=0, pitch=6, lens=24)
-    cam.handheld(2.6)
+    cam.push(t0, t1, (0, -26, 3.2), 10.2, 7.8, yaw=0, pitch=6, lens=20)
+    cam.handheld(2.2)
     sfx(t0 + 0.02, "wind")
     sfx(t0 + 0.08, "gasp")
