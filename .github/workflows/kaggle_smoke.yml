@@ -25,10 +25,11 @@ jobs:
           mkdir -p ~/.kaggle
           echo "$KAGGLE_API_TOKEN" > ~/.kaggle/access_token
           chmod 600 ~/.kaggle/access_token
+          SLUG_NAME="roblox-t4-smoke-${{ github.run_number }}"
           cat > kaggle/smoke/kernel-metadata.json << EOF
           {
-            "id": "${KAGGLE_USERNAME}/roblox-t4-gpu-smoke-test",
-            "title": "Roblox T4 GPU Smoke Test",
+            "id": "${KAGGLE_USERNAME}/${SLUG_NAME}",
+            "title": "Roblox T4 Smoke ${{ github.run_number }}",
             "code_file": "smoke_render.py",
             "language": "python",
             "kernel_type": "script",
@@ -49,7 +50,7 @@ jobs:
           KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
           KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
         run: |
-          SLUG="${KAGGLE_USERNAME}/roblox-t4-gpu-smoke-test"
+          SLUG="${KAGGLE_USERNAME}/roblox-t4-smoke-${{ github.run_number }}"
           sleep 10
           FINAL_STATE="timeout"
           for i in $(seq 1 45); do
