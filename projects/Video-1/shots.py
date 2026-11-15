@@ -187,16 +187,16 @@ def streetlamp_prop(loc=(-2.2, -26, 0)):
 @S(1, 0, 6, "HOOK: Picture Day classroom, Eddie sneezes in front of tripod camera")
 def s01(t0, t1):
     R, ks = class_scene(t0, t1, kids=8, board=BOARD)
-    camera_tripod((0.2, 11.4, 0), rot=0)
+    camera_tripod((0.2, 10.8, 0), rot=0)
     E = eddie(t0, t1, "shock")
-    E.pose(t0, loc=(2.5, 9.2, 0), rot=180)
+    E.pose(t0, loc=(2.5, 9.0, 0), rot=180)
     tsn = w(1) + 0.05
     W2.sneeze(E, t0, tsn)
     for k in ks[:4]:
         k.face(tsn, "gasp")
     cam = Cam()
-    cam.push(t0, t1, (2.5, 9.2, 3.65), 6.2, 4.8, yaw=186, pitch=4, lens=24, yaw1=176)
-    cam.crash(tsn, 24, 30, 0.08)
+    cam.push(t0, t1, (2.5, 9.0, 3.5), 4.6, 4.0, yaw=186, pitch=4, lens=20, yaw1=176)
+    cam.crash(tsn, 20, 26, 0.08)
     cam.handheld(1.4)
     sfx(tsn, "sneeze")
 
@@ -221,13 +221,13 @@ def s02(t0, t1):
 def s03(t0, t1):
     R, ks = class_scene(t0, t1, kids=6, board=BOARD)
     L = leo(t0, t1, "shock")
-    L.pose(t0, loc=(-1.8, 9.5, 0), rot=180)
-    shoe_prop("leo_shoe", (-0.6, 9.5, 0), scale=0.95, color="#2f5fd0", rot=180)
+    L.pose(t0, loc=(-1.8, 9.2, 0), rot=180)
+    shoe_prop("leo_shoe", (-0.6, 9.2, 0), scale=0.95, color="#2f5fd0", rot=180)
     tsn = w(21)
     W2.sneeze(L, t0 + 0.05, tsn)
     cam = Cam()
-    cam.push(t0, t1, (-1.8, 9.5, 3.65), 6.2, 4.8, yaw=174, pitch=4, lens=24)
-    cam.crash(tsn, 24, 30, 0.08)
+    cam.push(t0, t1, (-1.8, 9.2, 3.5), 4.5, 4.0, yaw=174, pitch=4, lens=20)
+    cam.crash(tsn, 20, 26, 0.08)
     cam.handheld(1.2)
     sfx(tsn, "sneeze")
 
