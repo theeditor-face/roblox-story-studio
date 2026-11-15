@@ -27,7 +27,7 @@ jobs:
           chmod 600 ~/.kaggle/access_token
           cat > kaggle/smoke/kernel-metadata.json << EOF
           {
-            "id": "${KAGGLE_USERNAME}/roblox-t4-smoke-test",
+            "id": "${KAGGLE_USERNAME}/roblox-t4-gpu-smoke-test",
             "title": "Roblox T4 GPU Smoke Test",
             "code_file": "smoke_render.py",
             "language": "python",
@@ -49,23 +49,30 @@ jobs:
           KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
           KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
         run: |
-          SLUG="${KAGGLE_USERNAME}/roblox-t4-smoke-test"
-          for i in $(seq 1 40); do
-            STATUS=$(kaggle kernels status "$SLUG")
+          SLUG="${KAGGLE_USERNAME}/roblox-t4-gpu-smoke-test"
+          sleep 10
+          FINAL_STATE="timeout"
+          for i in $(seq 1 45); do
+            STATUS=$(kaggle kernels status "$SLUG" 2>&1 || true)
             echo "Poll $i: $STATUS"
             if echo "$STATUS" | grep -qi "complete"; then
+              FINAL_STATE="complete"
               break
             fi
-            if echo "$STATUS" | grep -qi "error\|cancel"; then
-              kaggle kernels output "$SLUG" -p kaggle_out || true
-              ls -la kaggle_out || true
-              cat kaggle_out/*.log 2>/dev/null || true
-              exit 1
+            if echo "$STATUS" | grep -qi '"error"\|KernelWorkerStatus.ERROR\|cancel'; then
+              FINAL_STATE="error"
+              break
             fi
             sleep 20
           done
-          kaggle kernels output "$SLUG" -p kaggle_out
-          ls -la kaggle_out
+          mkdir -p kaggle_out
+          kaggle kernels output "$SLUG" -p kaggle_out || true
+          ls -la kaggle_out || true
+          cat kaggle_out/*.log 2>/dev/null || true
+          if [ "$FINAL_STATE" != "complete" ]; then
+            echo "Kernel finished with state: $FINAL_STATE"
+            exit 1
+          fi
 
       - name: Upload Kaggle Smoke Frame
         uses: actions/upload-artifact@v4
