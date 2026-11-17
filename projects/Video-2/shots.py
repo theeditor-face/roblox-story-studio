@@ -226,7 +226,9 @@ def build_elevator_lobby():
     Mg = mat("el_gold", hexc("#e0b84c"), 0.25, metal=0.85)
     Mr = ST.emit_mat("el_red", hexc("#ef4444"), 7.0)
     Ma = ST.emit_mat("el_amber", hexc("#f59e0b"), 4.5)
-    box("el_frame", (6.2, 0.5, 9.0), (0, 17.5, 4.5), Mg, 0.04, coll=c)
+    box("el_jambL", (0.7, 0.5, 8.6), (-2.75, 17.3, 4.3), Mg, 0.04, coll=c)
+    box("el_jambR", (0.7, 0.5, 8.6), (2.75, 17.3, 4.3), Mg, 0.04, coll=c)
+    box("el_header", (6.2, 0.5, 0.8), (0, 17.3, 8.5), Mg, 0.04, coll=c)
     box("el_void", (4.8, 1.4, 8.2), (0, 18.2, 4.1), Md, 0.01, coll=c)
     # elevator doors slightly pried open showing dark empty shaft inside
     box("el_doorL", (2.1, 0.22, 8.0), (-1.55, 17.4, 4.0), Ms, 0.03, coll=c)
@@ -448,7 +450,8 @@ def s15(t0, t1):
     J.face(t0, "angry")
     J.act(t0 + 0.05, "lean", expr="angry")
     cam = Cam()
-    cam.push(t0, t1, up(JUDGE_LOC, 3.2), 9.0, 7.6, yaw=-14, pitch=-4, lens=19)
+    cam.key(t0, (2.6, -1.6, 3.9), up(JUDGE_LOC, 3.2), lens=18)
+    cam.key(t1, (2.2, 0.2, 3.8), up(JUDGE_LOC, 3.2), lens=18)
 
 
 @S(16, 91, 103, "Judge points toward witness stand & shattered trophy case exhibit")
@@ -458,7 +461,8 @@ def s16(t0, t1):
     J.act(t0 + 0.05, "point_l", expr="furious")
     lips(J, t0, t1, mode="shout")
     cam = Cam()
-    cam.push(t0, t1, (-1.6, 2.4, 3.0), 12.2, 10.4, yaw=-18, pitch=8, lens=17)
+    cam.key(t0, (-3.2, -2.6, 4.2), (0.0, 3.6, 3.3), lens=17)
+    cam.key(t1, (-2.6, -1.0, 4.0), (0.0, 3.6, 3.3), lens=17)
     sfx(w(99), "hammer")
 
 
@@ -604,9 +608,9 @@ def s26(t0, t1):
     er = empty_judge_robe(JUDGE_LOC)
     tv = w(176)
     for ob in er.children:
-        set_obj_visible(ob, t0, False)
-        set_obj_visible(ob, tv - 1.0 / 30, False)
-        set_obj_visible(ob, tv, True)
+        sets.set_obj_visible(ob, t0, False)
+        sets.set_obj_visible(ob, tv - 1.0 / 30, False)
+        sets.set_obj_visible(ob, tv, True)
     W2.vanish(J, tv)
     W2.poof("judge_pop", up(JUDGE_LOC, 2.8), tv, s=1.05)
     cam = Cam()
@@ -627,7 +631,8 @@ def s27(t0, t1):
     W2.vanish(B, tv)
     W2.poof("bail_pop", up(BAILIFF_LOC, 2.2), tv, s=0.85)
     cam = Cam()
-    cam.push(t0, t1, up(BAILIFF_LOC, 2.6), 9.0, 7.6, yaw=-14, pitch=6, lens=18)
+    cam.key(t0, (2.2, -2.8, 3.7), up(BAILIFF_LOC, 2.6), lens=18)
+    cam.key(t1, (2.6, -1.2, 3.5), up(BAILIFF_LOC, 2.6), lens=18)
     sfx(tv, "pop")
 
 
@@ -641,7 +646,8 @@ def s28(t0, t1):
     W2.vanish(R, tv)
     W2.poof("rep_pop", up(REPORTER_LOC, 2.0), tv, s=0.85)
     cam = Cam()
-    cam.push(t0, t1, up(REPORTER_LOC, 2.4), 9.0, 7.6, yaw=16, pitch=8, lens=18)
+    cam.key(t0, (2.2, -2.8, 3.8), up(REPORTER_LOC, 2.2), lens=18)
+    cam.key(t1, (1.2, -1.4, 3.6), up(REPORTER_LOC, 2.2), lens=18)
     sfx(tv, "pop")
 
 
@@ -660,7 +666,8 @@ def s29(t0, t1):
     for jr in jrs[6:]:
         jr.face(t0 + 0.2, "panic")
     cam = Cam()
-    cam.push(t0, t1, (7.6, 1.2, 2.8), 13.0, 10.6, yaw=-45, pitch=12, lens=16)
+    cam.key(t0, (-1.8, -2.5, 4.2), (8.0, 1.2, 2.5), lens=17)
+    cam.key(t1, (0.2, -1.2, 3.8), (8.0, 1.2, 2.5), lens=17)
 
 
 @S(30, 198, 209, "Jury box back row (jurors 7-12) whisper truths & vanish one by one")
@@ -679,7 +686,8 @@ def s30(t0, t1):
         W2.poof(f"jpop_{idx}", up(JUROR_SLOTS[idx], 2.0), tv, s=0.55)
         sfx(tv, "pop", 0.75)
     cam = Cam()
-    cam.orbit(t0, t1, (8.2, 1.4, 3.0), 10.6, -52, -26, pitch=10, lens=17)
+    cam.key(t0, (0.5, -2.2, 4.4), (8.6, 1.6, 2.8), lens=17)
+    cam.key(t1, (1.8, 0.4, 4.2), (8.6, 1.6, 2.8), lens=17)
 
 
 # ================================================================== 54.5-59.2s EMPTY COURTROOM VISUALS (Words 209..225)
