@@ -461,8 +461,8 @@ def s16(t0, t1):
     J.act(t0 + 0.05, "point_l", expr="furious")
     lips(J, t0, t1, mode="shout")
     cam = Cam()
-    cam.key(t0, (-3.2, -2.6, 4.2), (0.0, 3.6, 3.3), lens=17)
-    cam.key(t1, (-2.6, -1.0, 4.0), (0.0, 3.6, 3.3), lens=17)
+    cam.key(t0, (2.8, -1.8, 4.0), (0.0, 3.4, 3.2), lens=17)
+    cam.key(t1, (2.2, -0.4, 3.8), (0.0, 3.4, 3.2), lens=17)
     sfx(w(99), "hammer")
 
 
