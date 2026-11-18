@@ -51,6 +51,17 @@ jobs:
           echo "$KAGGLE_API_TOKEN" > ~/.kaggle/access_token
           chmod 600 ~/.kaggle/access_token
 
+          python3 - << 'PY'
+          import os
+          p = "kaggle/render/run_render.py"
+          txt = open(p, encoding="utf-8").read()
+          old = 'cfg = {"project": "Video-1", "samples": 16}'
+          new = f'cfg = {{"project": {os.environ["PROJECT_NAME"]!r}, "samples": {int(os.environ["SAMPLES"])}}}'
+          assert old in txt, "Expected cfg line not found in run_render.py"
+          open(p, "w", encoding="utf-8").write(txt.replace(old, new, 1))
+          print("Injected config into run_render.py:", new)
+          PY
+
           cat > kaggle/render/render_config.json << EOF
           {
             "project": "${PROJECT_NAME}",
