@@ -125,7 +125,11 @@ def setup_render(f0, f1, res=(1080, 1920), samples=24, pct=100, blur=True):
     sc.render.fps = FPS
     sc.frame_start, sc.frame_end = f0, f1
     sc.frame_set(f0)
-    sc.render.use_motion_blur = False
+    sc.render.use_motion_blur = bool(blur and gpu_str != "CPU")
+    try:
+        sc.render.motion_blur_shutter = 0.45
+    except Exception:
+        pass
     sc.render.film_transparent = False
     vs = sc.view_settings
     for vt in ("AgX", "Filmic", "Standard"):
@@ -144,10 +148,10 @@ def setup_render(f0, f1, res=(1080, 1920), samples=24, pct=100, blur=True):
     sc.render.image_settings.file_format = "PNG"
     sc.render.image_settings.color_mode = "RGB"
     try:
-        sc.render.image_settings.compression = 0
+        sc.render.image_settings.compression = 15
     except Exception:
         pass
-    sc.render.use_compositing = False
+    setup_compositor()
 
 
 def setup_compositor(bloom=0.35, threshold=1.0):

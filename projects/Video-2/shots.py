@@ -252,27 +252,27 @@ def build_elevator_lobby():
 def s01(t0, t1):
     locs.living_room()
     cookie_plate((0.4, 0.4, 2.2), cookies=1)
-    M = mom(t0, t1, "angry", loc=(-1.9, 3.6, 0), rot=-24)
+    M = mom(t0, t1, "angry", loc=(-1.6, 3.5, 0), rot=-24)
     M.act(t0 + 0.05, "cross")
-    E = eddie(t0, t1, "worried", loc=(1.7, 3.3, 0), rot=20)
+    E = eddie(t0, t1, "worried", loc=(1.4, 3.3, 0), rot=20)
     E.act(t0 + 0.04, "shrug", expr="worried")
     lips(E, t0, t1)
     cam = Cam()
-    cam.push(t0, t1, (0.0, 2.8, 2.8), 13.0, 11.0, yaw=-6, pitch=8, lens=17)
-    cam.handheld(0.8)
+    cam.push(t0, t1, (0.0, 3.2, 3.5), 7.8, 6.4, yaw=-6, pitch=6, lens=24)
+    cam.handheld(1.0)
 
 
 @S(2, 6, 11, "Medium past Mom onto Eddie eyeing the cookie crumb plate nervously")
 def s02(t0, t1):
     locs.living_room()
     cookie_plate((0.4, 0.4, 2.2), cookies=0)
-    M = mom(t0, t1, "furious", loc=(-1.9, 3.6, 0), rot=-28)
+    M = mom(t0, t1, "furious", loc=(-1.6, 3.5, 0), rot=-28)
     M.act(t0 + 0.03, "point_l")
-    E = eddie(t0, t1, "sus", loc=(1.7, 3.3, 0), rot=14)
+    E = eddie(t0, t1, "sus", loc=(1.4, 3.3, 0), rot=14)
     lips(E, t0, t1)
     E.face(w(9), "panic")
     cam = Cam()
-    cam.push(t0, t1, (0.5, 2.8, 3.0), 10.6, 9.0, yaw=16, pitch=7, lens=17)
+    cam.push(t0, t1, (0.8, 3.2, 3.8), 6.2, 4.9, yaw=18, pitch=5, lens=26)
     sfx(t0 + 0.06, "chat")
 
 
@@ -280,15 +280,15 @@ def s02(t0, t1):
 def s03(t0, t1):
     locs.living_room()
     cookie_plate((0.4, 0.4, 2.2), cookies=0)
-    M = mom(t0, t1, "shock", loc=(-1.9, 3.6, 0), rot=-32)
-    E = eddie(t0, t1, "terror", loc=(1.7, 3.3, 0), rot=14)
+    M = mom(t0, t1, "shock", loc=(-1.6, 3.5, 0), rot=-32)
+    E = eddie(t0, t1, "terror", loc=(1.4, 3.3, 0), rot=14)
     tv = w(12)
     W2.vanish(E, tv)
-    W2.poof("ed_hook", (1.7, 3.3, 2.2), tv, s=0.95)
+    W2.poof("ed_hook", (1.4, 3.3, 2.4), tv, s=0.95)
     M.act(tv + 0.05, "hands_head", expr="terror")
     cam = Cam()
-    cam.push(t0, t1, (0.2, 3.2, 2.8), 12.6, 10.6, yaw=0, pitch=7, lens=17)
-    cam.crash(tv, 17, 22, 0.08)
+    cam.push(t0, t1, (0.1, 3.4, 3.5), 7.4, 6.0, yaw=0, pitch=5, lens=24)
+    cam.crash(tv, 24, 32, 0.08)
     cam.handheld(1.4)
     sfx(tv, "poof")
     sfx(tv + 0.08, "gasp")
@@ -300,11 +300,11 @@ def s04(t0, t1):
     cookie_plate((0.4, 0.4, 2.2), cookies=0)
     box("clk11_fr", (2.4, 0.14, 2.4), (2.2, 8.6, 7.6), mat("clk_f", hexc("#1e293b"), 0.4), 0.03)
     card("clk11", 2.1, 2.1, (2.2, 8.5, 7.6), img_mat("clock12", os.path.join(W.TEX, "clock_1200.png"), 0.45), "-Y")
-    M = mom(t0, t1, "terror", loc=(-1.9, 3.6, 0), rot=-40)
+    M = mom(t0, t1, "terror", loc=(-1.6, 3.5, 0), rot=-40)
     M.act(t0, "hands_face", expr="terror")
     M.shake(t0 + 0.1, 16)
     cam = Cam()
-    cam.orbit(t0, t1, (0.2, 3.8, 3.4), 12.2, -10, 10, pitch=6, lens=17)
+    cam.orbit(t0, t1, (0.1, 3.8, 3.8), 7.8, -10, 10, pitch=5, lens=23)
     sfx(t0 + 0.05, "ding")
 
 
@@ -312,26 +312,26 @@ def s04(t0, t1):
 @S(5, 18, 23, "RULE: Sunny town street — two kids chatting on sidewalk")
 def s05(t0, t1):
     bright_town()
-    E = eddie(t0, t1, "talk", loc=(-1.5, -26.5, 0), rot=-24)
-    L = story.leo(t0, t1, "happy", loc=(1.5, -26.5, 0), rot=24)
+    E = eddie(t0, t1, "talk", loc=(-1.4, -26.5, 0), rot=-24)
+    L = story.leo(t0, t1, "happy", loc=(1.4, -26.5, 0), rot=24)
     lips(E, t0, t1)
     cam = Cam()
-    cam.push(t0, t1, (0.0, -26.5, 2.8), 13.5, 11.2, yaw=-8, pitch=8, lens=17)
-    cam.handheld(0.7)
+    cam.push(t0, t1, (0.0, -26.5, 3.4), 8.2, 6.8, yaw=-8, pitch=6, lens=24)
+    cam.handheld(0.8)
 
 
 @S(6, 23, 29, "Telling the truth makes you disappear right on the sidewalk")
 def s06(t0, t1):
     bright_town()
-    E = eddie(t0, t1, "shock", loc=(-1.5, -26.5, 0), rot=-24)
-    L = story.leo(t0, t1, "neutral", loc=(1.5, -26.5, 0), rot=24)
+    E = eddie(t0, t1, "shock", loc=(-1.4, -26.5, 0), rot=-24)
+    L = story.leo(t0, t1, "neutral", loc=(1.4, -26.5, 0), rot=24)
     tv = w(28)
     W2.vanish(E, tv)
-    W2.poof("rule_v1", (-1.5, -26.5, 2.2), tv, s=0.9)
+    W2.poof("rule_v1", (-1.4, -26.5, 2.4), tv, s=0.9)
     L.act(tv + 0.04, "recoil", expr="shock")
     cam = Cam()
-    cam.push(t0, t1, (0.0, -26.5, 2.8), 12.2, 10.0, yaw=8, pitch=7, lens=17)
-    cam.crash(tv, 17, 21, 0.08)
+    cam.push(t0, t1, (0.0, -26.5, 3.4), 7.4, 5.8, yaw=8, pitch=5, lens=24)
+    cam.crash(tv, 24, 32, 0.08)
     sfx(tv, "teleport")
 
 
@@ -346,7 +346,7 @@ def s07(t0, t1):
     W2.vanish(P, tv)
     W2.poof("rule_big", (0.0, -0.8, 2.4), tv, s=1.4)
     cam = Cam()
-    cam.orbit(t0, t1, (0.0, -0.5, 2.6), 12.2, -14, 14, pitch=7, lens=17)
+    cam.orbit(t0, t1, (0.0, -0.5, 3.3), 7.6, -14, 14, pitch=6, lens=24)
     sfx(tv, "poof")
     sfx(w(36), "thud")
 
@@ -367,21 +367,21 @@ def s08(t0, t1):
     LIB.prop_phone("th_ph1", (-3.3, 1.4, 2.42))
     LIB.prop_phone("th_ph2", (-2.7, 1.6, 2.42))
     cam = Cam()
-    cam.push(t0, t1, (-3.0, 2.4, 2.8), 11.2, 9.2, yaw=-14, pitch=8, lens=17)
+    cam.push(t0, t1, (-3.1, 2.6, 3.2), 7.4, 5.8, yaw=-14, pitch=6, lens=24)
     sfx(w(43), "click")
 
 
 @S(9, 45, 56, "Police station: Officer calmly waits for suspect instead of lie detector")
 def s09(t0, t1):
     LIB.police_station()
-    ofc = LIB.police_officer("Det", loc=(-2.6, 1.0, 0), rot=-24)
+    ofc = LIB.police_officer("Det", loc=(-2.2, 1.0, 0), rot=-24)
     story._live(ofc, t0, t1, "smug")
     ofc.act(t0 + 0.06, "cross", expr="bored")
-    sus = LIB.robber("Suspect", loc=(2.4, 1.0, 0), rot=26)
+    sus = LIB.robber("Suspect", loc=(2.0, 1.0, 0), rot=26)
     story._live(sus, t0, t1, "scared")
     sus.shake(t0 + 0.2, 16)
     cam = Cam()
-    cam.orbit(t0, t1, (0.0, 1.2, 2.6), 13.0, -10, 12, pitch=7, lens=17)
+    cam.orbit(t0, t1, (0.0, 1.2, 3.2), 8.2, -10, 12, pitch=6, lens=23)
     sfx(w(52), "crickets")
 
 
@@ -389,13 +389,13 @@ def s09(t0, t1):
 def s10(t0, t1):
     world((0.88, 0.92, 1.0), 0.6)
     sets.bedroom()
-    M = mom(t0, t1, "happy", loc=(-2.0, 2.0, 0), rot=-26)
+    M = mom(t0, t1, "happy", loc=(-1.7, 2.0, 0), rot=-26)
     M.act(t0 + 0.05, "lean")
     D_ch = chars.dad()
     story._live(D_ch, t0, t1, "worried")
-    D_ch.pose(t0, loc=(2.0, 2.0, 0), rot=26)
+    D_ch.pose(t0, loc=(1.7, 2.0, 0), rot=26)
     cam = Cam()
-    cam.push(t0, t1, (0.0, 2.2, 2.8), 11.8, 10.0, yaw=6, pitch=7, lens=17)
+    cam.push(t0, t1, (0.0, 2.2, 3.4), 7.8, 6.4, yaw=6, pitch=6, lens=24)
 
 
 @S(11, 61, 67, "Mom tilts head asking 'does this make me look old'")
@@ -406,7 +406,7 @@ def s11(t0, t1):
     lips(M, t0, t1)
     M.act(t0 + 0.04, "shrug", expr="sus")
     cam = Cam()
-    cam.push(t0, t1, (-1.2, 2.2, 3.2), 9.0, 7.6, yaw=14, pitch=5, lens=18)
+    cam.push(t0, t1, (-1.3, 2.2, 3.9), 5.6, 4.4, yaw=14, pitch=4, lens=26)
 
 
 @S(12, 67, 71, "Dad sweats forcing fake grin & shaking head honestly-free")
@@ -420,7 +420,7 @@ def s12(t0, t1):
     D_ch.act(t0 + 0.15, "cheer", expr="grin")
     D_ch.shake(t0 + 0.25, 18)
     cam = Cam()
-    cam.push(t0, t1, (1.2, 2.2, 3.2), 9.0, 7.6, yaw=-14, pitch=5, lens=18)
+    cam.push(t0, t1, (1.3, 2.2, 3.9), 5.6, 4.4, yaw=-14, pitch=4, lens=26)
     sfx(t0 + 0.15, "rimshot")
 
 
@@ -431,7 +431,7 @@ def s13(t0, t1):
     E = story.eddie(t0, t1, "scared", loc=(-1.4, -3.5, 0), rot=150)
     E.walk(t0, t1, (-1.2, -3.6, 0), (-4.4, 1.6, 0.2), rate=2.2)
     cam = Cam()
-    cam.push(t0, t1, (-0.2, 1.5, 3.4), 16.5, 13.6, yaw=-10, pitch=14, lens=16)
+    cam.push(t0, t1, (-0.4, 1.2, 3.6), 11.8, 9.4, yaw=-10, pitch=12, lens=21)
     sfx(t0 + 0.04, "whoosh")
 
 
@@ -439,7 +439,7 @@ def s13(t0, t1):
 def s14(t0, t1):
     build_courtroom(t0, t1, eddie=True)
     cam = Cam()
-    cam.orbit(t0, t1, (0.0, 2.8, 3.6), 14.5, 22, -18, pitch=9, lens=16)
+    cam.orbit(t0, t1, (0.0, 2.6, 3.8), 10.6, 20, -16, pitch=8, lens=21)
     sfx(w(81), "door")
 
 
@@ -450,8 +450,8 @@ def s15(t0, t1):
     J.face(t0, "angry")
     J.act(t0 + 0.05, "lean", expr="angry")
     cam = Cam()
-    cam.key(t0, (2.6, -1.6, 3.9), up(JUDGE_LOC, 3.2), lens=18)
-    cam.key(t1, (2.2, 0.2, 3.8), up(JUDGE_LOC, 3.2), lens=18)
+    cam.key(t0, (1.8, 0.4, 4.3), up(JUDGE_LOC, 3.8), lens=25)
+    cam.key(t1, (1.4, 1.6, 4.2), up(JUDGE_LOC, 3.8), lens=25)
 
 
 @S(16, 91, 103, "Judge points toward witness stand & shattered trophy case exhibit")
@@ -461,8 +461,8 @@ def s16(t0, t1):
     J.act(t0 + 0.05, "point_l", expr="furious")
     lips(J, t0, t1, mode="shout")
     cam = Cam()
-    cam.key(t0, (2.8, -1.8, 4.0), (0.0, 3.4, 3.2), lens=17)
-    cam.key(t1, (2.2, -0.4, 3.8), (0.0, 3.4, 3.2), lens=17)
+    cam.key(t0, (2.2, 0.2, 4.2), (0.0, 3.8, 3.6), lens=23)
+    cam.key(t1, (1.6, 1.2, 4.1), (0.0, 3.8, 3.6), lens=23)
     sfx(w(99), "hammer")
 
 
@@ -470,11 +470,11 @@ def s16(t0, t1):
 def s17(t0, t1):
     W.hallway_day()
     broken_trophy_case((0.0, 4.5, 0))
-    L = story.leo(t0, t1, "terror", loc=(-1.4, 5.2, 0), rot=-25)
+    L = story.leo(t0, t1, "terror", loc=(-1.3, 5.2, 0), rot=-25)
     L.act(t0 + 0.04, "recoil", expr="terror")
     cam = Cam()
-    cam.push(t0, t1, (-0.5, 4.6, 2.8), 10.6, 8.8, yaw=12, pitch=8, lens=18)
-    cam.crash(w(105), 18, 23, 0.08)
+    cam.push(t0, t1, (-0.5, 4.8, 3.4), 7.2, 5.6, yaw=12, pitch=6, lens=24)
+    cam.crash(w(105), 24, 32, 0.08)
     sfx(t0 + 0.02, "whoosh")
     sfx(w(106), "window")
 
@@ -487,7 +487,7 @@ def s18(t0, t1):
     E.act(t0 + 0.05, "reach", expr="worried")
     E.face(w(115), "gasp")
     cam = Cam()
-    cam.push(t0, t1, up(WITNESS_LOC, 3.1), 9.4, 7.8, yaw=22, pitch=6, lens=18)
+    cam.push(t0, t1, up(WITNESS_LOC, 3.5), 6.2, 5.0, yaw=22, pitch=5, lens=24)
 
 
 @S(19, 118, 126, "Eddie strains trying to lie 'no' — glancing between Judge & Leo")
@@ -499,7 +499,7 @@ def s19(t0, t1):
     E.face(w(122), "side_r")
     lips(E, w(121), w(124))
     cam = Cam()
-    cam.push(t0, t1, up(WITNESS_LOC, 3.6), 7.2, 6.0, yaw=16, pitch=4, lens=20)
+    cam.push(t0, t1, up(WITNESS_LOC, 4.0), 5.0, 4.1, yaw=16, pitch=4, lens=27)
     cam.handheld(1.1)
     sfx(w(122), "snort")
 
@@ -512,10 +512,10 @@ def s20(t0, t1):
     lips(E, t0, w(127))
     tv = w(127)
     W2.vanish(E, tv)
-    W2.poof("ed_court", up(WITNESS_LOC, 2.4), tv, s=1.0)
+    W2.poof("ed_court", up(WITNESS_LOC, 2.6), tv, s=1.0)
     cam = Cam()
-    cam.push(t0, t1, up(WITNESS_LOC, 3.2), 8.6, 7.2, yaw=20, pitch=6, lens=18)
-    cam.crash(tv, 18, 24, 0.08)
+    cam.push(t0, t1, up(WITNESS_LOC, 3.6), 5.8, 4.6, yaw=20, pitch=5, lens=25)
+    cam.crash(tv, 25, 34, 0.08)
     sfx(tv, "poof")
     sfx(tv + 0.06, "pop")
 
@@ -532,7 +532,7 @@ def s21(t0, t1):
     for jr in cast["jurors"][:6]:
         jr.face(t0 + 0.1, "gasp")
     cam = Cam()
-    cam.orbit(t0, t1, (0.0, 2.0, 3.4), 15.2, -16, 16, pitch=12, lens=16)
+    cam.orbit(t0, t1, (0.0, 2.0, 3.6), 11.4, -16, 16, pitch=10, lens=21)
     cam.handheld(1.3)
     sfx(w(140), "glitch")
 
@@ -549,7 +549,7 @@ def s22(t0, t1):
     for sp in cast["specs"]:
         sp.face(t0 + 0.15, "gasp")
     cam = Cam()
-    cam.push(t0, t1, up(LEO_GAL_LOC, 3.0), 9.4, 7.8, yaw=158, pitch=8, lens=18)
+    cam.push(t0, t1, up(LEO_GAL_LOC, 3.6), 6.2, 4.9, yaw=158, pitch=6, lens=25)
     cam.handheld(1.2)
     sfx(w(143), "gasp")
 
@@ -561,12 +561,12 @@ def s23(t0, t1):
     L.act(t0, "point", expr="terror")
     tv = w(153)
     W2.vanish(L, tv)
-    W2.poof("leo_gal", up(LEO_GAL_LOC, 2.4), tv, s=1.0)
+    W2.poof("leo_gal", up(LEO_GAL_LOC, 2.6), tv, s=1.0)
     for sp in cast["specs"]:
         sp.act(tv + 0.05, "hands_face", expr="terror")
     cam = Cam()
-    cam.push(t0, t1, up(LEO_GAL_LOC, 3.0), 8.6, 7.2, yaw=162, pitch=8, lens=18)
-    cam.crash(tv, 18, 23, 0.08)
+    cam.push(t0, t1, up(LEO_GAL_LOC, 3.6), 5.8, 4.6, yaw=162, pitch=6, lens=25)
+    cam.crash(tv, 25, 33, 0.08)
     sfx(tv, "poof")
     sfx(tv + 0.05, "pop")
 
@@ -585,7 +585,7 @@ def s24(t0, t1):
             ob.location.z -= 0.55
             ob.keyframe_insert("location", frame=F(w(161)))
     cam = Cam()
-    cam.push(t0, t1, (0.2, 4.6, 4.0), 8.8, 7.4, yaw=-14, pitch=5, lens=18)
+    cam.push(t0, t1, (0.2, 4.6, 4.3), 5.8, 4.6, yaw=-14, pitch=4, lens=25)
     cam.handheld(1.2)
     sfx(w(161), "hammer")
 
@@ -597,7 +597,7 @@ def s25(t0, t1):
     J.act(t0 + 0.04, "fists", expr="furious")
     lips(J, t0, t1, mode="shout")
     cam = Cam()
-    cam.push(t0, t1, (-0.4, 4.2, 3.8), 11.2, 9.4, yaw=16, pitch=6, lens=17)
+    cam.push(t0, t1, (-0.2, 4.4, 4.2), 7.2, 5.8, yaw=16, pitch=5, lens=24)
     cam.handheld(1.1)
 
 
@@ -614,8 +614,8 @@ def s26(t0, t1):
     W2.vanish(J, tv)
     W2.poof("judge_pop", up(JUDGE_LOC, 2.8), tv, s=1.05)
     cam = Cam()
-    cam.push(t0, t1, up(JUDGE_LOC, 3.2), 9.0, 7.6, yaw=-10, pitch=5, lens=18)
-    cam.crash(tv, 18, 22, 0.08)
+    cam.push(t0, t1, up(JUDGE_LOC, 3.6), 6.0, 4.8, yaw=-10, pitch=4, lens=25)
+    cam.crash(tv, 25, 33, 0.08)
     sfx(tv, "poof")
     sfx(tv + 0.05, "pop")
 
@@ -631,8 +631,8 @@ def s27(t0, t1):
     W2.vanish(B, tv)
     W2.poof("bail_pop", up(BAILIFF_LOC, 2.2), tv, s=0.85)
     cam = Cam()
-    cam.key(t0, (2.2, -2.8, 3.7), up(BAILIFF_LOC, 2.6), lens=18)
-    cam.key(t1, (2.6, -1.2, 3.5), up(BAILIFF_LOC, 2.6), lens=18)
+    cam.key(t0, (2.2, -1.2, 3.9), up(BAILIFF_LOC, 3.2), lens=24)
+    cam.key(t1, (2.6, -0.2, 3.8), up(BAILIFF_LOC, 3.2), lens=24)
     sfx(tv, "pop")
 
 
@@ -646,8 +646,8 @@ def s28(t0, t1):
     W2.vanish(R, tv)
     W2.poof("rep_pop", up(REPORTER_LOC, 2.0), tv, s=0.85)
     cam = Cam()
-    cam.key(t0, (2.2, -2.8, 3.8), up(REPORTER_LOC, 2.2), lens=18)
-    cam.key(t1, (1.2, -1.4, 3.6), up(REPORTER_LOC, 2.2), lens=18)
+    cam.key(t0, (1.4, -1.8, 3.9), up(REPORTER_LOC, 2.8), lens=24)
+    cam.key(t1, (0.8, -0.8, 3.8), up(REPORTER_LOC, 2.8), lens=24)
     sfx(tv, "pop")
 
 
@@ -666,8 +666,8 @@ def s29(t0, t1):
     for jr in jrs[6:]:
         jr.face(t0 + 0.2, "panic")
     cam = Cam()
-    cam.key(t0, (-1.8, -2.5, 4.2), (8.0, 1.2, 2.5), lens=17)
-    cam.key(t1, (0.2, -1.2, 3.8), (8.0, 1.2, 2.5), lens=17)
+    cam.key(t0, (0.2, -2.0, 4.1), (8.0, 1.2, 2.8), lens=21)
+    cam.key(t1, (1.5, -0.8, 3.9), (8.0, 1.2, 2.8), lens=21)
 
 
 @S(30, 198, 209, "Jury box back row (jurors 7-12) whisper truths & vanish one by one")
@@ -686,8 +686,8 @@ def s30(t0, t1):
         W2.poof(f"jpop_{idx}", up(JUROR_SLOTS[idx], 2.0), tv, s=0.55)
         sfx(tv, "pop", 0.75)
     cam = Cam()
-    cam.key(t0, (0.5, -2.2, 4.4), (8.6, 1.6, 2.8), lens=17)
-    cam.key(t1, (1.8, 0.4, 4.2), (8.6, 1.6, 2.8), lens=17)
+    cam.key(t0, (1.6, -1.8, 4.3), (8.6, 1.6, 3.1), lens=21)
+    cam.key(t1, (2.6, 0.2, 4.1), (8.6, 1.6, 3.1), lens=21)
 
 
 # ================================================================== 54.5-59.2s EMPTY COURTROOM VISUALS (Words 209..225)
@@ -696,7 +696,7 @@ def s31(t0, t1):
     build_courtroom(t0, t1, eddie=False, leo=False, judge=False, bailiff_on=False,
                     reporter_on=False, jurors=0, spectators=False, empty_robe=True)
     cam = Cam()
-    cam.orbit(t0, t1, (0.0, 1.6, 3.2), 17.2, -14, 14, pitch=16, lens=16)
+    cam.orbit(t0, t1, (0.0, 1.8, 3.4), 12.6, -14, 14, pitch=14, lens=20)
 
 
 @S(32, 214, 219, "Floating microphones bob gently in empty courtroom air")
@@ -704,7 +704,7 @@ def s32(t0, t1):
     build_courtroom(t0, t1, eddie=False, leo=False, judge=False, bailiff_on=False,
                     reporter_on=False, jurors=0, spectators=False, empty_robe=True, float_mics=True)
     cam = Cam()
-    cam.push(t0, t1, (-4.5, 1.6, 3.5), 8.2, 6.6, yaw=18, pitch=6, lens=18)
+    cam.push(t0, t1, (-4.5, 1.6, 3.5), 5.6, 4.4, yaw=18, pitch=5, lens=24)
     sfx(t0 + 0.08, "sparkle")
 
 
@@ -713,7 +713,7 @@ def s33(t0, t1):
     build_courtroom(t0, t1, eddie=False, leo=False, judge=False, bailiff_on=False,
                     reporter_on=False, jurors=0, spectators=False, empty_robe=True, float_mics=True)
     cam = Cam()
-    cam.push(t0, t1, up(JUDGE_LOC, 2.8), 9.4, 7.2, yaw=-12, pitch=6, lens=18)
+    cam.push(t0, t1, up(JUDGE_LOC, 3.0), 6.4, 4.8, yaw=-12, pitch=5, lens=24)
     sfx(t0 + 0.05, "wind")
 
 
@@ -727,7 +727,7 @@ def s34(t0, t1):
             noise(ob, "rotation_euler", 0, 0.14, 4)
             noise(ob, "rotation_euler", 1, 0.14, 4)
     cam = Cam()
-    cam.push(t0, t1, (-4.8, 1.8, 3.6), 7.8, 6.2, yaw=-22, pitch=5, lens=19)
+    cam.push(t0, t1, (-4.8, 1.8, 3.6), 5.2, 4.0, yaw=-22, pitch=4, lens=25)
     cam.handheld(1.4)
     sfx(w(227), "gasp")
 
@@ -737,7 +737,7 @@ def s35(t0, t1):
     build_courtroom(t0, t1, eddie=False, leo=False, judge=False, bailiff_on=False,
                     reporter_on=False, jurors=0, spectators=False, empty_robe=True, float_mics=True)
     cam = Cam()
-    cam.whip(t0, t1, (2.0, -9.0, 5.2), (6.5, 1.2, 2.2), (-2.0, -10.5, 5.4), (-3.0, -4.0, 2.0), lens=16)
+    cam.whip(t0, t1, (2.0, -7.5, 4.6), (6.5, 1.2, 2.5), (-2.0, -8.5, 4.8), (-3.0, -4.0, 2.2), lens=21)
 
 
 @S(36, 244, None, "BUTTON: Courthouse hallway — empty elevator stool, ajar doors, plunging dial & alarm!")
@@ -749,8 +749,8 @@ def s36(t0, t1):
             noise(ob, "location", 0, 0.09, 3)
             noise(ob, "location", 2, 0.09, 3)
     cam = Cam()
-    cam.push(t0, t1, (0.2, 16.5, 4.4), 13.0, 8.6, yaw=-6, pitch=5, lens=16)
-    cam.crash(w(248), 16, 22, 0.09)
+    cam.push(t0, t1, (0.2, 16.5, 4.4), 9.6, 6.2, yaw=-6, pitch=4, lens=22)
+    cam.crash(w(248), 22, 30, 0.09)
     cam.handheld(2.4)
     sfx(w(246), "alarm")
     sfx(w(249), "boom")

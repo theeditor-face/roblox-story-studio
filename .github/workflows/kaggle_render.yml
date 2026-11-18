@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       project:
-        description: 'Project folder inside projects/ (e.g. Video-1)'
+        description: 'Project folder inside projects/ (e.g. Video-2)'
         required: true
-        default: 'Video-1'
+        default: 'Video-2'
       samples:
         description: 'Cycles GPU Samples (16 = High Quality, 24 = Ultra)'
         required: true
@@ -44,7 +44,7 @@ jobs:
         env:
           KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
           KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
-          PROJECT_NAME: ${{ github.event.inputs.project || 'Video-1' }}
+          PROJECT_NAME: ${{ github.event.inputs.project || 'Video-2' }}
           SAMPLES: ${{ github.event.inputs.samples || '16' }}
         run: |
           mkdir -p ~/.kaggle
@@ -52,13 +52,13 @@ jobs:
           chmod 600 ~/.kaggle/access_token
 
           python3 - << 'PY'
-          import os
+          import os, re
           p = "kaggle/render/run_render.py"
           txt = open(p, encoding="utf-8").read()
-          old = 'cfg = {"project": "Video-1", "samples": 16}'
           new = f'cfg = {{"project": {os.environ["PROJECT_NAME"]!r}, "samples": {int(os.environ["SAMPLES"])}}}'
-          assert old in txt, "Expected cfg line not found in run_render.py"
-          open(p, "w", encoding="utf-8").write(txt.replace(old, new, 1))
+          txt2, n = re.subn(r'cfg\s*=\s*\{"project":\s*"[^"]+",\s*"samples":\s*\d+\}', new, txt, count=1)
+          assert n == 1, "Expected cfg line not found in run_render.py"
+          open(p, "w", encoding="utf-8").write(txt2)
           print("Injected config into run_render.py:", new)
           PY
 
@@ -124,14 +124,14 @@ jobs:
       - name: Upload GitHub Actions Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ github.event.inputs.project || 'Video-1' }}-kaggle-final
+          name: ${{ github.event.inputs.project || 'Video-2' }}-kaggle-final
           path: kaggle_out/*
           retention-days: 14
 
       - name: Publish MP4 & QA Sheet to GitHub Releases
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PROJECT_NAME: ${{ github.event.inputs.project || 'Video-1' }}
+          PROJECT_NAME: ${{ github.event.inputs.project || 'Video-2' }}
           SAMPLES: ${{ github.event.inputs.samples || '16' }}
           NTFY_TOPIC: ${{ github.event.inputs.ntfy_topic }}
         run: |

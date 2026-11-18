@@ -6,14 +6,14 @@ import sys
 import time
 
 t_start = time.time()
-cfg = {"project": "Video-1", "samples": 16}
+cfg = {"project": "Video-2", "samples": 16}
 for cand in ("render_config.json", "/kaggle/src/render_config.json", "/kaggle/working/render_config.json"):
     if os.path.isfile(cand):
         with open(cand, encoding="utf-8") as f:
             cfg.update(json.load(f))
         break
 
-PROJ = cfg.get("project", "Video-1")
+PROJ = cfg.get("project", "Video-2")
 SAMPLES = int(cfg.get("samples", 16))
 print(f"=== Roblox 3D Kaggle Dual-T4 Render: project={PROJ}, samples={SAMPLES} ===", flush=True)
 
