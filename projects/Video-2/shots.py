@@ -153,6 +153,15 @@ def build_courtroom(t0, t1, *, eddie=True, leo=True, judge=True, bailiff_on=True
         remove_prefix("CR_gavel")
     m_oak = ST.wood("CR_oak2", "#6e4229", "#a06a45", 2.0)
     m_dark = ST.wood("CR_dark2", "#3e2414", "#623b22", 2.4)
+    mw_rear = mat("CR_rear_wall", hexc("#7c5338"), 0.72)
+    # Rear courtroom wall behind gallery (y=-7.8) with warm mahogany double entrance doors so reverse shots (S22/S23) are never dark
+    box("CR_rear_wL", (7.4, 0.35, 10.0), (-6.3, -7.8, 5.0), mw_rear, 0.02, coll=c)
+    box("CR_rear_wR", (7.4, 0.35, 10.0), (6.3, -7.8, 5.0), mw_rear, 0.02, coll=c)
+    box("CR_rear_wT", (5.2, 0.35, 3.6), (0.0, -7.8, 8.2), mw_rear, 0.02, coll=c)
+    box("CR_rear_doorL", (2.4, 0.28, 6.4), (-1.25, -7.75, 3.2), m_oak, 0.03, coll=c)
+    box("CR_rear_doorR", (2.4, 0.28, 6.4), (1.25, -7.75, 3.2), m_oak, 0.03, coll=c)
+    box("CR_rear_trim", (5.6, 0.42, 0.35), (0.0, -7.7, 6.45), m_dark, 0.02, coll=c)
+    light("CR_gal_fill", "AREA", (0.0, -2.5, 7.6), 950, hexc("#ffe8c4"), size=9.0, rot=(-25, 0, 0), coll=c)
     # Witness riser step behind CR_witness so character upper torso/arms sit cleanly above bench
     box("CR_wit_step", (2.4, 1.8, 0.35), (-5.2, 3.8, 0.175), m_dark, 0.03, coll=c)
     bible_prop((-4.7, 2.55, 2.31))
@@ -465,9 +474,9 @@ def s16(t0, t1):
     J.act(t0 + 0.05, "point_l", expr="furious")
     lips(J, t0, t1, mode="shout")
     cam = Cam()
-    # Aimed at (0.8, 4.2, 4.35) from +X side of center aisle showing Judge + trophy exhibit with 0 Reporter occlusion
-    cam.key(t0, (1.2, -2.4, 5.0), (0.8, 4.2, 4.35), lens=26)
-    cam.key(t1, (0.8, -1.4, 4.8), (0.8, 4.2, 4.35), lens=26)
+    # Aimed at (0.0, 5.5, 4.45) from center-right so Judge and witness/exhibit side are cleanly framed with 0 edge crop
+    cam.key(t0, (0.9, -2.4, 4.95), (0.0, 5.5, 4.45), lens=26)
+    cam.key(t1, (0.6, -1.5, 4.85), (0.0, 5.5, 4.45), lens=26)
     sfx(w(99), "hammer")
 
 
@@ -630,7 +639,7 @@ def s26(t0, t1):
 # ================================================================== 47.4-54.5s DOMINO VANISHES (Words 178..209)
 @S(27, 178, 181, "Then the bailiff pops out beside the dais")
 def s27(t0, t1):
-    _, cast = build_courtroom(t0, t1, eddie=False, leo=False, judge=False, empty_robe=True)
+    _, cast = build_courtroom(t0, t1, eddie=False, leo=False, judge=False, jurors=0, trophy_exhibit=False, empty_robe=True)
     B = cast["bailiff"]
     B.face(t0, "worried")
     lips(B, t0, w(180))
@@ -638,8 +647,7 @@ def s27(t0, t1):
     W2.vanish(B, tv)
     W2.poof("bail_pop", up(BAILIFF_LOC, 2.2), tv, s=0.8)
     cam = Cam()
-    cam.key(t0, (1.8, -4.4, 4.1), up(BAILIFF_LOC, 3.1), lens=26)
-    cam.key(t1, (2.2, -3.2, 4.0), up(BAILIFF_LOC, 3.1), lens=26)
+    cam.push(t0, t1, (5.2, 3.2, 3.3), 7.8, 6.6, yaw=-6, pitch=5, lens=28)
     sfx(tv, "pop")
 
 
@@ -653,8 +661,7 @@ def s28(t0, t1):
     W2.vanish(R, tv)
     W2.poof("rep_pop", up(REPORTER_LOC, 2.0), tv, s=0.8)
     cam = Cam()
-    cam.key(t0, (-1.2, -3.2, 4.1), up(REPORTER_LOC, 2.8), lens=26)
-    cam.key(t1, (-1.6, -2.0, 4.0), up(REPORTER_LOC, 2.8), lens=26)
+    cam.push(t0, t1, (-3.6, 4.6, 3.1), 7.6, 6.4, yaw=6, pitch=6, lens=28)
     sfx(tv, "pop")
 
 

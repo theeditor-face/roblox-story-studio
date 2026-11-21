@@ -134,7 +134,7 @@ def audit_video2():
          [(f"Spec{i}", sp, True) for i, sp in enumerate(SPECS)] + [("Reporter", REPORTER_LOC, True)]),
         ("S15 Judge Stern", (0.65, -1.7, 4.85), (0.0, 5.5, 4.5), 28,
          [("Judge", JUDGE_LOC, False)], [("Bailiff", BAILIFF_LOC, False)]),
-        ("S16 Judge + Exhibit", (1.0, -1.9, 4.9), (0.8, 4.2, 4.35), 26,
+        ("S16 Judge + Exhibit", (0.75, -1.95, 4.9), (0.0, 5.5, 4.45), 26,
          [("Judge", JUDGE_LOC, False)], []),
         ("S18 Eddie Bible", cam_pos_from_polar((-5.1, 3.6, 3.6), 8.0, 4, 5), (-5.1, 3.6, 3.6), 28,
          [("Eddie", WITNESS_LOC, False)], []),
@@ -151,9 +151,9 @@ def audit_video2():
          [("Judge", JUDGE_LOC, False)], []),
         ("S26 Judge Vanish", cam_pos_from_polar((0.0, 5.0, 4.4), 7.5, -8, 4), (0.0, 5.0, 4.4), 28,
          [("Judge", JUDGE_LOC, False)], []),
-        ("S27 Bailiff Pop", (2.0, -3.8, 4.05), (5.3, 3.2, 3.1), 26,
+        ("S27 Bailiff Pop", cam_pos_from_polar((5.2, 3.2, 3.3), 7.2, -6, 5), (5.2, 3.2, 3.3), 28,
          [("Bailiff", BAILIFF_LOC, False)], [("Reporter", REPORTER_LOC, True)]),
-        ("S28 Reporter Pop", (-1.4, -2.6, 4.05), (-3.6, 4.7, 3.0), 26,
+        ("S28 Reporter Pop", cam_pos_from_polar((-3.6, 4.6, 3.1), 7.0, 6, 6), (-3.6, 4.6, 3.1), 28,
          [("Reporter", REPORTER_LOC, True)], []),
     ]
 

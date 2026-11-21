@@ -48,7 +48,8 @@ for i in ids:
         if mode == "preview":
             S = V.build(i, samples=samples or 8, pct=25)
             sc = bpy.context.scene; sc.render.use_motion_blur = False
-            sc.frame_set((F(S["t0"]) + F(S["t1"]) - 1) // 2)
+            f0, f1 = F(S["t0"]), F(S["t1"]) - 1
+            sc.frame_set(f0 + max(1, (f1 - f0) // 4))
             sc.render.filepath = os.path.join(vdir, "preview", f"shot_{i:02d}.png")
             bpy.ops.render.render(write_still=True)
         elif mode.startswith("still"):
