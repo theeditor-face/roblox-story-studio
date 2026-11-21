@@ -154,14 +154,14 @@ def build_courtroom(t0, t1, *, eddie=True, leo=True, judge=True, bailiff_on=True
     m_oak = ST.wood("CR_oak2", "#6e4229", "#a06a45", 2.0)
     m_dark = ST.wood("CR_dark2", "#3e2414", "#623b22", 2.4)
     mw_rear = mat("CR_rear_wall", hexc("#7c5338"), 0.72)
-    # Rear courtroom wall behind gallery (y=-7.8) with warm mahogany double entrance doors so reverse shots (S22/S23) are never dark
-    box("CR_rear_wL", (7.4, 0.35, 10.0), (-6.3, -7.8, 5.0), mw_rear, 0.02, coll=c)
-    box("CR_rear_wR", (7.4, 0.35, 10.0), (6.3, -7.8, 5.0), mw_rear, 0.02, coll=c)
-    box("CR_rear_wT", (5.2, 0.35, 3.6), (0.0, -7.8, 8.2), mw_rear, 0.02, coll=c)
-    box("CR_rear_doorL", (2.4, 0.28, 6.4), (-1.25, -7.75, 3.2), m_oak, 0.03, coll=c)
-    box("CR_rear_doorR", (2.4, 0.28, 6.4), (1.25, -7.75, 3.2), m_oak, 0.03, coll=c)
-    box("CR_rear_trim", (5.6, 0.42, 0.35), (0.0, -7.7, 6.45), m_dark, 0.02, coll=c)
-    light("CR_gal_fill", "AREA", (0.0, -2.5, 7.6), 950, hexc("#ffe8c4"), size=9.0, rot=(-25, 0, 0), coll=c)
+    # Rear courtroom wall behind gallery (y=-11.6) with warm mahogany double entrance doors so reverse shots (S22/S23) are never dark AND wide shots (S31) at y=-9.8 are inside the room
+    box("CR_rear_wL", (7.4, 0.35, 10.0), (-6.3, -11.6, 5.0), mw_rear, 0.02, coll=c)
+    box("CR_rear_wR", (7.4, 0.35, 10.0), (6.3, -11.6, 5.0), mw_rear, 0.02, coll=c)
+    box("CR_rear_wT", (5.2, 0.35, 3.6), (0.0, -11.6, 8.2), mw_rear, 0.02, coll=c)
+    box("CR_rear_doorL", (2.4, 0.28, 6.4), (-1.25, -11.55, 3.2), m_oak, 0.03, coll=c)
+    box("CR_rear_doorR", (2.4, 0.28, 6.4), (1.25, -11.55, 3.2), m_oak, 0.03, coll=c)
+    box("CR_rear_trim", (5.6, 0.42, 0.35), (0.0, -11.5, 6.45), m_dark, 0.02, coll=c)
+    light("CR_gal_fill", "AREA", (0.0, -3.5, 7.6), 950, hexc("#ffe8c4"), size=9.0, rot=(-25, 0, 0), coll=c)
     # Witness riser step behind CR_witness so character upper torso/arms sit cleanly above bench
     box("CR_wit_step", (2.4, 1.8, 0.35), (-5.2, 3.8, 0.175), m_dark, 0.03, coll=c)
     bible_prop((-4.7, 2.55, 2.31))
@@ -710,7 +710,7 @@ def s31(t0, t1):
     build_courtroom(t0, t1, eddie=False, leo=False, judge=False, bailiff_on=False,
                     reporter_on=False, jurors=0, spectators=False, empty_robe=True)
     cam = Cam()
-    cam.orbit(t0, t1, (0.0, 2.2, 3.6), 12.2, -14, 14, pitch=14, lens=24)
+    cam.orbit(t0, t1, (0.0, 2.6, 3.6), 10.4, -12, 12, pitch=14, lens=24)
 
 
 @S(32, 214, 219, "Floating microphones bob gently in empty courtroom air")
