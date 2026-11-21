@@ -185,34 +185,36 @@ def nurse_office():
 
 
 def courtroom():
-    """Wood-paneled courtroom with tall windows, gold Justice seal, ST.wood() bench & gallery seating."""
-    c = _room_shell("Courtroom", 20, 16, 10.0, "#7c5338", "#5a3d2b", "#3d271a", skip_walls=("back",))
-    world(hexc("#2b1e16"), 0.55)
-    _room_lights("CR", c, key_z=8.8, energy=2300, color="#ffe8c4", fill_energy=1100)
-    mw = mat("CR_wall_b", hexc("#7c5338"), 0.72)
-    m_wtrim = mat("CR_wtrim", hexc("#d4b483"), 0.45)
+    """High-key pastel courtroom (roblox-v3 style-toon.md §1-2): cream walls, warm oak trim & bench, tall windows, gold Justice seal."""
+    c = _room_shell("Courtroom", 20, 16, 10.0, "#f4ead5", "#e8d5b5", "#6e4229", skip_walls=("back",))
+    world(hexc("#f7eedf"), 0.55)
+    _room_lights("CR", c, key_z=8.8, energy=1450, color="#fff6e8", fill_energy=750)
+    mw = mat("CR_wall_b", hexc("#f4ead5"), 0.78)
+    m_wtrim = mat("CR_wtrim", hexc("#6e4229"), 0.45)
     # 1 & 5: Tall courtroom window bay on back-left wall with outside trees
     _window_wall("CR_win", "y", 7.8, (-10.0, 10.0), 10.0, (-7.8, -4.4, 3.2, 8.2),
                  mw, m_wtrim, c, inner_sign=1, sky_col=(0.75, 0.88, 1.0))
-    m_oak = ST.wood("CR_oak", "#6e4229", "#a06a45", 2.0)
-    m_dark = ST.wood("CR_dark", "#3e2414", "#623b22", 2.4)
-    m_gold = mat("CR_gold", hexc("#e0b84c"), 0.22, metal=0.85)
-    m_red = mat("CR_carpet", hexc("#7a1f24"), 0.85)
+    m_oak = mat("CR_oak", hexc("#c98b5e"), 0.58)
+    m_dark = mat("CR_dark", hexc("#8c5834"), 0.62)
+    m_gold = mat("CR_gold", hexc("#e0b84c"), 0.28, metal=0.75)
+    m_red = mat("CR_carpet", hexc("#d95b5b"), 0.75)
     # Wainscoting wood paneling on right & back
     box("CR_wain_r", (0.16, 15.6, 3.6), (9.7, 0, 1.8), m_dark, 0.02, coll=c)
+    box("CR_wain_l", (0.16, 15.6, 3.6), (-9.7, 0, 1.8), m_dark, 0.02, coll=c)
+    box("CR_wain_b", (19.6, 0.16, 3.6), (0, 7.72, 1.8), m_dark, 0.02, coll=c)
     box("CR_carpet", (4.5, 13.5, 0.06), (0, -0.5, 0.03), m_red, 0.01, coll=c)
     # 2: Real PNG Justice Seal behind judge & on front of bench
     _tex_panel("CR_seal_wall", 3.0, 3.0, (0, 7.72, 6.6), "court_seal.png", "-Y", coll=c, frame_col="#e0b84c")
-    # 3: Judge dais, carved oak bench, gavel, lamp, witness box
+    # 3: Judge dais, carved oak bench (height 2.85 so Judge's torso/arms/collar sit clearly above top), gavel, lamp, witness box
     box("CR_dais", (10.0, 4.4, 1.0), (0, 5.2, 0.5), m_dark, 0.04, coll=c)
-    box("CR_bench", (7.8, 1.8, 2.7), (0, 4.2, 2.35), m_oak, 0.05, coll=c)
-    box("CR_bench_top", (8.1, 2.1, 0.2), (0, 4.2, 3.75), m_dark, 0.04, coll=c)
-    cyl("CR_bench_seal", 0.72, 0.1, (0, 3.26, 2.35), m_gold, 24, rot=(90, 0, 0), coll=c)
-    prop_gavel("CR_gavel", (1.6, 3.6, 3.85), coll=c)
+    box("CR_bench", (7.8, 1.8, 1.75), (0, 4.2, 1.875), m_oak, 0.05, coll=c)
+    box("CR_bench_top", (8.1, 2.1, 0.16), (0, 4.2, 2.83), m_dark, 0.04, coll=c)
+    cyl("CR_bench_seal", 0.62, 0.1, (0, 3.26, 1.9), m_gold, 24, rot=(90, 0, 0), coll=c)
+    prop_gavel("CR_gavel", (1.6, 3.6, 2.92), coll=c)
     _chair("CR_jchair", (0, 5.7, 1.0), c, seat_col="#3d271a", rot=180)
     # Witness stand with mic
-    box("CR_witness", (2.6, 2.4, 2.3), (-5.2, 2.6, 1.15), m_oak, 0.04, coll=c)
-    prop_desk_mic("CR_wmic", (-4.8, 1.8, 2.3), coll=c)
+    box("CR_witness", (2.6, 2.4, 2.1), (-5.2, 2.6, 1.05), m_oak, 0.04, coll=c)
+    prop_desk_mic("CR_wmic", (-4.8, 1.8, 2.11), coll=c)
     # 4: Counsel tables + stacked law books + brass rail + chairs
     for sx, x in (("L", -4.2), ("R", 4.2)):
         box(f"CR_tbl_{sx}", (3.8, 1.7, 0.22), (x, -2.0, 2.1), m_oak, 0.04, coll=c)

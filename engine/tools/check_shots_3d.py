@@ -9,8 +9,9 @@ import os
 import re
 import sys
 
-SENSOR_H = 36.0
-SENSOR_W = 36.0 * (1080.0 / 1920.0)  # 20.25 mm for 9:16 portrait
+# Blender default camera (sensor_fit="AUTO", sensor_width=36.0) in 1080x1920 vertical fits the larger dimension (1920) to 64mm height
+SENSOR_W = 36.0
+SENSOR_H = 36.0 * (1920.0 / 1080.0)  # 64.0 mm vertical sensor in 9:16 portrait (exact rbxkit.py math)
 
 
 def vec_sub(a, b):
@@ -110,50 +111,50 @@ def audit_video2():
     SPECS = [(-5.4, -6.3, 0.25), (-3.8, -6.3, 0.25), (3.6, -6.3, 0.25), (5.2, -6.3, 0.25)]
 
     tests = [
-        ("S01 Hook 2-shot", cam_pos_from_polar((0.0, 3.2, 3.3), 9.5, -4, 6), (0.0, 3.2, 3.3), 28,
-         [("Mom", (-1.5, 3.5, 0), False), ("Eddie", (1.4, 3.3, 0), False)], []),
-        ("S02 Eddie CU", cam_pos_from_polar((0.9, 3.3, 3.4), 8.0, 12, 5), (0.9, 3.3, 3.4), 28,
-         [("Eddie", (1.4, 3.3, 0), False)], [("Mom", (-1.5, 3.5, 0), False)]),
-        ("S05 Town Rule 2-shot", cam_pos_from_polar((0.0, -26.5, 3.3), 9.8, -6, 6), (0.0, -26.5, 3.3), 28,
-         [("Eddie", (-1.4, -26.5, 0), False), ("Leo", (1.4, -26.5, 0), False)], []),
-        ("S08 Therapist", cam_pos_from_polar((-0.5, 2.8, 3.4), 9.5, -6, 6), (-0.5, 2.8, 3.4), 28,
+        ("S01 Hook 2-shot", cam_pos_from_polar((0.0, 3.2, 3.1), 9.9, -4, 6), (0.0, 3.2, 3.1), 35,
+         [("Mom", (-1.6, 3.5, 0), False), ("Eddie", (1.5, 3.3, 0), False)], []),
+        ("S02 Eddie CU", cam_pos_from_polar((1.1, 3.3, 3.3), 7.3, 10, 5), (1.1, 3.3, 3.3), 35,
+         [("Eddie", (1.5, 3.3, 0), False)], [("Mom", (-1.6, 3.5, 0), False)]),
+        ("S05 Town Rule 2-shot", cam_pos_from_polar((0.0, -26.5, 3.1), 10.1, -6, 6), (0.0, -26.5, 3.1), 35,
+         [("Eddie", (-1.5, -26.5, 0), False), ("Leo", (1.5, -26.5, 0), False)], []),
+        ("S08 Therapist", cam_pos_from_polar((-0.6, 2.8, 3.2), 9.5, -6, 6), (-0.6, 2.8, 3.2), 35,
          [("Therapist", (-2.2, 2.8, 0.15), True)], []),
-        ("S09 Police Wait", cam_pos_from_polar((0.0, 1.4, 3.3), 10.4, 0, 6), (0.0, 1.4, 3.3), 28,
+        ("S09 Police Wait", cam_pos_from_polar((0.0, 1.4, 3.1), 10.6, 0, 6), (0.0, 1.4, 3.1), 35,
          [("Officer", (-1.6, 1.2, 0), False), ("Suspect", (1.6, 1.2, 0), False)], []),
-        ("S10 Bedroom 2-shot", cam_pos_from_polar((0.0, 2.2, 3.3), 9.5, 6, 6), (0.0, 2.2, 3.3), 28,
+        ("S10 Bedroom 2-shot", cam_pos_from_polar((0.0, 2.2, 3.1), 9.7, 6, 6), (0.0, 2.2, 3.1), 35,
          [("Mom", (-1.5, 2.0, 0), False), ("Dad", (1.5, 2.0, 0), False)], []),
-        ("S11 Mom Question", cam_pos_from_polar((-1.1, 2.2, 3.5), 8.0, 10, 5), (-1.1, 2.2, 3.5), 28,
+        ("S11 Mom Question", cam_pos_from_polar((-1.2, 2.2, 3.3), 7.3, 8, 5), (-1.2, 2.2, 3.3), 35,
          [("Mom", (-1.3, 2.2, 0), False)], []),
-        ("S12 Dad Sweat", cam_pos_from_polar((1.1, 2.2, 3.5), 8.0, -10, 5), (1.1, 2.2, 3.5), 28,
+        ("S12 Dad Sweat", cam_pos_from_polar((1.2, 2.2, 3.3), 7.3, -8, 5), (1.2, 2.2, 3.3), 35,
          [("Dad", (1.3, 2.2, 0), False)], []),
-        ("S13 Court Walk-in", (0.0, -6.9, 5.05), (-0.8, 2.4, 3.3), 25,
+        ("S13 Court Walk-in", (0.0, -7.1, 5.05), (-0.8, 2.4, 3.3), 32,
          [("Judge", JUDGE_LOC, False), ("Eddie", (-1.8, 0.2, 0), False)],
          [(f"Spec{i}", sp, True) for i, sp in enumerate(SPECS)] + [("Reporter", REPORTER_LOC, True)]),
-        ("S14 Court Overview", (0.0, -4.1, 4.85), (0.2, 3.2, 3.5), 25,
+        ("S14 Court Overview", (0.0, -4.4, 4.85), (0.2, 3.2, 3.5), 32,
          [("Judge", JUDGE_LOC, False)],
          [(f"Spec{i}", sp, True) for i, sp in enumerate(SPECS)] + [("Reporter", REPORTER_LOC, True)]),
-        ("S15 Judge Stern", (0.65, -1.7, 4.85), (0.0, 5.5, 4.5), 28,
+        ("S15 Judge Stern", (0.45, -1.5, 4.65), (0.0, 5.5, 4.1), 35,
          [("Judge", JUDGE_LOC, False)], [("Bailiff", BAILIFF_LOC, False)]),
-        ("S16 Judge + Exhibit", (0.75, -1.95, 4.9), (0.0, 5.5, 4.45), 26,
+        ("S16 Judge + Exhibit", (0.65, -1.7, 4.7), (0.0, 5.5, 4.1), 34,
          [("Judge", JUDGE_LOC, False)], []),
-        ("S18 Eddie Bible", cam_pos_from_polar((-5.1, 3.6, 3.6), 8.0, 4, 5), (-5.1, 3.6, 3.6), 28,
+        ("S18 Eddie Bible", cam_pos_from_polar((-5.1, 3.6, 3.5), 7.6, 4, 5), (-5.1, 3.6, 3.5), 35,
          [("Eddie", WITNESS_LOC, False)], []),
-        ("S19 Eddie Strain CU", cam_pos_from_polar((-5.1, 3.6, 3.8), 7.2, 6, 4), (-5.1, 3.6, 3.8), 28,
+        ("S19 Eddie Strain CU", cam_pos_from_polar((-5.1, 3.6, 3.7), 6.9, 6, 4), (-5.1, 3.6, 3.7), 35,
          [("Eddie", WITNESS_LOC, False)], []),
-        ("S21 Court Flicker", (0.0, -3.9, 4.9), (0.0, 2.8, 3.5), 25,
+        ("S21 Court Flicker", (0.0, -4.2, 4.8), (0.0, 2.8, 3.5), 32,
          [("Judge", JUDGE_LOC, False)],
          [(f"Spec{i}", sp, True) for i, sp in enumerate(SPECS)] + [("Reporter", REPORTER_LOC, True)]),
-        ("S22 Leo Gallery", cam_pos_from_polar((-2.4, -6.3, 3.55), 8.1, 162, 6), (-2.4, -6.3, 3.55), 28,
+        ("S22 Leo Gallery", cam_pos_from_polar((-2.4, -6.3, 3.45), 7.6, 162, 6), (-2.4, -6.3, 3.45), 35,
          [("Leo", LEO_GAL_LOC, False)], [(f"Spec{i}", sp, True) for i, sp in enumerate(SPECS)]),
-        ("S24 Judge Gavel", cam_pos_from_polar((0.2, 4.8, 4.4), 7.7, -10, 4), (0.2, 4.8, 4.4), 28,
+        ("S24 Judge Gavel", cam_pos_from_polar((0.2, 4.8, 4.1), 7.7, -10, 4), (0.2, 4.8, 4.1), 35,
          [("Judge", JUDGE_LOC, False)], []),
-        ("S25 Judge Shouts", cam_pos_from_polar((0.0, 4.8, 4.4), 7.9, 12, 5), (0.0, 4.8, 4.4), 28,
+        ("S25 Judge Shouts", cam_pos_from_polar((0.0, 4.8, 4.1), 7.9, 12, 5), (0.0, 4.8, 4.1), 35,
          [("Judge", JUDGE_LOC, False)], []),
-        ("S26 Judge Vanish", cam_pos_from_polar((0.0, 5.0, 4.4), 7.5, -8, 4), (0.0, 5.0, 4.4), 28,
+        ("S26 Judge Vanish", cam_pos_from_polar((0.0, 5.0, 4.1), 7.5, -8, 4), (0.0, 5.0, 4.1), 35,
          [("Judge", JUDGE_LOC, False)], []),
-        ("S27 Bailiff Pop", cam_pos_from_polar((5.2, 3.2, 3.3), 7.2, -6, 5), (5.2, 3.2, 3.3), 28,
+        ("S27 Bailiff Pop", cam_pos_from_polar((5.2, 3.2, 3.2), 7.3, -6, 5), (5.2, 3.2, 3.2), 35,
          [("Bailiff", BAILIFF_LOC, False)], [("Reporter", REPORTER_LOC, True)]),
-        ("S28 Reporter Pop", cam_pos_from_polar((-3.6, 4.6, 3.1), 7.0, 6, 6), (-3.6, 4.6, 3.1), 28,
+        ("S28 Reporter Pop", cam_pos_from_polar((-3.6, 4.6, 3.0), 7.1, 6, 6), (-3.6, 4.6, 3.0), 35,
          [("Reporter", REPORTER_LOC, True)], []),
     ]
 

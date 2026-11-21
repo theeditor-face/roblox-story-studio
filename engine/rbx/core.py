@@ -628,8 +628,7 @@ class Cam:
     def __init__(self, name="Cam", lens=35, coll=None):
         cd = D.cameras.new(name)
         cd.lens = lens
-        cd.sensor_fit = "VERTICAL"
-        cd.sensor_height = 36
+        cd.sensor_width = 36
         cd.clip_start = 0.05
         cd.clip_end = 600
         self.ob = D.objects.new(name, cd)

@@ -26,7 +26,98 @@ EXPR = {
 }
 
 
-# ------------------------------------------------------------------ layered face material
+# ------------------------------------------------------------------ roblox-v3 24-face toon atlas material (style-toon.md §4)
+V3_FACES = [
+    "neutral", "happy", "sad", "cry", "angry", "shocked",
+    "scared", "sleepy", "talk", "smirk", "blink", "creepy",
+    "smile", "laugh", "nervous", "dizzy", "squeeze", "wink",
+    "oh", "content", "sparkle", "sparkle_oh", "nerd", "stare",
+]
+V3_COLS, V3_ROWS = 6, 4
+V3_ALIAS = {
+    "neutral": "neutral", "happy": "happy", "joy": "laugh", "smile": "smile", "grin": "happy",
+    "shock": "shocked", "shocked": "shocked", "gasp": "oh", "oh": "oh",
+    "terror": "scared", "scream": "scared", "scared": "scared", "panic": "scared",
+    "worried": "nervous", "nervous": "nervous", "sus": "nervous",
+    "angry": "angry", "furious": "angry", "shout": "angry", "determined": "angry",
+    "smug": "smirk", "smirk": "smirk", "bored": "sleepy", "sleepy": "sleepy", "yawn": "sleepy",
+    "side_l": "nervous", "side_r": "nervous", "wink": "wink", "cry": "cry", "sad": "sad",
+    "talk": "talk", "relief": "content", "content": "content", "confused": "nerd",
+    "lookup": "oh", "lookdown": "sad", "blink": "blink", "sparkle": "sparkle",
+    "sparkle_oh": "sparkle_oh", "nerd": "nerd", "stare": "stare", "dizzy": "dizzy",
+    "squeeze": "squeeze", "brace": "squeeze", "laugh": "laugh", "creepy": "creepy",
+}
+
+
+def v3_face_material(name, skin):
+    """Head material projecting roblox-v3 face_atlas_v3.png (6x4 grid of 24 thick-ink 2D toon faces)."""
+    m = D.materials.new(name)
+    m.use_nodes = True
+    nt = m.node_tree; N, L = nt.nodes, nt.links
+    b = next(n for n in N if n.type == "BSDF_PRINCIPLED")
+    tc = N.new("ShaderNodeTexCoord"); sep = N.new("ShaderNodeSeparateXYZ")
+    L.new(tc.outputs["Object"], sep.inputs[0])
+
+    def M(op, a, bv=None):
+        n = N.new("ShaderNodeMath"); n.operation = op
+        (L.new(a, n.inputs[0]) if not isinstance(a, float) else setattr(n.inputs[0], "default_value", a))
+        if bv is not None:
+            (L.new(bv, n.inputs[1]) if not isinstance(bv, float) else setattr(n.inputs[1], "default_value", bv))
+        return n.outputs[0]
+
+    # Map head front (-0.54..+0.54 in X, -0.52..+0.52 in Z) to [0..1] UV cell
+    u = M("ADD", M("DIVIDE", sep.outputs["X"], 1.08), 0.5)
+    v = M("ADD", M("DIVIDE", M("SUBTRACT", sep.outputs["Z"], -0.02), 1.04), 0.5)
+    mask = M("MULTIPLY", M("MULTIPLY", M("MULTIPLY", M("GREATER_THAN", u, 0.0), M("LESS_THAN", u, 1.0)),
+                              M("MULTIPLY", M("GREATER_THAN", v, 0.0), M("LESS_THAN", v, 1.0))),
+             M("LESS_THAN", sep.outputs["Y"], -0.05))
+    cmb = N.new("ShaderNodeCombineXYZ"); L.new(u, cmb.inputs[0]); L.new(v, cmb.inputs[1])
+    col = N.new("ShaderNodeRGB"); col.name = "Skin"; col.outputs[0].default_value = (*skin, 1)
+
+    mp = N.new("ShaderNodeMapping"); mp.name = "V3FaceMap"
+    mp.vector_type = "POINT"
+    mp.inputs["Scale"].default_value = (1.0 / V3_COLS, 1.0 / V3_ROWS, 1.0)
+    mp.inputs["Location"].default_value = (0.0, (V3_ROWS - 1) / V3_ROWS, 0.0)
+    L.new(cmb.outputs[0], mp.inputs[0])
+
+    tx = N.new("ShaderNodeTexImage")
+    tx.image = D.images.load(os.path.join(ASSETS, "faces", "face_atlas_v3.png"), check_existing=True)
+    tx.extension = "CLIP"; tx.interpolation = "Cubic"
+    L.new(mp.outputs[0], tx.inputs[0])
+
+    a = M("MULTIPLY", tx.outputs["Alpha"], mask)
+    mix = N.new("ShaderNodeMix"); mix.data_type = "RGBA"
+    L.new(a, mix.inputs[0]); L.new(col.outputs[0], mix.inputs[6]); L.new(tx.outputs["Color"], mix.inputs[7])
+    L.new(mix.outputs[2], b.inputs["Base Color"])
+    b.inputs["Roughness"].default_value = 0.58
+    try:
+        b.inputs["Specular IOR Level"].default_value = 0.25
+    except KeyError:
+        pass
+    m.diffuse_color = (*skin, 1)
+    return m
+
+
+def _v3_cell(face_name):
+    fn = V3_ALIAS.get(face_name, "neutral") if isinstance(face_name, str) else V3_FACES[int(face_name) % len(V3_FACES)]
+    idx = V3_FACES.index(fn) if fn in V3_FACES else 0
+    col, row = idx % V3_COLS, idx // V3_COLS
+    return (col / V3_COLS, (V3_ROWS - 1 - row) / V3_ROWS, 0.0)
+
+
+def _key_v3_face(ch, face_name, t):
+    nt = ch.face_mat.node_tree
+    mp = nt.nodes["V3FaceMap"]
+    mp.inputs["Location"].default_value = _v3_cell(face_name)
+    mp.inputs["Location"].keyframe_insert("default_value", frame=F(t))
+    if nt.animation_data and nt.animation_data.action:
+        for fc in fcurves(nt.animation_data.action):
+            for kp in fc.keyframe_points:
+                kp.interpolation = "CONSTANT"
+
+
+def _is_v3(ch):
+    return ch.face_mat is not None and "V3FaceMap" in ch.face_mat.node_tree.nodes
 def layered_face_material(name, style, skin):
     """Head material that projects an eyes atlas and a mouth atlas onto the head front."""
     m = D.materials.new(name)
@@ -94,6 +185,11 @@ def _layered(ch):
 
 def face(ch, t, expr=None, eyes=None, mouth=None):
     """face(t, "shock") | face(t, eyes="wide", mouth="scream") | legacy int index."""
+    if _is_v3(ch):
+        fname = expr or mouth or eyes or "neutral"
+        _key_v3_face(ch, fname, t)
+        ch._v3_track.append((t, fname))
+        return ch
     if not _layered(ch):
         return C.Char._face_legacy(ch, t, expr)
     if isinstance(expr, str):
@@ -116,8 +212,27 @@ def _eye_at(ch, t):
     return best[1]
 
 
+def _v3_at(ch, t):
+    best = (-1e9, "neutral")
+    for tt, fn in getattr(ch, "_v3_track", []):
+        if tt <= t and tt >= best[0]:
+            best = (tt, fn)
+    return best[1]
+
+
 def blink(ch, t0, t1, every=(1.8, 3.6), seed=None):
     """Auto blinks (3 frames closed) where the eyes are open."""
+    if _is_v3(ch):
+        rnd = random.Random(seed if seed is not None else hash(ch.name) % 1000)
+        t = t0 + rnd.uniform(0.4, every[0])
+        while t < t1 - 0.15:
+            cur = _v3_at(ch, t)
+            nxt = [tt for tt, _ in ch._v3_track if t - 0.05 < tt < t + 0.18]
+            if cur not in ("blink", "happy", "laugh", "wink", "squeeze", "content") and not nxt:
+                _key_v3_face(ch, "blink", t)
+                _key_v3_face(ch, cur, t + 0.1)
+            t += rnd.uniform(*every)
+        return ch
     if not _layered(ch):
         return ch
     rnd = random.Random(seed if seed is not None else hash(ch.name) % 1000)
@@ -134,6 +249,18 @@ def blink(ch, t0, t1, every=(1.8, 3.6), seed=None):
 
 def talk(ch, t0, t1, words=None, open_m="talk", wide_m="talk_wide", rest="flat", syll=0.12):
     """Lip flaps. With words ([{start,end}] or [{s,e}]) flap per word, else at a syllable rate."""
+    if _is_v3(ch):
+        base_f = _v3_at(ch, t0)
+        if base_f == "talk":
+            base_f = "neutral"
+        k = 0
+        t = t0
+        while t < t1:
+            _key_v3_face(ch, "talk" if k % 2 == 0 else base_f, t)
+            k += 1
+            t += 0.12
+        _key_v3_face(ch, base_f, t1)
+        return ch
     if not _layered(ch):
         return ch
     k = 0
@@ -284,12 +411,18 @@ def install():
 
     def init(self, name, *a, **kw):
         style = kw.get("face", "hero")
-        layered = style and os.path.exists(os.path.join(ASSETS, "faces", f"{style}_eyes.png"))
-        if layered:
+        v3_path = os.path.join(ASSETS, "faces", "face_atlas_v3.png")
+        use_v3 = bool(style) and os.path.exists(v3_path)
+        layered = (not use_v3) and style and os.path.exists(os.path.join(ASSETS, "faces", f"{style}_eyes.png"))
+        if use_v3 or layered:
             kw["face"] = None
         orig_init(self, name, *a, **kw)
-        self._eye_track, self._mouth_track = [], []
-        if layered:
+        self._eye_track, self._mouth_track, self._v3_track = [], [], []
+        if use_v3:
+            self.face_mat = v3_face_material(name + "_face", self.skin_c)
+            self.head.data.materials.clear(); self.head.data.materials.append(self.face_mat)
+            face(self, -10.0, "neutral")
+        elif layered:
             self.face_mat = layered_face_material(name + "_face", style, self.skin_c)
             self.head.data.materials.clear(); self.head.data.materials.append(self.face_mat)
             face(self, -10.0, "neutral")

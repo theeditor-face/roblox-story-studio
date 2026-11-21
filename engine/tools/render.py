@@ -49,7 +49,8 @@ for i in ids:
             S = V.build(i, samples=samples or 8, pct=25)
             sc = bpy.context.scene; sc.render.use_motion_blur = False
             f0, f1 = F(S["t0"]), F(S["t1"]) - 1
-            sc.frame_set(f0 + max(1, (f1 - f0) // 4))
+            # Sample at 12% into the shot so characters that vanish mid-shot are still visible in the preview contact sheet
+            sc.frame_set(min(f1, f0 + max(1, (f1 - f0) // 8)))
             sc.render.filepath = os.path.join(vdir, "preview", f"shot_{i:02d}.png")
             bpy.ops.render.render(write_still=True)
         elif mode.startswith("still"):

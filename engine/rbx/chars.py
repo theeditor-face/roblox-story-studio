@@ -136,9 +136,9 @@ class Char:
         self.hip = empty(n + "_hip", (0, 0, 2.0), self.root, self.coll)
         self.torso = box(n + "_torso", (2, 1, 2), (0, 0, 1.0), M_shirt, 0.09, parent=self.hip, coll=self.coll)
         self.neck = empty(n + "_neck", (0, 0, 2.0), self.hip, self.coll)
-        # head
+        # head: rounded blocky cube (1.25 x 1.2 x 1.2, bevel=0.28) per roblox-v3 rbxkit.py line 190
         self.face_mat = face_material(n + "_face", face, skin_c) if face else M_skin
-        self.head = cyl(n + "_head", HEAD_R, HEAD_H, (0, 0, HEAD_H / 2 + 0.02), self.face_mat, 40, bev=0.26,
+        self.head = box(n + "_head", (1.25, 1.2, HEAD_H), (0, 0, HEAD_H / 2 + 0.02), self.face_mat, 0.28,
                         parent=self.neck, coll=self.coll, seg=5)
         # arms: shoulder pivots at the top of the arm block
         self.shL = empty(n + "_shL", (1.5, 0, 1.55), self.hip, self.coll)
