@@ -267,9 +267,9 @@ def bedroom(night=False, bathroom=False, real=None):
         cyl(f"pencil{i}", 0.05, 1.5, (9.0 + (i - 1) * 0.12, -6.4, 5.2), mat("pen" + c, hexc(c), 0.4), 8, coll=st, rot=((i - 1) * 10, 0, 0))
     # ---- lighting
     if not night:
-        light("br_key", "AREA", (-2, -6, H - 0.5), 9000, (1.0, 0.98, 0.95), 10, coll=lc, target=(0, 2, 0), size_y=8)
-        light("br_win", "AREA", (X0 + 1, -4, 8), 3500, (1.0, 0.93, 0.82), 6, coll=lc, target=(5, 2, 2))
-        light("br_fill", "AREA", (8, -12, 6), 2500, (0.85, 0.9, 1.0), 8, coll=lc, target=(0, 4, 3))
+        light("br_key", "AREA", (-2, -6, H - 0.5), 1800, (1.0, 0.98, 0.95), 10, coll=lc, target=(0, 2, 0), size_y=8)
+        light("br_win", "AREA", (X0 + 1, -4, 8), 850, (1.0, 0.93, 0.82), 6, coll=lc, target=(5, 2, 2))
+        light("br_fill", "AREA", (8, -12, 6), 650, (0.85, 0.9, 1.0), 8, coll=lc, target=(0, 4, 3))
     else:
         light("br_moon", "AREA", (X0 + 1, -2, 10), 1800, (0.45, 0.6, 1.0), 8, coll=lc, target=(2, 4, 0))
         light("br_fill", "AREA", (6, -12, 8), 700, (0.4, 0.5, 0.95), 10, coll=lc, target=(0, 4, 2))

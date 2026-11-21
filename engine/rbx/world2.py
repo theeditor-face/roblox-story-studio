@@ -304,41 +304,41 @@ def seated_audience(t0, t1, rows=4, cols=7, origin=(0, -6), spacing=(2.6, 3.2), 
 
 # ------------------------------------------------------------------ effects + acting
 def poof(name, loc, t, s=1.0, coll=None, n=7, seed=0):
-    """Teleport poof: white puffs bloom and fade, sparkles fly out."""
+    """Teleport poof: opaque pastel cloud puffs expand and pop cleanly (per blocky-shorts pitfalls.md)."""
     rnd = random.Random(seed)
-    Mp = mat("poof_white", (0.97, 0.97, 1.0), 0.9, emit=(0.8, 0.85, 1.0), estr=1.2)
-    Ms = mat("poof_spark", hexc("#fff4a0"), 0.3, emit=hexc("#fff4a0"), estr=8.0)
+    Mp = mat("poof_white", hexc("#F1F5F9"), 0.85)
+    Ms = mat("poof_spark", hexc("#FACC15"), 0.35, emit=hexc("#FACC15"), estr=1.4)
     for i in range(n):
-        off = Vector((rnd.uniform(-1, 1), rnd.uniform(-1, 1), rnd.uniform(-0.6, 1.2))) * 1.0 * s
+        off = Vector((rnd.uniform(-1, 1), rnd.uniform(-1, 1), rnd.uniform(-0.6, 1.2))) * 0.85 * s
         p = Vector(loc) + off
-        ob = sphere(f"{name}_p{i}", 0.7 * s, tuple(p), Mp, coll=coll, seg=16)
+        ob = sphere(f"{name}_p{i}", 0.58 * s, tuple(p), Mp, coll=coll, seg=16)
         ob.scale = (0.01,) * 3
         ob.keyframe_insert("scale", frame=F(t - 0.04))
-        ob.scale = (1.2 * rnd.uniform(0.8, 1.2),) * 3
-        ob.keyframe_insert("scale", frame=F(t + 0.12))
-        ob.keyframe_insert("location", frame=F(t + 0.12))
-        ob.location = tuple(p + off * 0.5 + Vector((0, 0, 0.6 * s)))
+        ob.scale = (1.1 * rnd.uniform(0.8, 1.15),) * 3
+        ob.keyframe_insert("scale", frame=F(t + 0.10))
+        ob.keyframe_insert("location", frame=F(t + 0.10))
+        ob.location = tuple(p + off * 0.45 + Vector((0, 0, 0.5 * s)))
         ob.scale = (0.01,) * 3
-        ob.keyframe_insert("scale", frame=F(t + 0.5))
-        ob.keyframe_insert("location", frame=F(t + 0.5))
+        ob.keyframe_insert("scale", frame=F(t + 0.42))
+        ob.keyframe_insert("location", frame=F(t + 0.42))
     for i in range(10):
         a = i / 10 * math.tau
-        st = sphere(f"{name}_s{i}", 0.12 * s, tuple(loc), Ms, coll=coll, seg=8)
+        st = sphere(f"{name}_s{i}", 0.10 * s, tuple(loc), Ms, coll=coll, seg=8)
         st.scale = (0.01,) * 3
         st.keyframe_insert("scale", frame=F(t - 0.02))
         st.keyframe_insert("location", frame=F(t - 0.02))
         st.scale = (1, 1, 1)
         st.keyframe_insert("scale", frame=F(t + 0.04))
-        st.location = tuple(Vector(loc) + Vector((math.cos(a) * 3.2, rnd.uniform(-1, 1), math.sin(a) * 3.2 + 1)) * s)
+        st.location = tuple(Vector(loc) + Vector((math.cos(a) * 2.8, rnd.uniform(-0.8, 0.8), math.sin(a) * 2.8 + 0.8)) * s)
         st.scale = (0.01,) * 3
-        st.keyframe_insert("location", frame=F(t + 0.4))
-        st.keyframe_insert("scale", frame=F(t + 0.4))
-    lt = light(f"{name}_flash", "POINT", tuple(Vector(loc) + Vector((0, -1.5, 1))), 0, (0.85, 0.9, 1.0), 2.0, coll=coll)
+        st.keyframe_insert("location", frame=F(t + 0.36))
+        st.keyframe_insert("scale", frame=F(t + 0.36))
+    lt = light(f"{name}_flash", "POINT", tuple(Vector(loc) + Vector((0, -1.5, 1))), 0, (0.95, 0.97, 1.0), 1.5, coll=coll)
     lt.data.keyframe_insert("energy", frame=F(t - 0.03))
-    lt.data.energy = 8000 * s
+    lt.data.energy = 180 * s
     lt.data.keyframe_insert("energy", frame=F(t + 0.02))
     lt.data.energy = 0
-    lt.data.keyframe_insert("energy", frame=F(t + 0.3))
+    lt.data.keyframe_insert("energy", frame=F(t + 0.25))
 
 
 def vanish(ch, t, extra=()):

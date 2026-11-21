@@ -44,10 +44,13 @@ if src and not o.no_music:
     if duration(src) < 2.0:
         print(f"warning: music file looks broken ({src}), mixing without music")
     else:
-        sp = o.music_speed
-        af = (f"asetrate=44100*{sp},aresample=44100" if o.music_mode == "speed" else f"atempo={sp}")
+        sp = 1.0 if "roblox-story-bg" in os.path.basename(src).lower() else o.music_speed
+        if abs(sp - 1.0) < 0.02:
+            af = "aresample=44100"
+        else:
+            af = "aresample=44100," + (f"asetrate=44100*{sp},aresample=44100" if o.music_mode == "speed" else f"atempo={sp}")
         subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", src, "-vn", "-ac", "2", "-ar", "44100", "-af",
-                        "aresample=44100," + af, os.path.join(adir, "music.wav")], check=True)
+                        af, os.path.join(adir, "music.wav")], check=True)
         print(f"music: {os.path.basename(src)} x{sp} ({o.music_mode}) -> audio/music.wav")
 else:
     print("music: none (put the bed in studio/music/ or pass --music)")
@@ -56,9 +59,20 @@ else:
 subprocess.run([sys.executable, os.path.join(HERE, "mix.py"), "--video", o.slug, "--music-db", o.music_db,
                 "--sfx-db", o.sfx_db], check=True)
 
-# 2. captions (script words, one at a time; same look as the reference)
+# 2. captions (roblox-v3 style-toon.md §6 & make_caps.py: Poppins ExtraBold at y=1357, colored keywords, safe-zone clamped)
 words = json.load(open(os.path.join(adir, "words.json"), encoding="utf-8"))
-LAG = 1.3 / 30
+LAG = 1.0 / 30
+
+RED_WORDS = {
+    "vanished", "vanish", "disappear", "disappeared", "truth", "broke", "gone", "invisible",
+    "order", "panicked", "elevator", "sneezed", "sneeze", "sneezing", "shrank", "smaller",
+    "tinier", "giant", "giants", "alarm", "illegal", "wait", "stop", "impossible",
+}
+YELLOW_WORDS = {
+    "cookie", "eleven", "six", "witness", "courtroom", "judge", "leo", "bible", "gavel",
+    "bailiff", "reporter", "twelve", "dominoes", "eddie", "mia", "higgins", "miller",
+    "pepper", "picture", "thumbtack", "trophy", "oath", "robe",
+}
 
 
 def ts(t):
@@ -75,21 +89,37 @@ ScaledBorderAndShadow: yes
 
 [V4+ Styles]
 Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
-Style: Word,{FONT},150,&H00FFFFFF,&H00FFFFFF,&H00000000,&H64000000,-1,0,0,0,100,100,1,0,1,9,3,5,20,20,20,1
+Style: Word,{FONT},108,&H00FFFFFF,&H00FFFFFF,&H00000000,&H64000000,-1,0,0,0,100,100,0,0,1,10,5,5,70,70,20,1
 
 [Events]
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
 """
 lines = []
 for i, w in enumerate(words):
-    txt = re.sub(r"[^\w'$%,.]", "", w["word"]).strip(",.").upper()
+    txt = re.sub(r"[^\w'$%,.?!-]", "", w["word"]).strip(",.").upper()
     if not txt:
         continue
-    s = 0.0 if i == 0 else w["start"] + LAG
-    e = (words[i + 1]["start"] + LAG) if i + 1 < len(words) else w["end"] + 0.4
-    lines.append(f"Dialogue: 0,{ts(s)},{ts(e)},Word,,0,0,0,,{{\\pos(540,1607)}}{txt}")
+    norm_w = re.sub(r"'s$", "", re.sub(r"[^\w']", "", w["word"]).lower().replace("’", "'"))
+    if norm_w in RED_WORDS:
+        col = "&H005E5DDB&"   # #DB5D5E (style-toon.md §6.2 red)
+    elif norm_w in YELLOW_WORDS:
+        col = "&H005BD9EA&"   # #EAD95B (style-toon.md §6.2 yellow)
+    else:
+        col = "&H00FFFFFF&"
+    s = 0.0 if i == 0 else max(0.0, w["start"] - LAG)
+    e = max(s + 0.08, (words[i + 1]["start"] - LAG) if i + 1 < len(words) else w["end"] + 0.35)
+    sc = min(1.0, 0.78 * 1080 / max(1, len(txt) * 0.65 * 108))
+    sc1 = int(round(120 * sc))
+    sc0 = int(round(100 * sc))
+    tags = f"{{\\an5\\pos(540,1357)\\1c{col}\\fscx{sc1}\\fscy{sc1}\\t(0,110,\\fscx{sc0}\\fscy{sc0})}}"
+    lines.append(f"Dialogue: 0,{ts(s)},{ts(e)},Word,,0,0,0,,{tags}{txt}")
 fdir_abs = os.path.join(STUDIO, "assets", "fonts")
-font_name = "Montserrat Black" if os.path.isfile(os.path.join(fdir_abs, "Montserrat-Black.ttf")) else kit.caption_font(CFG)
+if os.path.isfile(os.path.join(fdir_abs, "Poppins-ExtraBold.ttf")):
+    font_name = "Poppins ExtraBold"
+elif os.path.isfile(os.path.join(fdir_abs, "Montserrat-Black.ttf")):
+    font_name = "Montserrat Black"
+else:
+    font_name = kit.caption_font(CFG)
 head = head.replace("{FONT}", font_name)
 open(os.path.join(vdir, "captions.ass"), "w", encoding="utf-8").write(head + "\n".join(lines) + "\n")
 

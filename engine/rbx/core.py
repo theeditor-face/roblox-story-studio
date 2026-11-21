@@ -127,31 +127,36 @@ def setup_render(f0, f1, res=(1080, 1920), samples=24, pct=100, blur=True):
     sc.frame_set(f0)
     sc.render.use_motion_blur = bool(blur and gpu_str != "CPU")
     try:
-        sc.render.motion_blur_shutter = 0.45
+        sc.render.motion_blur_shutter = 0.35
     except Exception:
         pass
     sc.render.film_transparent = False
     vs = sc.view_settings
-    for vt in ("AgX", "Filmic", "Standard"):
+    for vt in ("Standard", "AgX", "Filmic"):
         try:
             vs.view_transform = vt
             break
         except TypeError:
             continue
-    for lk in ("AgX - Medium High Contrast", "Medium High Contrast", "None"):
+    for lk in ("None", "Medium High Contrast"):
         try:
             vs.look = lk
             break
         except TypeError:
             continue
-    vs.exposure = 0.0
+    vs.exposure = -0.12 if gpu_str != "CPU" else 0.0
     sc.render.image_settings.file_format = "PNG"
     sc.render.image_settings.color_mode = "RGB"
     try:
         sc.render.image_settings.compression = 15
     except Exception:
         pass
-    setup_compositor()
+    # Per roblox-v3 style-toon.md §1 & §9: no bloom/glare compositor blowout; keep edges clean & crisp
+    sc.render.use_compositing = False
+    try:
+        sc.use_nodes = False
+    except Exception:
+        pass
 
 
 def setup_compositor(bloom=0.35, threshold=1.0):
@@ -624,13 +629,28 @@ class Cam:
         cd = D.cameras.new(name)
         cd.lens = lens
         cd.sensor_fit = "VERTICAL"
-        cd.sensor_height = 24
+        cd.sensor_height = 36
         cd.clip_start = 0.05
         cd.clip_end = 600
         self.ob = D.objects.new(name, cd)
         _link(self.ob, coll)
         bpy.context.scene.camera = self.ob
         self.cd = cd
+
+    def face_cam(self, t0, t1, ch, dist=4.6, lens=32, side=0.0, height=-0.15, look_z=-0.25, push=0.55, room=None):
+        """Toon/Reference close-up straight in front of a character's face (from roblox-v3 rbxkit.py)."""
+        bpy.context.view_layer.update()
+        s = ch.root.scale[0]
+        eye = ch.root.matrix_world.translation + Vector((0, 0, 4.55 * s))
+        rot = ch.root.matrix_world.to_3x3()
+        fwd = (rot @ Vector((0, -1, 0))).normalized()
+        right = (rot @ Vector((1, 0, 0))).normalized()
+        tgt = tuple(eye + Vector((0, 0, look_z * s)))
+        p0 = tuple(eye + fwd * dist + right * side + Vector((0, 0, height)))
+        p1 = tuple(eye + fwd * max(2.4, dist - push) + right * side + Vector((0, 0, height)))
+        self.key(t0, p0, tgt, lens=lens, room=room)
+        self.key(t1, p1, tgt, lens=lens, room=room)
+        return self
 
     def key(self, t, loc, target, lens=None, roll=0.0, focus=None, fstop=None, interp="BEZIER", ease=None, room=None):
         """Keyframe at absolute time t (s). focus = world point or distance for DOF."""

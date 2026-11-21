@@ -147,11 +147,19 @@ class Char:
         for piv, nm in ((self.shL, "_armL"), (self.shR, "_armR")):
             box(n + nm, (1, 1, 2), (0, 0, -0.55), None, 0.09, parent=piv, coll=self.coll,
                 cuts_z=[cut], mats=[(cut, M_skin), (5, M_shirt)])
-        # legs: hip pivots
+        # legs: hip pivots + distinct 3D shoes & belt waistband (from roblox-v3 rbxkit.py & make_clothes.py)
         self.hpL = empty(n + "_hpL", (0.5, 0, 0.0), self.hip, self.coll)
         self.hpR = empty(n + "_hpR", (-0.5, 0, 0.0), self.hip, self.coll)
+        M_shoe = mat(n + "_shoe", hexc("#1e2028"), 0.5)
+        M_sole = mat(n + "_sole", hexc("#f4f4f0"), 0.65)
+        M_belt = mat(n + "_belt", hexc("#262830"), 0.55)
+        M_buck = mat(n + "_buck", hexc("#d4af37"), 0.3, metal=0.75)
+        box(n + "_belt_band", (2.02, 1.02, 0.16), (0, 0, 0.08), M_belt, 0.02, parent=self.hip, coll=self.coll)
+        box(n + "_belt_buck", (0.32, 0.04, 0.18), (0, -0.51, 0.08), M_buck, 0.01, parent=self.hip, coll=self.coll)
         for piv, nm in ((self.hpL, "_legL"), (self.hpR, "_legR")):
-            box(n + nm, (0.98, 1, 2), (0, 0, -1.0), M_pants, 0.09, parent=piv, coll=self.coll)
+            box(n + nm, (0.98, 1, 1.68), (0, 0, -0.84), M_pants, 0.08, parent=piv, coll=self.coll)
+            box(n + nm + "_shoe", (1.0, 1.08, 0.26), (0, -0.04, -1.80), M_shoe, 0.05, parent=piv, coll=self.coll)
+            box(n + nm + "_sole", (1.02, 1.10, 0.08), (0, -0.04, -1.96), M_sole, 0.02, parent=piv, coll=self.coll)
         # decals on torso front (front = -Y, surface at y=-0.5)
         if vneck:
             M_v = mat(n + "_vneck", hexc(vneck), 0.5)
@@ -232,6 +240,21 @@ class Char:
                    parent=h, coll=self.coll, seg=20)
             box(n + "_capbadge", (0.3, 0.04, 0.2), (0, -0.73, 0.65), mat("badge_gold", hexc("#d9a520"), 0.3, 0.8),
                 0.02, parent=h, coll=self.coll)
+        elif kind == "fluffy":
+            rnd = random.Random(seed)
+            sphere(n + "_cap", 0.72, (0, 0.05, 0.54), M, (1.0, 1.0, 0.55), parent=h, coll=self.coll, seg=24)
+            spots = [(x, y, 0.68 + 0.08 * (1 - abs(x))) for x in (-0.46, -0.15, 0.15, 0.46) for y in (-0.38, 0.0, 0.34)]
+            spots += [(x, -0.56, 0.52) for x in (-0.42, -0.14, 0.14, 0.42)]
+            for i, (x, y, z) in enumerate(spots):
+                box(f"{n}_tf{i}", (0.42, 0.42, 0.36), (x + rnd.uniform(-0.04, 0.04), y, z), M, 0.15,
+                    parent=h, coll=self.coll, rot=(rnd.uniform(-22, 22), rnd.uniform(-22, 22), rnd.uniform(-22, 22)))
+        elif kind == "long":
+            sphere(n + "_cap", 0.74, (0, 0.05, 0.54), M, (1.02, 1.0, 0.55), parent=h, coll=self.coll, seg=24)
+            box(n + "_hback", (1.38, 0.38, 1.8), (0, 0.48, -0.15), M, 0.14, parent=h, coll=self.coll)
+            for sx in (-1, 1):
+                box(f"{n}_hside{sx}", (0.24, 0.85, 1.45), (sx * 0.64, 0.08, -0.05), M, 0.1, parent=h, coll=self.coll)
+            for i, x in enumerate((-0.42, -0.14, 0.14, 0.42)):
+                box(f"{n}_bang{i}", (0.28, 0.18, 0.38), (x, -0.54, 0.42), M, 0.07, parent=h, coll=self.coll)
         elif kind == "bald":
             pass
 

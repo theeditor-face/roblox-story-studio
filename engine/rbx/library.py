@@ -33,13 +33,18 @@ def _room_shell(name, width=18.0, depth=14.0, height=9.0, wall_col="#f2efe8",
     mt = mat(name + "_trim", hexc(trim_col), 0.5)
     hw, hd = width / 2.0, depth / 2.0
     box(name + "_floor", (width, depth, 0.3), (0, 0, -0.15), mf, 0.02, coll=c)
-    box(name + "_ceil", (width, depth, 0.3), (0, 0, height + 0.15), mw, 0.02, coll=c)
+    shell_obs = [box(name + "_ceil", (width, depth, 0.3), (0, 0, height + 0.15), mw, 0.02, coll=c)]
     if "back" not in skip_walls:
-        box(name + "_back", (width, 0.4, height), (0, hd, height / 2), mw, 0.02, coll=c)
+        shell_obs.append(box(name + "_back", (width, 0.4, height), (0, hd, height / 2), mw, 0.02, coll=c))
     if "left" not in skip_walls:
-        box(name + "_left", (0.4, depth, height), (-hw, 0, height / 2), mw, 0.02, coll=c)
+        shell_obs.append(box(name + "_left", (0.4, depth, height), (-hw, 0, height / 2), mw, 0.02, coll=c))
     if "right" not in skip_walls:
-        box(name + "_right", (0.4, depth, height), (hw, 0, height / 2), mw, 0.02, coll=c)
+        shell_obs.append(box(name + "_right", (0.4, depth, height), (hw, 0, height / 2), mw, 0.02, coll=c))
+    for ob in shell_obs:
+        try:
+            ob.visible_shadow = False
+        except Exception:
+            pass
     box(name + "_trim_b", (width, 0.15, 0.35), (0, hd - 0.22, 0.17), mt, 0.02, coll=c)
     box(name + "_trim_l", (0.15, depth, 0.35), (-hw + 0.22, 0, 0.17), mt, 0.02, coll=c)
     box(name + "_trim_r", (0.15, depth, 0.35), (hw - 0.22, 0, 0.17), mt, 0.02, coll=c)

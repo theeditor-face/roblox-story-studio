@@ -197,10 +197,10 @@ def living_room():
     box("lr_back", (40, 0.5, 14), (0, 10.25, 7), Mw, 0, coll=c)
     box("lr_trim", (40, 0.6, 1.4), (0, 9.9, 11.3), mat("lr_trim", hexc("#b04a3a"), 0.6), 0.05, coll=c)
     for i in range(4):
-        window(f"lr_win{i}", -9 + i * 6, 9.95, 7.0, 4.2, 4.6, c, "-Y", sky=(0.85, 0.92, 1.0), estr=2.0)
+        window(f"lr_win{i}", -9 + i * 6, 9.95, 7.0, 4.2, 4.6, c, "-Y", sky=(0.72, 0.85, 0.98), estr=0.65)
     # red car outside
     box("lr_car", (6, 2, 2.5), (2, 14, 2.0), mat("redcar", hexc("#d03030"), 0.3), 0.3, coll=c)
-    box("lr_out", (60, 0.4, 30), (0, 20, 10), mat("lr_outside", (0.8, 0.9, 1.0), emit=(0.8, 0.9, 1.0), estr=1.5), 0, coll=c)
+    box("lr_out", (60, 0.4, 30), (0, 20, 10), mat("lr_outside", (0.72, 0.85, 0.98), emit=(0.72, 0.85, 0.98), estr=0.5), 0, coll=c)
     Mc = mat("couch", hexc("#4fb3b8"), 0.6)
     box("couch_seat", (10, 4, 1.6), (0, 6.5, 1.4), Mc, 0.4, coll=c)
     box("couch_back", (10, 1.4, 4.0), (0, 8.6, 2.6), Mc, 0.5, coll=c)
@@ -211,8 +211,8 @@ def living_room():
         for sy in (-1, 1):
             box(f"ct_leg{sx}{sy}", (0.3, 0.3, 1.9), (sx * 2.6, 0.5 + sy * 1.2, 0.95), mat("ct_leg", hexc("#704a2a"), 0.5), 0.02, coll=c)
     box("lr_phone", (0.6, 1.1, 0.08), (-1.6, 0.0, 2.22), mat("phone", hexc("#18181c"), 0.2), 0.04, coll=c, rot=(0, 0, 20))
-    light("lr_key", "AREA", (0, -6, 12), 5000, (1.0, 0.97, 0.92), 10, coll=c, target=(0, 6, 2))
-    light("lr_fill", "AREA", (-10, -4, 6), 1500, (0.9, 0.95, 1.0), 6, coll=c, target=(0, 6, 3))
+    light("lr_key", "AREA", (0, -6, 12), 1800, (1.0, 0.97, 0.92), 10, coll=c, target=(0, 6, 2))
+    light("lr_fill", "AREA", (-10, -4, 6), 750, (0.9, 0.95, 1.0), 6, coll=c, target=(0, 6, 3))
     return dict(coll=c, seat=(0, 6.2, 2.2))
 
 
