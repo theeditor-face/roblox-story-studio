@@ -57,7 +57,7 @@ JUDGE_LOC = (0.0, 5.5, 1.0)
 WITNESS_LOC = (-5.2, 3.8, 0.35)
 LEO_GAL_LOC = (-2.4, -6.3, 0.25)
 BAILIFF_LOC = (5.3, 3.2, 0.0)
-REPORTER_LOC = (-1.6, 2.6, 0.2)
+REPORTER_LOC = (-3.6, 4.7, 0.2)
 EXHIBIT_LOC = (2.8, 1.2, 0.0)
 JUROR_SLOTS = [
     (7.3, -1.6 + j * 1.15, 0.25) for j in range(6)
@@ -138,9 +138,9 @@ def remove_prefix(prefix):
 
 def bright_town():
     R = town_scene()
-    W.sun(2.4, rot=(48, 0, 20))
-    light("tw_front_key", "AREA", (0, -42, 14), 1600, (1.0, 0.98, 0.94), 22, target=(0, -25, 3.5))
-    light("tw_rim_fill", "AREA", (0, -10, 14), 700, (0.9, 0.95, 1.0), 18, target=(0, -26, 3.5))
+    W.sun(1.6, rot=(48, 0, 20))
+    light("tw_front_key", "AREA", (0, -42, 14), 850, (1.0, 0.98, 0.94), 22, target=(0, -25, 3.5))
+    light("tw_rim_fill", "AREA", (0, -10, 14), 400, (0.9, 0.95, 1.0), 18, target=(0, -26, 3.5))
     return R
 
 
@@ -156,11 +156,12 @@ def build_courtroom(t0, t1, *, eddie=True, leo=True, judge=True, bailiff_on=True
     # Witness riser step behind CR_witness so character upper torso/arms sit cleanly above bench
     box("CR_wit_step", (2.4, 1.8, 0.35), (-5.2, 3.8, 0.175), m_dark, 0.03, coll=c)
     bible_prop((-4.7, 2.55, 2.31))
-    # Stenographer desk for Court Reporter (at x=-1.6, y=1.65 so witness stand line-of-sight is 100% open)
-    box("CR_steno_tbl", (1.6, 1.0, 0.18), (-1.6, 1.65, 1.95), m_oak, 0.03, coll=c)
-    for lx in (-0.65, 0.65):
-        box(f"CR_stl_{lx}", (0.14, 0.14, 1.9), (-1.6 + lx, 1.65, 0.95), m_dark, 0.02, coll=c)
-    box("CR_steno_pad", (0.6, 0.45, 0.08), (-1.6, 1.65, 2.08), mat("st_pad", hexc("#f8fafc"), 0.4), 0.01, coll=c)
+    # Stenographer desk for Court Reporter (at x=-3.6, y=3.75 beside dais so center aisle & Judge shots are 100% open)
+    if reporter_on:
+        box("CR_steno_tbl", (1.5, 0.95, 0.18), (-3.6, 3.75, 1.95), m_oak, 0.03, coll=c)
+        for lx in (-0.6, 0.6):
+            box(f"CR_stl_{lx}", (0.14, 0.14, 1.9), (-3.6 + lx, 3.75, 0.95), m_dark, 0.02, coll=c)
+        box("CR_steno_pad", (0.55, 0.42, 0.08), (-3.6, 3.75, 2.08), mat("st_pad", hexc("#f8fafc"), 0.4), 0.01, coll=c)
     # Gallery benches behind rail y=-4.6 (outer wings only so center aisle x=-2.0..+2.0 is open for cameras)
     for gx in (-4.2, 4.2):
         box(f"CR_gbench_{gx}", (4.8, 1.4, 0.22), (gx, -6.3, 1.15), m_oak, 0.03, coll=c)
@@ -358,15 +359,15 @@ def s08(t0, t1):
     remove_prefix("NO_sign")
     remove_prefix("NO_chart")
     remove_prefix("NO_cross")
-    box("TH_sign_bg", (5.2, 0.14, 1.0), (0.0, 5.74, 6.2), mat("th_bg", hexc("#2b6cb0"), 0.4), 0.04)
-    text("TH_sign_txt", "COUPLES THERAPY", (0.0, 5.64, 6.08), 0.42, mat("th_w", (1, 1, 1), 0.35), rot=(90, 0, 0))
-    th = therapist(t0, t1, "worried", loc=(-1.3, 2.8, 0.15), rot=-12)
-    th.pose(t0, loc=(-1.3, 2.8, 0.15), rot=-12, legL=(80, 4), legR=(80, -4))
+    box("TH_sign_bg", (5.2, 0.14, 1.0), (0.0, 5.74, 6.75), mat("th_bg", hexc("#2b6cb0"), 0.4), 0.04)
+    text("TH_sign_txt", "COUPLES THERAPY", (0.0, 5.64, 6.63), 0.42, mat("th_w", (1, 1, 1), 0.35), rot=(90, 0, 0))
+    th = therapist(t0, t1, "worried", loc=(-2.2, 2.8, 0.15), rot=-14)
+    th.pose(t0, loc=(-2.2, 2.8, 0.15), rot=-14, legL=(80, 4), legR=(80, -4))
     th.act(t0 + 0.04, "phone", expr="worried")
-    LIB.prop_phone("th_ph1", (-0.8, 1.4, 2.42))
-    LIB.prop_phone("th_ph2", (0.2, 1.6, 2.42))
+    LIB.prop_phone("th_ph1", (-1.8, 1.8, 2.42))
+    LIB.prop_phone("th_ph2", (-2.6, 1.8, 2.42))
     cam = Cam()
-    cam.push(t0, t1, (-0.3, 2.8, 3.4), 9.8, 8.4, yaw=-8, pitch=6, lens=28)
+    cam.push(t0, t1, (-0.5, 2.8, 3.4), 10.2, 8.8, yaw=-6, pitch=6, lens=28)
     sfx(w(43), "click")
 
 
@@ -447,7 +448,7 @@ def s14(t0, t1):
 
 @S(15, 85, 91, "The judge looks sternly down from the dais bench")
 def s15(t0, t1):
-    _, cast = build_courtroom(t0, t1)
+    _, cast = build_courtroom(t0, t1, reporter_on=False)
     J = cast["judge"]
     J.face(t0, "angry")
     J.act(t0 + 0.05, "lean", expr="angry")
@@ -459,7 +460,7 @@ def s15(t0, t1):
 
 @S(16, 91, 103, "Judge points toward witness stand & shattered trophy case exhibit")
 def s16(t0, t1):
-    _, cast = build_courtroom(t0, t1)
+    _, cast = build_courtroom(t0, t1, reporter_on=False)
     J = cast["judge"]
     J.act(t0 + 0.05, "point_l", expr="furious")
     lips(J, t0, t1, mode="shout")
@@ -486,7 +487,7 @@ def s17(t0, t1):
 # ================================================================== 29-35.5s CONFESSION & VANISH (Words 108..131)
 @S(18, 108, 118, "Witness stand: Eddie places hand on Bible, mouth opens nervously")
 def s18(t0, t1):
-    _, cast = build_courtroom(t0, t1)
+    _, cast = build_courtroom(t0, t1, reporter_on=False)
     E = cast["eddie"]
     E.act(t0 + 0.05, "reach", expr="worried")
     E.face(w(115), "gasp")
@@ -497,7 +498,7 @@ def s18(t0, t1):
 
 @S(19, 118, 126, "Eddie strains trying to lie 'no' — glancing between Judge & Leo")
 def s19(t0, t1):
-    _, cast = build_courtroom(t0, t1)
+    _, cast = build_courtroom(t0, t1, reporter_on=False)
     E = cast["eddie"]
     E.face(t0, "panic")
     E.shake(t0 + 0.06, 20)
@@ -511,7 +512,7 @@ def s19(t0, t1):
 
 @S(20, 126, 131, "'...Leo.' Gone! Eddie pops away leaving empty witness stand")
 def s20(t0, t1):
-    _, cast = build_courtroom(t0, t1)
+    _, cast = build_courtroom(t0, t1, reporter_on=False)
     E = cast["eddie"]
     E.face(t0, "scared")
     lips(E, t0, w(127))
@@ -580,7 +581,7 @@ def s23(t0, t1):
 # ================================================================== 42-47.4s JUDGE VANISHES (Words 159..178)
 @S(24, 159, 164, "Judge raises gavel high and SLAMS it onto the oak bench")
 def s24(t0, t1):
-    c, cast = build_courtroom(t0, t1, eddie=False, leo=False, static_gavel=False)
+    c, cast = build_courtroom(t0, t1, eddie=False, leo=False, reporter_on=False, static_gavel=False)
     J = cast["judge"]
     J.pose(t0, loc=JUDGE_LOC, rot=0, armR=(-135, -8))
     J.pose(w(161), loc=JUDGE_LOC, rot=0, armR=(-35, -4))
@@ -598,7 +599,7 @@ def s24(t0, t1):
 
 @S(25, 164, 175, "Judge shouts 'ORDER! Both witnesses are invisible, we cannot have—'")
 def s25(t0, t1):
-    _, cast = build_courtroom(t0, t1, eddie=False, leo=False)
+    _, cast = build_courtroom(t0, t1, eddie=False, leo=False, reporter_on=False)
     J = cast["judge"]
     J.act(t0 + 0.04, "fists", expr="furious")
     lips(J, t0, t1, mode="shout")
@@ -609,7 +610,7 @@ def s25(t0, t1):
 
 @S(26, 175, 178, "Judge vanishes mid-sentence leaving her upright empty robe!")
 def s26(t0, t1):
-    c, cast = build_courtroom(t0, t1, eddie=False, leo=False)
+    c, cast = build_courtroom(t0, t1, eddie=False, leo=False, reporter_on=False)
     J = cast["judge"]
     er = empty_judge_robe(JUDGE_LOC)
     tv = w(176)
@@ -652,8 +653,8 @@ def s28(t0, t1):
     W2.vanish(R, tv)
     W2.poof("rep_pop", up(REPORTER_LOC, 2.0), tv, s=0.8)
     cam = Cam()
-    cam.key(t0, (0.4, -4.6, 4.1), up(REPORTER_LOC, 2.8), lens=26)
-    cam.key(t1, (0.0, -3.4, 4.0), up(REPORTER_LOC, 2.8), lens=26)
+    cam.key(t0, (-1.2, -3.2, 4.1), up(REPORTER_LOC, 2.8), lens=26)
+    cam.key(t1, (-1.6, -2.0, 4.0), up(REPORTER_LOC, 2.8), lens=26)
     sfx(tv, "pop")
 
 

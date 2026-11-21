@@ -132,19 +132,19 @@ def setup_render(f0, f1, res=(1080, 1920), samples=24, pct=100, blur=True):
         pass
     sc.render.film_transparent = False
     vs = sc.view_settings
-    for vt in ("Standard", "AgX", "Filmic"):
+    for vt in ("AgX", "Standard", "Filmic"):
         try:
             vs.view_transform = vt
             break
         except TypeError:
             continue
-    for lk in ("None", "Medium High Contrast"):
+    for lk in ("AgX - Medium High Contrast", "Medium High Contrast", "None"):
         try:
             vs.look = lk
             break
         except TypeError:
             continue
-    vs.exposure = -0.12 if gpu_str != "CPU" else 0.0
+    vs.exposure = -0.25 if gpu_str != "CPU" else -0.20
     sc.render.image_settings.file_format = "PNG"
     sc.render.image_settings.color_mode = "RGB"
     try:

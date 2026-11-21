@@ -106,7 +106,7 @@ def audit_video2():
     WITNESS_LOC = (-5.2, 3.8, 0.35)
     LEO_GAL_LOC = (-2.4, -6.3, 0.25)
     BAILIFF_LOC = (5.3, 3.2, 0.0)
-    REPORTER_LOC = (-1.6, 2.6, 0.2)
+    REPORTER_LOC = (-3.6, 4.7, 0.2)
     SPECS = [(-5.4, -6.3, 0.25), (-3.8, -6.3, 0.25), (3.6, -6.3, 0.25), (5.2, -6.3, 0.25)]
 
     tests = [
@@ -116,8 +116,8 @@ def audit_video2():
          [("Eddie", (1.4, 3.3, 0), False)], [("Mom", (-1.5, 3.5, 0), False)]),
         ("S05 Town Rule 2-shot", cam_pos_from_polar((0.0, -26.5, 3.3), 9.8, -6, 6), (0.0, -26.5, 3.3), 28,
          [("Eddie", (-1.4, -26.5, 0), False), ("Leo", (1.4, -26.5, 0), False)], []),
-        ("S08 Therapist", cam_pos_from_polar((-0.3, 2.8, 3.4), 9.1, -8, 6), (-0.3, 2.8, 3.4), 28,
-         [("Therapist", (-1.3, 2.8, 0.15), True)], []),
+        ("S08 Therapist", cam_pos_from_polar((-0.5, 2.8, 3.4), 9.5, -6, 6), (-0.5, 2.8, 3.4), 28,
+         [("Therapist", (-2.2, 2.8, 0.15), True)], []),
         ("S09 Police Wait", cam_pos_from_polar((0.0, 1.4, 3.3), 10.4, 0, 6), (0.0, 1.4, 3.3), 28,
          [("Officer", (-1.6, 1.2, 0), False), ("Suspect", (1.6, 1.2, 0), False)], []),
         ("S10 Bedroom 2-shot", cam_pos_from_polar((0.0, 2.2, 3.3), 9.5, 6, 6), (0.0, 2.2, 3.3), 28,
@@ -133,11 +133,11 @@ def audit_video2():
          [("Judge", JUDGE_LOC, False)],
          [(f"Spec{i}", sp, True) for i, sp in enumerate(SPECS)] + [("Reporter", REPORTER_LOC, True)]),
         ("S15 Judge Stern", (0.65, -1.7, 4.85), (0.0, 5.5, 4.5), 28,
-         [("Judge", JUDGE_LOC, False)], [("Reporter", REPORTER_LOC, True), ("Bailiff", BAILIFF_LOC, False)]),
+         [("Judge", JUDGE_LOC, False)], [("Bailiff", BAILIFF_LOC, False)]),
         ("S16 Judge + Exhibit", (1.0, -1.9, 4.9), (0.8, 4.2, 4.35), 26,
-         [("Judge", JUDGE_LOC, False)], [("Reporter", REPORTER_LOC, True)]),
+         [("Judge", JUDGE_LOC, False)], []),
         ("S18 Eddie Bible", cam_pos_from_polar((-5.1, 3.6, 3.6), 8.0, 4, 5), (-5.1, 3.6, 3.6), 28,
-         [("Eddie", WITNESS_LOC, False)], [("Reporter", REPORTER_LOC, True)]),
+         [("Eddie", WITNESS_LOC, False)], []),
         ("S19 Eddie Strain CU", cam_pos_from_polar((-5.1, 3.6, 3.8), 7.2, 6, 4), (-5.1, 3.6, 3.8), 28,
          [("Eddie", WITNESS_LOC, False)], []),
         ("S21 Court Flicker", (0.0, -3.9, 4.9), (0.0, 2.8, 3.5), 25,
@@ -149,9 +149,11 @@ def audit_video2():
          [("Judge", JUDGE_LOC, False)], []),
         ("S25 Judge Shouts", cam_pos_from_polar((0.0, 4.8, 4.4), 7.9, 12, 5), (0.0, 4.8, 4.4), 28,
          [("Judge", JUDGE_LOC, False)], []),
+        ("S26 Judge Vanish", cam_pos_from_polar((0.0, 5.0, 4.4), 7.5, -8, 4), (0.0, 5.0, 4.4), 28,
+         [("Judge", JUDGE_LOC, False)], []),
         ("S27 Bailiff Pop", (2.0, -3.8, 4.05), (5.3, 3.2, 3.1), 26,
-         [("Bailiff", BAILIFF_LOC, False)], []),
-        ("S28 Reporter Pop", (0.2, -4.0, 4.05), (-1.6, 2.6, 3.0), 26,
+         [("Bailiff", BAILIFF_LOC, False)], [("Reporter", REPORTER_LOC, True)]),
+        ("S28 Reporter Pop", (-1.4, -2.6, 4.05), (-3.6, 4.7, 3.0), 26,
          [("Reporter", REPORTER_LOC, True)], []),
     ]
 
@@ -170,10 +172,10 @@ def audit_video2():
                 eb = project_char_bbox(eloc, cpos, ctgt, lens, seated=eseat)
                 if not eb or eb["depth"] >= fb["depth"] - 0.3:
                     continue
-                # Check if foreground extra overlaps focal character's head box
-                ox = max(0.0, min(fb["head_x1"], eb["body_x1"]) - max(fb["head_x0"], eb["body_x0"]))
-                oy = max(0.0, min(fb["head_y1"], eb["body_y1"]) - max(fb["head_y0"], eb["body_y0"]))
-                if ox * oy > 0.002:
+                # Check if foreground extra overlaps focal character's head OR torso box
+                ox = max(0.0, min(fb["body_x1"], eb["body_x1"]) - max(fb["body_x0"], eb["body_x0"]))
+                oy = max(0.0, min(fb["body_y1"], eb["body_y1"]) - max(fb["body_y0"], eb["body_y0"]))
+                if ox * oy > 0.008:
                     occl_by.append(ename)
             issues = []
             if fb["head_y0"] < 0.04:

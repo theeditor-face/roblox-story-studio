@@ -139,8 +139,8 @@ def _chair(name, loc, coll, seat_col="#2563eb", rot=0):
 def nurse_office():
     """Bright school nurse's office with sunlit window bay, privacy screen, vision chart & wood desk."""
     c = _room_shell("NurseOffice", 16, 12, 8.5, "#eef7f5", "#dce8e6", "#7da8a1", skip_walls=("back",))
-    world(hexc("#d7ecea"), 0.85)
-    _room_lights("NO", c, energy=1850, color="#ffffff")
+    world(hexc("#d7ecea"), 0.55)
+    _room_lights("NO", c, energy=1250, color="#ffffff", fill_energy=650)
     mw = mat("NO_wall_b", hexc("#eef7f5"), 0.72)
     m_trim = mat("NO_wtrim", hexc("#ffffff"), 0.45)
     # 1 & 5: Back-left window bay looking out to sky & trees
@@ -357,8 +357,8 @@ def gym():
 def police_station():
     """Police precinct with barred holding cell opening, mugshot height chart & WANTED PNGs."""
     c = _room_shell("PoliceStation", 18, 14, 8.5, "#dbe4ee", "#94a3b8", "#1e3a8a", skip_walls=("back",))
-    world(hexc("#cbd5e1"), 0.8)
-    _room_lights("PS", c, energy=1950, color="#f4f8ff")
+    world(hexc("#cbd5e1"), 0.55)
+    _room_lights("PS", c, energy=1350, color="#f4f8ff", fill_energy=700)
     mw = mat("PS_wall_b", hexc("#dbe4ee"), 0.72)
     m_steel = mat("PS_steel", hexc("#475569"), 0.25, metal=0.8)
     m_wood = ST.wood("PS_wood", "#5a3a24", "#8f613f", 1.8)
@@ -389,9 +389,9 @@ def police_station():
 def park_day():
     """Sunny city park with low brick arch wall, welcome sign PNG, fountain, lamps, benches & trees."""
     c = _coll("ParkDay")
-    world(hexc("#7ec8f8"), 1.0)
-    W.sun(5.5, (48, -22, 35))
-    light("PK_fill", "AREA", (0, -10, 12), 1300, hexc("#fff8eb"), size=18.0, rot=(35, 0, 0), coll=c)
+    world(hexc("#7ec8f8"), 0.85)
+    W.sun(2.6, (48, -22, 35))
+    light("PK_fill", "AREA", (0, -10, 12), 750, hexc("#fff8eb"), size=18.0, rot=(35, 0, 0), coll=c)
     m_grass = mat("PK_grass", hexc("#4ade80"), 0.85)
     m_path = ST.tiles("PK_path", "#d6d3d1", "#9ca3af", 0.35, 1.2, 1.2, 0.65, axis="XY")
     m_wood = ST.wood("PK_wood", "#78350f", "#b06d38", 1.8)
